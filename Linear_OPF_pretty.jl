@@ -4,14 +4,11 @@ using LinearAlgebra
 using XLSX, Plots , PlotThemes
 
 
-#Create a mathematical optimization model using the Gurobi Optimizer as the solver
-model = Model(Gurobi.Optimizer)
-
 ########################################################               ########################################################
 ######################################################## Data Handling ########################################################
 ########################################################               ########################################################
 #Choose xlsx file you want to read
-filename = "Paper_nodes_PV.xlsx"
+#filename = "Paper_nodes_PV.xlsx"
 #filename = "Name of file.xlsx" , xlsx file should be in the same directory as the code
 
 #Alternative way to choose the file
@@ -92,7 +89,6 @@ for row in eachrow(gen_data)
         push!(K_buses, bus_id)
     end
 end
-K_buses
 n_K_buses = length(K_buses)
 
 # Create an array to store all the L buses
@@ -146,16 +142,14 @@ complete_mapping[slack_bus] = size(bus_data, 1)
 
 
 
-
-
 # Create the Admittance Matrix(with mapped buses)
 global Y = zeros(Complex, n, n)
 global Z_w_slack = zeros(Complex, n, n)
-for row in eachrow(data)
+for row in eachrow(Edges)
     From_Bus = complete_mapping[row.from_bus]
     To_Bus = complete_mapping[row.to_bus]
-    x = row.X
-    r = row.R
+    x = row.X_pu
+    r = row.R_pu
     local z = r + x .* im
     local y_admit = 1 ./ z[1]
     Y[From_Bus, To_Bus] = -y_admit
@@ -174,15 +168,12 @@ Y_without_slack =Y[ 1:end .!= sl, 1:end .!= sl]
 # # Create the Impedance Matrix excluding the slack bus
 Z = inv(Y_without_slack)
 
-
-
 # Create the R and X Matrices excluding the slack bus
 global R_matrix = zeros(Float64, n_K_L_buses, n_K_L_buses)
 global X_matrix = zeros(Float64, n_K_L_buses, n_K_L_buses)
 
 R_matrix = real.(Z)
 X_matrix = imag.(Z)
-
 
 #Create Matrices that are used on the paper for the linear approximation
 global R_KK = zeros(Float64, n_K_buses, n_K_buses)
@@ -286,7 +277,7 @@ for row in eachrow(Upward_data)
         push!(Upward_set, bus)
     end
 end
-Upward_set
+
 
 # Create dictionaries for the Resistance and Reactance of each edge
 Rij = Dict{Int64, Float64}()
@@ -301,12 +292,14 @@ for row in eachrow(Edges)
     Rij[edge] = R_ij
     Xij[edge] = X_ij
 end
-Rij
+
 
 ########################################################                                 ########################################################
 ######################################################## Mathematical optimization model ########################################################
 ########################################################                                 ########################################################
 
+#Create a mathematical optimization model using the Gurobi Optimizer as the solver
+model = Model(Gurobi.Optimizer)
 
 @variable(model, V[Nodes])                                  # Variable representing voltage magnitudes of each node
 @variable(model, delta[Nodes])                              # Variable representing voltage angles of each node
@@ -317,6 +310,7 @@ Rij
 @variable(model, f[edges_index])                            # Variable representing Active Power flow on each edge
 @variable(model, f_q[edges_index])                          # Variable representing Reactive Power flow on each edge
 
+#### Constraints for the optimization problem
 
 # Limits for the Reactive Power produced by the slack and the K buses
 @constraint(model, [k in slack_K_buses], Qmin[k] <= Q[k] <= Qmax[k]) 
@@ -426,7 +420,6 @@ results_df = DataFrame(
     vm_pu = [value(V[i]) for i in Nodes],
     va_degree = [rad2deg(value(delta[i])) for i in Nodes]
 )
-show(stdout, "text/plain", results_df)
 
 # Results for the Active Power production
 prod_df = DataFrame(   
@@ -458,7 +451,6 @@ price_df = DataFrame(
     price = [dual(active_power[j]) for j in buses]
 )
 
-
 #Results for Flows     
 Edges_leng = 1:length(Edges.from_bus)
 from_bus = Edges[:,:from_bus]
@@ -471,7 +463,6 @@ flows_df = DataFrame(
     Flow_Reactive = [value(f_q[i]) for i in Edges_leng],
     Flowmax = [Flowmax_edge_dict[i] for i in Edges_leng ]
 )
-
 
 #Print the results
 println(results_df)
