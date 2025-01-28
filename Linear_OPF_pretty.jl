@@ -16,7 +16,7 @@ filename = "Paper_nodes_PV.xlsx"
 
 #Alternative way to choose the file
 filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","Paper_nodes_PV.xlsx")
-#filename = joinpath("filepath","Name of file.xlsx")
+#filename = joinpath("filepath","The name of the file.xlsx")
 
 
 #Place the data from the excel file to DataFrames
