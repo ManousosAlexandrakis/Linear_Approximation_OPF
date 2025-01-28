@@ -301,6 +301,7 @@ end
 #Create a mathematical optimization model using the Gurobi Optimizer as the solver
 model = Model(Gurobi.Optimizer)
 
+# Variables
 @variable(model, V[Nodes])                                  # Variable representing voltage magnitudes of each node
 @variable(model, delta[Nodes])                              # Variable representing voltage angles of each node
 @variable(model, Q[slack_K_buses])                          # Variable representing Reactive Power production by generator buses
@@ -310,7 +311,7 @@ model = Model(Gurobi.Optimizer)
 @variable(model, f[edges_index])                            # Variable representing Active Power flow on each edge
 @variable(model, f_q[edges_index])                          # Variable representing Reactive Power flow on each edge
 
-#### Constraints for the optimization problem
+# Constraints for the optimization problem
 
 # Limits for the Reactive Power produced by the slack and the K buses
 @constraint(model, [k in slack_K_buses], Qmin[k] <= Q[k] <= Qmax[k]) 
