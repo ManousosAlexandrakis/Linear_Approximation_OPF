@@ -31,21 +31,6 @@ Downward_data = DataFrame(XLSX.readtable(filename, "Downward"))
 #Sbase of the system
 Ssystem = 1
 
-# Create a dictionary to store max flow limits for each edge
-Flowmax = Dict{Tuple{Int, Int}, Float64}()
-for row in eachrow(Edges)
-    From = row.from_bus
-    To = row.to_bus
-    FlowMax = row.FlowMax
-    
-     # Store FlowMax for both directions in the dictionary using tuples as keys
-     forward_edge = (From, To)
-     backward_edge = (To, From)
-
-     Flowmax[forward_edge] = FlowMax
-     Flowmax[backward_edge] = FlowMax
-end
-
 # Create a dictionary mapping edges' idx to FlowMax
 Flowmax_edge_dict = Dict{Int, Float64}()
 for row in eachrow(Edges)
