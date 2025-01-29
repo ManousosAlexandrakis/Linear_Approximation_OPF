@@ -310,11 +310,11 @@ for k in Nodes
     end
 end
 
-# Active Power Flows on each edge( Taylor Series Approximation)
+# Active Power Flows on each edge (Taylor Series Approximation)
 @constraint(model, [i in edges_index],f[i] - (Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
 / (Rij[i]^2 + Xij[i]^2)  == 0 )
 
-# Reactive Power Flows on each edge( Taylor Series Approximation)
+# Reactive Power Flows on each edge (Taylor Series Approximation)
 @constraint(model, [i in edges_index], f_q[i] - (Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
 / (Rij[i]^2 + Xij[i]^2)    == 0)
 
@@ -349,7 +349,7 @@ end
 / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.from_bus[i] == k) - sum((Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] 
 - delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == reactive_power_k[k])
 
-# Parameter used for the voltage magnitude of generator-buses
+# Parameter used for the voltage magnitude of generator-buses used i Reactive Power Production equation
 h = Dict{Int, Int}()
 for k in K_buses
     h[k] = 1
