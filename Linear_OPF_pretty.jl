@@ -56,14 +56,12 @@ n = size(bus_data,1)
 n_edges = length(Edges.from_bus)
 Lines = 1:n_edges
 
-
 # Create an array to store all the Nodes
 Nodes = Int[]
 for row in eachrow(bus_data)
     bus = row.bus
     push!(Nodes, bus)
 end
-
 
 # Create an array to store all the K buses
 K_buses = Int[]
@@ -91,7 +89,6 @@ end
 # Create an array to store all the K and L buses
 K_L_buses = setdiff(Nodes, [slack_bus])
 n_K_L_buses = length(K_L_buses)
-
 
 
 # Create a map for all the buses(bus names to indexes)
@@ -125,8 +122,7 @@ end
 complete_mapping[slack_bus] = size(bus_data, 1)
 
 
-
-# Create the Admittance Matrix(with mapped buses)
+# Create the Mapped Admittance Matrix
 global Y = zeros(Complex, n, n)
 global Z_w_slack = zeros(Complex, n, n)
 for row in eachrow(Edges)
@@ -252,7 +248,6 @@ for row in eachrow(Upward_data)
     maxQ[bus] = u_maxquantity/Ssystem
 end
 
-
 # Create an array to store all the buses that can offer upward flexibility
 Upward_set = Int[]
 for row in eachrow(Upward_data)
@@ -261,7 +256,6 @@ for row in eachrow(Upward_data)
         push!(Upward_set, bus)
     end
 end
-
 
 # Create dictionaries for the Resistance and Reactance of each edge
 Rij = Dict{Int64, Float64}()
@@ -276,13 +270,15 @@ for row in eachrow(Edges)
     Rij[edge] = R_ij
     Xij[edge] = X_ij
 end
-
 ####################################################################                                 ####################################################################
 #################################################################### Mathematical optimization model ####################################################################
 ####################################################################                                 ####################################################################
 
-#Create a mathematical optimization model using the Gurobi Optimizer as the solver
-model = Model(Gurobi.Optimizer)
+# Create a mathematical optimization model using the Gurobi Optimizer as the solver
+GUROBI_ENV = Gurobi.Env()
+model = Model(() -> Gurobi.Optimizer(GUROBI_ENV))
+set_optimizer_attribute(model, "MIPGap", 0.0) 
+set_silent(model)
 
 # Variables
 @variable(model, V[Nodes])                                  # Variable representing voltage magnitudes of each node
@@ -317,10 +313,10 @@ end
 # Active Power Flows on each edge( Taylor Series Approximation)
 @constraint(model, [i in edges_index],f[i] - (Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
 / (Rij[i]^2 + Xij[i]^2)  == 0 )
+
 # Reactive Power Flows on each edge( Taylor Series Approximation)
 @constraint(model, [i in edges_index], f_q[i] - (Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
 / (Rij[i]^2 + Xij[i]^2)    == 0)
-
 
 #Active Power Flow Limits
 @constraint(model, [i in edges_index],f[i] <=Flowmax_edge_dict[i])
@@ -330,20 +326,17 @@ end
 @constraint(model, [i in edges_index],f_q[i] <=Flowmax_edge_dict[i])
 @constraint(model, [i in edges_index],-f_q[i] <=Flowmax_edge_dict[i])
 
-
 # Voltage magnitude equation for all buses except the slack bus
 @constraint(model, Voltage[k in K_L_buses], V[k] == slack_v + (sum(R_matrix[complete_mapping[k], complete_mapping[i]] * (active_power_k[i]) for i in K_buses)
 + sum(X_matrix[complete_mapping[k], complete_mapping[i]] * (reactive_power_k[i]) for i in K_buses)
 + sum(R_matrix[complete_mapping[k], complete_mapping[i]] * (active_power_k[i]) for i in L_buses)
 + sum(X_matrix[complete_mapping[k], complete_mapping[i]] * (reactive_power_k[i]) for i in L_buses)) / slack_v)
 
-
 # Voltage angle equation for all buses except the slack bus
 @constraint(model, DeltaConstraint[k in K_L_buses], delta[k] == slack_degree + (sum(-R_matrix[complete_mapping[k], complete_mapping[i]] * (reactive_power_k[i]) for i in K_buses)
 + sum(X_matrix[complete_mapping[k], complete_mapping[i]] * (active_power_k[i]) for i in K_buses)
 + sum(-R_matrix[complete_mapping[k], complete_mapping[i]] * (reactive_power_k[i]) for i in L_buses)
 + sum(X_matrix[complete_mapping[k], complete_mapping[i]] * (active_power_k[i]) for i in L_buses)) / (slack_v^2))
-
 
 #Pinjection = sumPij  
 # Taylor Series Approximation for Active Power Injection of slack bus
