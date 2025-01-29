@@ -293,10 +293,9 @@ for row in eachrow(Edges)
     Xij[edge] = X_ij
 end
 
-
-########################################################                                 ########################################################
-######################################################## Mathematical optimization model ########################################################
-########################################################                                 ########################################################
+####################################################################                                 ####################################################################
+#################################################################### Mathematical optimization model ####################################################################
+####################################################################                                 ####################################################################
 
 #Create a mathematical optimization model using the Gurobi Optimizer as the solver
 model = Model(Gurobi.Optimizer)
@@ -373,27 +372,28 @@ end
 / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.from_bus[i] == k) - sum((Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] 
 - delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == reactive_power_k[k])
 
-
+# Parameter used for the voltage magnitude of generator-buses
+h = Dict{Int, Int}()
+for k in K_buses
+    h[k] = 1
+end
 # Reactive Power Production equation for K_buses
-@constraint(model, reactive[k in K_buses], 
-    Q[k]+get(total_qgen_qload,k,0) == 
-     - sum(X_KK_inv[K_bus_mapping[k], K_bus_mapping[j]] * 
-        (
-            sum(R_KK[K_bus_mapping[j], K_bus_mapping[i]] * active_power_k[i] for i in K_buses) +  
-            sum(R_KL[K_bus_mapping[j], L_bus_mapping[i]] * active_power_k[i] for i in L_buses) +  
-            sum(X_KL[K_bus_mapping[j], L_bus_mapping[i]] * reactive_power_k[i] for i in L_buses)  
-            
-        )
-        for j in K_buses)
-    )
-
+ @constraint(model, reactive[k in K_buses], 
+     Q[k]+get(total_qgen_qload,k,0) == 
+      - sum(X_KK_inv[K_bus_mapping[k], K_bus_mapping[j]] * 
+         (
+             sum(R_KK[K_bus_mapping[j], K_bus_mapping[i]] * active_power_k[i] for i in K_buses) +  
+             sum(R_KL[K_bus_mapping[j], L_bus_mapping[i]] * active_power_k[i] for i in L_buses) +  
+             sum(X_KL[K_bus_mapping[j], L_bus_mapping[i]] * reactive_power_k[i] for i in L_buses)  
+             #+(1 - V[j]) 
+             +(1 - h[j]) 
+         )
+         for j in K_buses)
+     )
 
 # Reactive and Active Power injection equations for all buses
-for k in Nodes
-    @constraint(model, reactive_power_k[k] == sum(Q[i] for i in slack_K_buses if i == k) + get(total_qgen_qload,k,0))
-end
-@constraint(model, active_power[k in Nodes],active_power_k[k] == get(total_pgen_pload,k,0) + sum(production[i] for i in Upward_set if i == k) ) 
-
+@constraint(model,reactive_power[k in Nodes],reactive_power_k[k] == sum(Q[i] for i in slack_K_buses if i == k) + get(total_qgen_qload,k,0))
+@constraint(model,  active_power[k in Nodes],  active_power_k[k] == get(total_pgen_pload,k,0) + sum(production[i] for i in Upward_set if i == k) ) #dual-variable is the nodal price
 
 # Objective Function
 @objective(model, Max,  -  sum(PU[i]*production[i] for i in Upward_set))
@@ -401,19 +401,14 @@ end
 # Solve the optimization problem
 optimize!(model)
 
-
 #Dual variables for pricing
-for k in slack_bus
-println(dual(TaylorActive[k]))
-end
-
 for k in Nodes
      println(dual(active_power[k]))
 end
 
-########################################################                                      ########################################################
-######################################################## Results for the optimization problem ######################################################## 
-########################################################                                      ########################################################
+####################################################################                                      ####################################################################
+#################################################################### Results for the optimization problem ####################################################################
+####################################################################                                      ####################################################################
 
 # Results for the Voltage Magnitude and Voltage Angle
 results_df = DataFrame(
@@ -449,7 +444,7 @@ Qreact_df = DataFrame(
 #Results for Prices
 price_df = DataFrame(
     Bus = buses,
-    price = [dual(active_power[j]) for j in buses]
+    price = [-dual(active_power[j]) for j in buses]
 )
 
 #Results for Flows     
@@ -473,7 +468,6 @@ println(price_df)
 println(flows_df)
 # println(PowerInjection_df)
 println("Termination Status:", termination_status(model))
-
 
 
 # Results Stored in an Excel File
