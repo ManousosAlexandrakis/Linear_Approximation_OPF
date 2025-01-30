@@ -1,23 +1,21 @@
 using DataFrames,JuMP, GLPK
 using XLSX,Gurobi
+####################################################################                                 ####################################################################
+####################################################################          Data Handling          ####################################################################
+####################################################################                                 ####################################################################
 
 
 
 
+# Choose xlsx file you want to read
+#filename = "Paper_nodes_PV.xlsx"
+#filename = "Name of file.xlsx" , xlsx file should be in the same directory as the code
 
-#filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\DCOPF","Trondheim_no_dublicates-B-theta-newUpward.xlsx")
+# Alternative way to choose the file
+filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","Paper_nodes_PV.xlsx")
+#filename = joinpath("filepath","The name of the file.xlsx")
 
-#filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Simple Datasets","3nodes-test_newV20.xlsx")
-#filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Simple Datasets","3nodes-test_newV21.xlsx")
-
-#filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","promised_ehv4_Ruan_for_my_code.xlsx")
-#filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","Paper_nodes_PV.xlsx")
-filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","promised_ehv1_Ruan_for_my_code.xlsx")
-
-
-
-
-#Loading Excel sheets into DataFrames
+# Loading Excel sheets into DataFrames
 gen_data = DataFrame(XLSX.readtable(filename, "gen"))
 Edges = DataFrame(XLSX.readtable(filename, "edges"))
 bus_data = DataFrame(XLSX.readtable(filename, "bus"))
@@ -26,40 +24,31 @@ slack_data = DataFrame(XLSX.readtable(filename, "ext_grid"))
 Upward_data = DataFrame(XLSX.readtable(filename, "Upward"))
 Downward_data = DataFrame(XLSX.readtable(filename, "Downward"))
 
-slack_v = slack_data[1, :vm_pu]  #παίρνει απο το dataframe slack_data την πρωτη γραμμή της στήλης vm_pu
+#Data for slack bus(voltage magnitude,voltage degree,bus number)
+slack_v = slack_data[1, :vm_pu]  
 slack_degree = slack_data[1,:va_degree]
 slack_bus = slack_data[1,:bus]
 
-
-
 buses = bus_data[:, :bus]
-
+edges_index = Edges[:,:idx]
+# Create a dictionary to store the index of each bus
 slack_index = findfirst(bus_data[:, :bus] .== slack_bus)
 bus_id_to_index = Dict(bus_data[setdiff(1:end, slack_index), :bus] .=> 1:size(bus_data, 1)-1)
 bus_id_to_index[slack_bus] = size(bus_data, 1)
 
-
-data = DataFrame(
-    from_bus = Edges.from_bus,
-    to_bus = Edges.to_bus,
-    Flowmax = Edges.FlowMax
-) 
-
-flowmax_dict = Dict{Int, Float64}()
+# Create a dictionary mapping edges' idx to FlowMax
+Flowmax_dict = Dict{Tuple{Int, Int}, Float64}()
 for row in eachrow(Edges)
-    flowmax_dict[row.idx] = row.FlowMax
+    Flowmax_dict[(row.from_bus, row.to_bus)] = row.FlowMax
+    Flowmax_dict[(row.to_bus, row.from_bus)] = row.FlowMax
 end
-Flowmax = flowmax_dict
 
-
-
-
+#Sbase of the system
 Ssystem = 1
-edges_index = Edges[:,:idx]
+
 # Create a dictionary to store connected buses
 connected_buses_dict = Dict{Int, Vector{Int}}()
-
-for row in eachrow(data)
+for row in eachrow(Edges)
     From = row.from_bus
     To = row.to_bus
     
@@ -75,61 +64,34 @@ for row in eachrow(data)
 end
 
 
-
-connected_buses_dict
-
-
+# Total number of buses and edges
 n = size(bus_data,1)
+Edges_leng = 1:length(Edges.from_bus)
 
-Edges_leng = 1:length(data.from_bus)
-
+# Create an array to store all the Nodes
 Nodes = Int[]
 for row in eachrow(bus_data)
     bus = row.bus
     push!(Nodes, bus)
 end
 
-# Ssystem = 100
 
-PD = Dict{Int,Float64}()
-QD = Dict{Int,Float64}()
-for row in eachrow(Downward_data)
-    bus = row.Bus
-    d_price = row.PD
-    d_quantity = row.QD
-    #print(d_quantity)
-    PD[bus] = d_price
-    QD[bus] = d_quantity
-end
-
+# Create dictionaries to store generator buses' Marginal Cost, Minimum and Maximum Active Power production limits
 PU = Dict{Int,Float64}()
+MinQ = Dict{Int, Float64}()
+MaxQ = Dict{Int, Float64}()
 for row in eachrow(Upward_data)
-    bus = row.Bus
+    name = row.name
     u_price = row.PU
-    PU[bus] = u_price
+    u_minquantity = row.MinQ
+    u_maxquantity = row.MaxQ
+    #println(u_quantity)
+    PU[name] = u_price
+    MinQ[name] = u_minquantity
+    MaxQ[name] = u_maxquantity
 end
 
-
-# Create a dictionary mapping bus to MinQ (minimum quantity produced)      
-MinQ_dict = Dict{Int, Float64}()
-for row in eachrow(Upward_data)
-    MinQ_dict[row.Bus] = row.MinQ
-end
-MinQ = MinQ_dict
-
-# Create a dictionary mapping bus to MaxQ (maximum quantity produced)      
-MaxQ_dict = Dict{Int, Float64}()
-
-for row in eachrow(Upward_data)
-    MaxQ_dict[row.Bus] = row.MaxQ
-    MinQ_dict[row.Bus] = row.MinQ
-end
-
-
-maxQ = MaxQ_dict
-minQ = MinQ_dict
-
-
+# Create dictionaries to store Minimum and Maximum ReActive Power production limits
 Qmin = Dict{Int, Float64}()
 Qmax = Dict{Int, Float64}()
 for row in eachrow(gen_data)
@@ -140,24 +102,18 @@ for row in eachrow(gen_data)
     Qmax[row.bus] = row.QRmax/Ssystem
     # total_pgen_pload[bus] = get(total_pgen_pload, bus, 0.0) + Pgen / Ssystem
 end
-
-
-Downward_set = Int[]
-for row in eachrow(Downward_data)
-    bus = row.Bus
-    if QD[bus] !=0 
-        push!(Downward_set, bus)
-    end
-end
-
+Upward_data
+# Create an array to store all the buses that can offer upward flexibility
 Upward_set = Int[]
 for row in eachrow(Upward_data)
     bus = row.Bus
-    if maxQ[bus] !=0 
+    if MaxQ[bus] !=0 
         push!(Upward_set, bus)
     end
 end
+buses_except_upward = setdiff(buses, Upward_set)
 
+# Create Y matrix
 global y = zeros(Complex, n, n)
 
 for row in eachrow(Edges)
@@ -171,11 +127,7 @@ for row in eachrow(Edges)
     y[To_Bus,From_Bus] = 1 ./ z[1]
 end
 
-
-
 Y = zeros(Complex, n, n)
-
-
 
 for k in Nodes
     Y[bus_id_to_index[k], bus_id_to_index[k]] =  sum((y[bus_id_to_index[k], bus_id_to_index[m]] ) for m in connected_buses_dict[k])
@@ -191,49 +143,18 @@ Y
 #println("Admittance Matrix (Ykk):")
 #println(Y)
 
-
+# Create B matrix
 B = imag.(Y)
 
-# Create Downward_set
-Downward_set = Downward_data[:, :Bus]
-buses_except_downward = setdiff(buses, Downward_set)
-# Create Upward_set
-Upward_set = Upward_data[:, :Bus]
-buses_except_upward = setdiff(buses, Upward_set)
-
-
+# Active Load for each bus
 global total_p= 0.0
-
-
 total_pgen_pload = Dict{Int, Float64}()
-
-for row in eachrow(bus_data)
-    bus = row.bus
-    total_pgen_pload[bus_id_to_index[bus]] = 0.0
-    
-end
-
 for row in eachrow(load_data)
     bus = bus_id_to_index[row.bus]
-    # Pload = row.p_pu
-    
     Pload = row.p_mw/ Ssystem
-    
     total_pgen_pload[bus] = get(total_pgen_pload, bus, 0.0) - Pload 
-    
     global total_p += total_pgen_pload[bus]
-    
 end
-
-println(total_p)
-
-
-Flowmax_dict = Dict{Tuple{Int, Int}, Float64}()
-for row in eachrow(Edges)
-    Flowmax_dict[(row.from_bus, row.to_bus)] = row.FlowMax
-    Flowmax_dict[(row.to_bus, row.from_bus)] = row.FlowMax
-end
-Flowmax_dict
 
 
 # Create Load_set
@@ -242,94 +163,87 @@ for row in eachrow(load_data)
     load_buses = row.bus
     push!(Load_set,load_buses)
 end
-Load_set
-
 Buses_without_load =  setdiff(buses, Load_set)
-###################
-#Create Load_Dict
+
+# Load_Dict
 # Add buses and their load values from load_data
-# Initialize Load_dict as a dictionary
 Load_dict = Dict{Int, Float64}()
-
 for row in eachrow(load_data)
-    Load_dict[row.bus] = row.p_mw  # Add the bus and its corresponding load value
+    Load_dict[row.bus] = row.p_mw  
 end
-
-# Now, add the additional buses with load 0.0 if they are not already in Load_dict
+# Add the additional buses with load 0.0 if they are not already in Load_dict
 for bus in Buses_without_load
     Load_dict[bus] = 0.0
 end
-
 Load = Load_dict
 
-buses_except_upward = setdiff(buses, Upward_set)
 
 
-
+# Load_Dict_q
+# Add buses and their load_q values from load_data
 Load_dict_q = Dict{Int, Float64}()
-
 for row in eachrow(load_data)
-    Load_dict_q[row.bus] = row.q_mvar  # Add the bus and its corresponding load value
+    Load_dict_q[row.bus] = row.q_mvar  
 end
-
 # Now, add the additional buses with load 0.0 if they are not already in Load_dict
 for bus in Buses_without_load
     Load_dict_q[bus] = 0.0
 end
-
 Load_q = Load_dict_q
 
 
-model = Model(Gurobi.Optimizer)
+####################################################################                                 ####################################################################
+#################################################################### Mathematical optimization model ####################################################################
+####################################################################                                 ####################################################################
 
-Nodes
+# Create a mathematical optimization model using the Gurobi Optimizer as the solver
+GUROBI_ENV = Gurobi.Env()
+model = Model(() -> Gurobi.Optimizer(GUROBI_ENV))
+set_optimizer_attribute(model, "MIPGap", 0.0) 
+set_silent(model)
 
-#variables
-@variable(model, f[1:n,1:n])
-@variable(model, j[1:n,1:n])
-@variable(model, p[Nodes]>=0)
-@variable(model, delta[Nodes])
-@variable(model, V[Nodes])
-@variable(model, Q[Nodes])  
 
-#Active Power Flow calculation for each edge
+
+#Variables
+@variable(model, f[1:n,1:n])     # Variable representing Active Power flow on each edge(both directions)
+@variable(model, j[1:n,1:n])     # Variable representing Reactive Power flow on each edge(both directions)
+@variable(model, p[Nodes]>=0)    # Variable representing Active Power production by generator buses
+@variable(model, Q[Nodes])       # Variable representing Reactive Power production by generator buses
+@variable(model, delta[Nodes])   # Variable representing voltage angles of each node
+@variable(model, V[Nodes])       # Variable representing voltage magnitudes of each node
+
+
+# Active Power Flow calculation for each edge
 @constraint(model,[m in Nodes,n in connected_buses_dict[m]],B[bus_id_to_index[m], bus_id_to_index[n]] *(delta[m] - delta[n])==f[bus_id_to_index[m], bus_id_to_index[n]]) 
 @constraint(model,[m in Nodes,n in connected_buses_dict[m]],B[bus_id_to_index[m], bus_id_to_index[n]] *(V[m] - V[n])==j[bus_id_to_index[m], bus_id_to_index[n]])  ###########
 
-#Voltage for all buses is considered 1
+# Voltage for slack_bus is considered 1
 @constraint(model, V[slack_bus] == 1)
 
+# Voltage magnitude limits 0.8 <= V <= 1.2
 for k in Nodes 
     if k != slack_bus
-        @constraint(model, 0.8 <= V[k] <= 1.2)         ###########
+        @constraint(model, 0.8 <= V[k] <= 1.2)         
     end
 end
 
 #Voltage angle for slack bus is considered 0
 @constraint(model, delta[slack_bus] == 0)
+
 #Active Power Limits for Generators
-@constraint(model,PowerProductionLimits[i=Upward_set] , minQ[i] <= p[i]  <= maxQ[i])
+@constraint(model,PowerProductionLimits[i=Upward_set] , MinQ[i] <= p[i]  <= MaxQ[i])
+
 #Reactive Power Limits for Generators
-@constraint(model,ReactivePowerProductionLimits[i=Upward_set] , Qmin[i] <= Q[i]  <= Qmax[i]) ##############
-
-
-
-
-Flowmax_dict = Dict{Tuple{Int, Int}, Float64}()
-for row in eachrow(Edges)
-    Flowmax_dict[(row.from_bus, row.to_bus)] = row.FlowMax
-    Flowmax_dict[(row.to_bus, row.from_bus)] = row.FlowMax
-end
+@constraint(model,ReactivePowerProductionLimits[i=Upward_set] , Qmin[i] <= Q[i]  <= Qmax[i]) 
 
 # Active Power Limit for Edges' Flows
 @constraint(model,[m in Nodes,n in connected_buses_dict[m]] ,  f[bus_id_to_index[m], bus_id_to_index[n]] <= Flowmax_dict[m,n])  
+# Reactive Power Limit for Edges' Flows
 @constraint(model,[m in Nodes,n in connected_buses_dict[m]] ,  j[bus_id_to_index[m], bus_id_to_index[n]] <= Flowmax_dict[m,n])  
 
-
-
-#Active Power Production of non Gen
+#Active Power Production of non Generators is 0
 @constraint(model, [n in buses_except_upward], p[n]==0)
-#Reactive Power Production of non Gen
+#Reactive Power Production of non Generators is 0
 @constraint(model, [n in buses_except_upward], Q[n]==0) #############
 
 #Active Power injection of node n = Sum of ejected power flows from node n
@@ -337,21 +251,22 @@ end
 #Reactive Power injection of node n = Sum of ejected power flows from node n
 @constraint(model, [n in Nodes], sum(j[bus_id_to_index[n], bus_id_to_index[m]] for m in connected_buses_dict[n]) ==Q[n] - Load_q[n] ) ###############
 
-Load_q
-Load
-Upward_set
-PU
 
+# Objective Function
 @objective(model, Min,  sum(PU[i]*p[i] for i in Upward_set))
 
+# Solve the optimization problem
 optimize!(model)
-status = termination_status(model)
-println(status)   
 
 
+#Dual variables for pricing
+for k in Nodes
+    println(dual(price[k]))
+end
 
-
-@show objective_value(model)
+####################################################################                                      ####################################################################
+#################################################################### Results for the optimization problem ####################################################################
+####################################################################                                      ####################################################################
 
 #Results for production and injection
 results_df = DataFrame(
@@ -379,8 +294,17 @@ flows_df = DataFrame(
 
 price_df = DataFrame(
     Bus = Nodes,
-    node_price = [dual(price[j]) for j in Nodes]
+    node_price = [-dual(price[j]) for j in Nodes]
 )
 
+#Print the results
+println(results_df)
+println(production_df)
+println(price_df)
+println(flows_df)
 
+println("Termination Status:", termination_status(model))
+
+# Results Stored in an Excel File
 #XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Decoupled_Paper_nodes_PV.xlsx", "flows"=> flows_df, "results" => results_df, "production" => production_df, "price" => price_df)
+#XLSX.writetable("filepath.xlsx",  "Results" => results_df , "Production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   

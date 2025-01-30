@@ -5,15 +5,15 @@ using XLSX,Gurobi
 ####################################################################          Data Handling          ####################################################################
 ####################################################################                                 ####################################################################
 
-#Choose xlsx file you want to read
+# Choose xlsx file you want to read
 #filename = "Paper_nodes_PV.xlsx"
 #filename = "Name of file.xlsx" , xlsx file should be in the same directory as the code
 
-#Alternative way to choose the file
+# Alternative way to choose the file
 filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","Paper_nodes_PV.xlsx")
 #filename = joinpath("filepath","The name of the file.xlsx")
 
-#Loading Excel sheets into DataFrames
+# Loading Excel sheets into DataFrames
 sgen_data = DataFrame(XLSX.readtable(filename, "gen"))
 Edges = DataFrame(XLSX.readtable(filename, "edges"))
 bus_data = DataFrame(XLSX.readtable(filename, "bus"))
@@ -74,7 +74,7 @@ for row in eachrow(bus_data)
     push!(Nodes, bus)
 end
 
-# Create a dictionary to store generator buses' Marginal Cost, Minimum and Maximum Active Power production limits
+# Create dictionaries to store generator buses' Marginal Cost, Minimum and Maximum Active Power production limits
 PU = Dict{Int,Float64}()
 MinQ = Dict{Int, Float64}()
 MaxQ = Dict{Int, Float64}()
@@ -137,13 +137,11 @@ global total_p= 0.0
 total_pgen_pload = Dict{Int, Float64}()
 for row in eachrow(load_data)
     bus = bus_id_to_index[row.bus]
-    # Pload = row.p_pu
     Pload = row.p_mw/ Ssystem
     total_pgen_pload[bus] = get(total_pgen_pload, bus, 0.0) - Pload 
     global total_p += total_pgen_pload[bus]
 end
-total_pgen_pload
-println(total_p)
+
 
 # Create Load_set
 Load_set = Int[]
@@ -158,7 +156,7 @@ Buses_without_load =  setdiff(buses, Load_set)
 # Add buses and their load values from load_data
 Load_dict = Dict{Int, Float64}()
 for row in eachrow(load_data)
-    Load_dict[row.bus] = row.p_mw  # Add the bus and its corresponding load value
+    Load_dict[row.bus] = row.p_mw  
 end
 # Add the additional buses with load 0.0 if they are not already in Load_dict
 for bus in Buses_without_load
@@ -185,22 +183,22 @@ set_silent(model)
 @variable(model, delta[Nodes]) # Variable representing voltage angles of each node
 @variable(model, V[Nodes])     # Variable representing voltage magnitudes of each node
 
-#Real Power Flow calculation for each edge
+# Real Power Flow calculation for each edge
 @constraint(model,[m in Nodes,n in connected_buses_dict[m]],B[bus_id_to_index[m], bus_id_to_index[n]] *(delta[m] - delta[n])==f[bus_id_to_index[m], bus_id_to_index[n]]) 
-#Voltage for all buses is considered 1
+# Voltage for all buses is considered 1
 @constraint(model,[m in Nodes], V[m] == 1)
-#Voltage angle for slack bus is considered 0
+# Voltage angle for slack bus is considered 0
 @constraint(model, delta[slack_bus] == 0)
-#Real Power Limits for Generators
+# Real Power Limits for Generators
 @constraint(model,PowerProductionLimits[i=Upward_set] , MinQ[i] <= p[i]  <= MaxQ[i])
 
-# RealPower Limit for Edges' Flows
+# Real Power Limit for Edges' Flows
 @constraint(model,[m in Nodes,n in connected_buses_dict[m]] ,  f[bus_id_to_index[m], bus_id_to_index[n]] <= Flowmax_dict[m,n])  
 
 #Real Power Production of non Generators is 0
 @constraint(model, [n in buses_except_upward], p[n]==0)
 
-#Power injection of node n = Sum of ejected power flows from node n
+# Power injection of node n = Sum of ejected power flows from node n
 @constraint(model, price[n in Nodes], sum(f[bus_id_to_index[n], bus_id_to_index[m]] for m in connected_buses_dict[n]) ==p[n] - Load[n] )
 
 
@@ -210,8 +208,7 @@ set_silent(model)
 
 # Solve the optimization problem
 optimize!(model)
-status = termination_status(model)
-println(status)   
+ 
 
 #Dual variables for pricing
 for k in Nodes
@@ -224,7 +221,7 @@ end
 #Results for Prices
 price_df = DataFrame(
     Bus = Nodes,
-    node_price = [dual(price[j]) for j in Nodes]
+    node_price = [-dual(price[j]) for j in Nodes]
 )
 
 
