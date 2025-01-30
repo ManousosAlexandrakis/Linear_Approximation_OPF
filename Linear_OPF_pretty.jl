@@ -1,7 +1,7 @@
 #Packages
 using DataFrames, JuMP,Gurobi
 using LinearAlgebra
-using XLSX, Plots , PlotThemes
+using XLSX
 ####################################################################                                 ####################################################################
 ####################################################################          Data Handling          ####################################################################
 ####################################################################                                 ####################################################################
@@ -15,7 +15,7 @@ filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπ�
 #filename = joinpath("filepath","The name of the file.xlsx")
 
 
-#Place the data from the excel file to DataFrames
+#Loading Excel sheets into DataFrames
 gen_data = DataFrame(XLSX.readtable(filename, "gen"))
 Edges = DataFrame(XLSX.readtable(filename, "edges"))
 bus_data = DataFrame(XLSX.readtable(filename, "bus"))
@@ -45,11 +45,10 @@ slack_bus = slack_data[1,:bus]
 buses = bus_data[:, :bus]
 edges_index = Edges[:,:idx]
 
-# Create a dictionary to store the index of each busq
+# Create a dictionary to store the index of each bus
 slack_index = findfirst(bus_data[:, :bus] .== slack_bus)
 bus_id_to_index = Dict(bus_data[setdiff(1:end, slack_index), :bus] .=> 1:size(bus_data, 1)-1)
 bus_id_to_index[slack_bus] = size(bus_data, 1)
-bus_id_to_index_with_slack = Dict(bus_data[:, :bus] .=> 1:size(bus_data, 1))
 
 # Total number of buses and edges
 n = size(bus_data,1)
@@ -350,23 +349,26 @@ end
 - delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == reactive_power_k[k])
 
 # Parameter used for the voltage magnitude of generator-buses used i Reactive Power Production equation
-h = Dict{Int, Int}()
+h = Dict{Int, Float64}()
 for k in K_buses
     h[k] = 1
 end
 # Reactive Power Production equation for K_buses
- @constraint(model, reactive[k in K_buses], 
-     Q[k]+get(total_qgen_qload,k,0) == 
-      - sum(X_KK_inv[K_bus_mapping[k], K_bus_mapping[j]] * 
-         (
-             sum(R_KK[K_bus_mapping[j], K_bus_mapping[i]] * active_power_k[i] for i in K_buses) +  
-             sum(R_KL[K_bus_mapping[j], L_bus_mapping[i]] * active_power_k[i] for i in L_buses) +  
-             sum(X_KL[K_bus_mapping[j], L_bus_mapping[i]] * reactive_power_k[i] for i in L_buses)  
-             #+(1 - V[j]) 
-             +(1 - h[j]) 
-         )
-         for j in K_buses)
-     )
+  @constraint(model, reactive[k in K_buses], 
+      Q[k]+get(total_qgen_qload,k,0) == 
+       - sum(X_KK_inv[K_bus_mapping[k], K_bus_mapping[j]] * 
+          (
+              sum(R_KK[K_bus_mapping[j], K_bus_mapping[i]] * active_power_k[i] for i in K_buses) +  
+              sum(R_KL[K_bus_mapping[j], L_bus_mapping[i]] * active_power_k[i] for i in L_buses) +  
+              sum(X_KL[K_bus_mapping[j], L_bus_mapping[i]] * reactive_power_k[i] for i in L_buses)  
+              #+(1 - V[j]) 
+              +(1 - h[j]) 
+          )
+          for j in K_buses)
+      )
+# @constraint(model, V[15]==1)
+# @constraint(model, V[51]==1)
+
 
 # Reactive and Active Power injection equations for all buses
 @constraint(model,reactive_power[k in Nodes],reactive_power_k[k] == sum(Q[i] for i in slack_K_buses if i == k) + get(total_qgen_qload,k,0))
@@ -441,12 +443,12 @@ flows_df = DataFrame(
 println(results_df)
 println(prod_df)
 println(Qreact_df)
-println(price_df)
-println(flows_df)
+# println(price_df)
+# println(flows_df)
 # println(PowerInjection_df)
 println("Termination Status:", termination_status(model))
 
 
 # Results Stored in an Excel File
-#XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\LINEAR_OPF_Paper_nodes_K.xlsx",  "results" => results_df , "production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
+#XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\test.xlsx",  "results" => results_df , "production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
 #XLSX.writetable("filepath.xlsx",  "Results" => results_df , "Production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
