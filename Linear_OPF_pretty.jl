@@ -11,7 +11,7 @@ using XLSX
 #filename = "Name of file.xlsx" , xlsx file should be in the same directory as the code
 
 #Alternative way to choose the file
-filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","Paper_nodes_PV.xlsx")
+filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","promised_ehv1_Ruan_for_my_code.xlsx")
 #filename = joinpath("filepath","The name of the file.xlsx")
 
 
@@ -450,5 +450,5 @@ println("Termination Status:", termination_status(model))
 
 
 # Results Stored in an Excel File
-#XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\test.xlsx",  "results" => results_df , "production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
+XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\LINEAR_OPF_ehv1.xlsx",  "results" => results_df , "production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
 #XLSX.writetable("filepath.xlsx",  "Results" => results_df , "Production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
