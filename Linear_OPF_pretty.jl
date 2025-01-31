@@ -348,7 +348,7 @@ end
 / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.from_bus[i] == k) - sum((Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] 
 - delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == reactive_power_k[k])
 
-# Parameter used for the voltage magnitude of generator-buses used i Reactive Power Production equation
+# Parameter used for the voltage magnitude of generator-buses used in Reactive Power Production equation
 h = Dict{Int, Float64}()
 for k in K_buses
     h[k] = 1
