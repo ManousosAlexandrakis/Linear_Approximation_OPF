@@ -11,7 +11,7 @@ using XLSX
 #filename = "Name of file.xlsx" , xlsx file should be in the same directory as the code
 
 #Alternative way to choose the file
-filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","promised_ehv1_Ruan_for_my_code.xlsx")
+filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","Paper_nodes_PV.xlsx")
 #filename = joinpath("filepath","The name of the file.xlsx")
 
 
@@ -28,6 +28,19 @@ Downward_data = DataFrame(XLSX.readtable(filename, "Downward"))
 #K = all generators except slack bus
 #L = all buses except slack bus and K
 
+# Create a dictionary to store connected buses
+connected_buses_dict = Dict{Int, Vector{Int}}()
+for row in eachrow(Edges)
+    From = row.from_bus
+    To = row.to_bus
+    
+    if !haskey(connected_buses_dict, From)
+        connected_buses_dict[From] = Int[]
+    end
+    push!(connected_buses_dict[From], To)
+    
+end
+connected_buses_dict
 #Sbase of the system
 Ssystem = 1
 
@@ -309,13 +322,9 @@ for k in Nodes
     end
 end
 
-# Active Power Flows on each edge (Taylor Series Approximation)
-@constraint(model, [i in edges_index],f[i] - (Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
-/ (Rij[i]^2 + Xij[i]^2)  == 0 )
+ @constraint(model,[i in Nodes], sum(f[j] for j in edges_index if Edges.from_bus[j] == i) - sum(f[j] for j in edges_index if Edges.to_bus[j] == i) == active_power_k[i])
+ @constraint(model,[i in Nodes], sum(f_q[j] for j in edges_index if Edges.from_bus[j] == i) - sum(f_q[j] for j in edges_index if Edges.to_bus[j] == i) == reactive_power_k[i])
 
-# Reactive Power Flows on each edge (Taylor Series Approximation)
-@constraint(model, [i in edges_index], f_q[i] - (Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
-/ (Rij[i]^2 + Xij[i]^2)    == 0)
 
 #Active Power Flow Limits
 @constraint(model, [i in edges_index],f[i] <=Flowmax_edge_dict[i])
@@ -348,8 +357,26 @@ end
 / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.from_bus[i] == k) - sum((Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] 
 - delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == reactive_power_k[k])
 
-
-@constraint(model, [i in Upward_set], V[i]==1)
+# Parameter used for the voltage magnitude of generator-buses used in Reactive Power Production equation
+h = Dict{Int, Float64}()
+for k in K_buses
+    h[k] = 1
+end
+# Reactive Power Production equation for K_buses
+  @constraint(model, reactive[k in K_buses], 
+      Q[k]+get(total_qgen_qload,k,0) == 
+       - sum(X_KK_inv[K_bus_mapping[k], K_bus_mapping[j]] * 
+          (
+              sum(R_KK[K_bus_mapping[j], K_bus_mapping[i]] * active_power_k[i] for i in K_buses) +  
+              sum(R_KL[K_bus_mapping[j], L_bus_mapping[i]] * active_power_k[i] for i in L_buses) +  
+              sum(X_KL[K_bus_mapping[j], L_bus_mapping[i]] * reactive_power_k[i] for i in L_buses)  
+              #+(1 - V[j]) 
+              +(1 - h[j]) 
+          )
+          for j in K_buses)
+      )
+# @constraint(model, V[15]==1)
+# @constraint(model, V[51]==1)
 
 
 # Reactive and Active Power injection equations for all buses
@@ -426,7 +453,7 @@ println(results_df)
 println(prod_df)
 println(Qreact_df)
 # println(price_df)
-# println(flows_df)
+ println(flows_df)
 # println(PowerInjection_df)
 println("Termination Status:", termination_status(model))
 
@@ -434,3 +461,4 @@ println("Termination Status:", termination_status(model))
 # Results Stored in an Excel File
 #XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\LINEAR_OPF_ehv1.xlsx",  "results" => results_df , "production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
 #XLSX.writetable("filepath.xlsx",  "Results" => results_df , "Production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
+#XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\test.xlsx",  "results" => results_df , "production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   

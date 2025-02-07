@@ -18,6 +18,13 @@ filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπ
 filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv1","LINEAR_OPF_ehv1.xlsx")
 filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv1","LINEAR_OPF_Paper_nodes_PV_fixed_ehv1")
 
+filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","ACOPF_ehv5.xlsx")
+filename2 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","ACOPF_ehv5_fixed.xlsx")
+filename3 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","BTheta_ehv5.xlsx")
+filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","Decoupled_ehv5.xlsx")
+filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","LINEAR_OPF_ehv5.xlsx")
+filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","LINEAR_OPF_Paper_nodes_PV_fixed_ehv5")
+
 
 
 

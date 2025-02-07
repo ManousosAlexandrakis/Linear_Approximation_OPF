@@ -38,6 +38,13 @@ filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπ
 filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","LINEAR_OPF_ehv5.xlsx")
 filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","LINEAR_OPF_ehv5.xlsx")
 
+filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","ACOPF_ehv4.xlsx")
+filename2 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","ACOPF_ehv4_fixed.xlsx")
+filename3 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","BTheta_ehv4.xlsx")
+filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","Decoupled_ehv4.xlsx")
+filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","LINEAR_OPF_ehv4.xlsx")
+filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","LINEAR_OPF_ehv4.xlsx")
+
 
 
 ##################################################################################
@@ -433,7 +440,7 @@ max_price = maximum([maximum(Y_prices_ACOPF),  maximum(Y_prices_BTheta), maximum
 
 buses = VD_ACOPF_df.Bus
 bus_count = length(buses)
-y_ticks_values_prices = vcat(1150, collect(range(min_price * 0.99, stop = max_price * 1.01, length = 9)))
+y_ticks_values_prices = vcat(1150, collect(range(min_price * 0.99, stop = max_price * 1.01, length = 11)))
 y_ticks_labels_prices = [@sprintf("%.2f", v) for v in y_ticks_values_prices]
 
 buses_str = string.(buses)
@@ -505,7 +512,7 @@ hline!([1150], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 #hline!([30], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv5_priced.pdf")
+savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_priced.pdf")
 # Titles for each subplot
 titles = ["Plot 1", "Plot 2", "Plot 3", "Plot 4"]
 
