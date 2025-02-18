@@ -28,19 +28,6 @@ Downward_data = DataFrame(XLSX.readtable(filename, "Downward"))
 #K = all generators except slack bus
 #L = all buses except slack bus and K
 
-# Create a dictionary to store connected buses
-connected_buses_dict = Dict{Int, Vector{Int}}()
-for row in eachrow(Edges)
-    From = row.from_bus
-    To = row.to_bus
-    
-    if !haskey(connected_buses_dict, From)
-        connected_buses_dict[From] = Int[]
-    end
-    push!(connected_buses_dict[From], To)
-    
-end
-connected_buses_dict
 #Sbase of the system
 Ssystem = 1
 

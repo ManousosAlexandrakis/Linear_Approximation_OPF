@@ -8,12 +8,12 @@ using XLSX, Plots , PlotThemes,Printf,Interpolations
 
 
 
-# filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","ACOPF_Paper_nodes_PV.xlsx")
-# filename2 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","ACOPF_Paper_nodes_PV_fixed.xlsx")
-# filename3 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","BTheta_Paper_nodes_PV.xlsx")
-# filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","Decoupled_Paper_nodes_PV.xlsx")
-# filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","LINEAR_OPF_Paper_nodes_PV.xlsx")
-# filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
+ filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","ACOPF_Paper_nodes_PV.xlsx")
+ filename2 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","ACOPF_Paper_nodes_PV_fixed.xlsx")
+ filename3 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","BTheta_Paper_nodes_PV.xlsx")
+ filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","Decoupled_Paper_nodes_PV.xlsx")
+ filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","LINEAR_OPF_Paper_nodes_PV.xlsx")
+ filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
 
 
 # filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV_no_flows_constraints","ACOPF_Paper_nodes_PV.xlsx")
@@ -118,7 +118,7 @@ production = bar(
 bar!(
     x_indices .- 1*offset,  # Center the first group of bars
     Y_LINEAR,  # Values for the first dataset
-    label = "Linear_Bolognani_OPF",
+    label = "Linear_Thesis_OPF",
     color = RGB(244/255,120/255,53/255),
     legendfontsize = 8,
     bar_width = bar_width,  # Set the width of the bars
@@ -147,7 +147,7 @@ bar!(x_indices .+ 1*offset,  # Center the first group of bars
 
 )
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv5_active.pdf")
+savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_active.pdf")
 
 #Voltage Magnitude Plotting
 ##############################################
@@ -163,7 +163,7 @@ min_voltage = minimum([minimum(Y_V_ACOPF),  minimum(Y_V_BTheta), minimum(Y_V_Dec
 
 
 
-yticks_values_V = range(min_voltage * 0.99, stop = max_voltage*1.01, length = 10)
+yticks_values_V = range(min_voltage * 0.97, stop = max_voltage*1.01, length = 10)
 
 #yticks_values_V = 0.75:0.05:1.25
 yticks_labels_V = [@sprintf("%.2f", v) for v in yticks_values_V]
@@ -180,14 +180,14 @@ xticks_labels_V = buses_str[1:1:end]
 theme(:wong2)
 V = scatter(buses_str,
          Y_V_ACOPF,
-         ylim = (min_voltage* 0.99,max_voltage*1.01),
+         ylim = (min_voltage* 0.97,max_voltage*1.01),
          xlim = (-0,bus_count),
          xlabel = "Buses",
          ylabel = "Voltage Magnitude[pu]",
          title = "Voltage Magnitude",
          legend = :bottomleft,
          label = "ACOPF",
-         markersize = 9,
+         markersize = 10,
          color = RGB(142/255,193/255,39/255),
          alpha = 0.8,
          yticks = (yticks_values_V, yticks_labels_V),  # Set yticks and labels
@@ -232,7 +232,7 @@ plot!(buses_str, Y_V_Decoupled, color= RGB(0/255,174/255,219/255), lw=2,label = 
 
 scatter!(buses_str,
          Y_V_LINEAR,
-         label = "Linear_Bolognani_OPF",
+         label = "Linear_Thesis_OPF",
          color = RGB(244/255,120/255,53/255),
          markersize = 11,
          alpha = 0.7,
@@ -241,7 +241,7 @@ scatter!(buses_str,
 plot!(buses_str, Y_V_LINEAR, color= RGB(244/255,120/255,53/255), lw=2,label = false)  # Add line plot to connect points
 
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv5_Voltage_Magnitude.pdf")
+savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_Voltage_Magnitude.pdf")
 
 #Voltage Angle Plotting
 ##############################################
@@ -266,7 +266,7 @@ end
 
 #yticks_values_D = min_delta*1.1:((max_delta-min_delta)/8):max_delta*1.1
 #yticks_values_D = range(min_delta * 1.1, stop = max_delta*1.1, length = 10)
-yticks_values_D = vcat(0, collect(range(min_delta * 1.02, stop = max_delta * 1.5, length = 10)))
+yticks_values_D = vcat(0, collect(range(min_delta * 1.02, stop = max_delta * 1.1, length = 10)))
 
 yticks_labels_D = [@sprintf("%.2f", v) for v in yticks_values_D]
 bus_count = length(buses)
@@ -283,14 +283,14 @@ buses_str = string.(buses)
 theme(:wong2)
 Delta = scatter(buses_str,
          Y_D_ACOPF,
-         ylim = (min_delta*1.02,max_delta*1.5),
+         ylim = (min_delta*1.02,max_delta*1.1),
          xlim = (0,bus_count),
          xlabel = "Buses",
          ylabel = "Delta[degrees]",
          title = "Voltage Angle",
          legend = :bottomleft,
          label = "ACOPF",
-         markersize = 11,
+         markersize = 10,
          color = RGB(142/255,193/255,39/255),
          alpha = 0.6,
          yticks = (yticks_values_D, yticks_labels_D) ,
@@ -311,7 +311,7 @@ Delta = scatter(buses_str,
          Y_D_BTheta,
          label = "BTHETA_OPF",
          color = RGB(162/255,0/255,255/255),
-         markersize = 9,
+         markersize = 11,
          alpha = 0.7,
         markershape = :utriangle
 )
@@ -322,7 +322,7 @@ scatter!(buses_str,
 Y_D_Decoupled,
 label = "DECOUPLED_OPF",
 color = RGB(0/255,174/255,219/255),
-markersize = 10,
+markersize = 12,
 alpha = 0.8,
 markershape = :xcross
 )
@@ -331,7 +331,7 @@ plot!(buses_str, Y_D_Decoupled, color=RGB(0/255,174/255,219/255), lw=2,label = f
 
 scatter!(buses_str,
          Y_D_LINEAR,
-         label = "Linear_Bolognani_OPF",
+         label = "Linear_Thesis_OPF",
          color = RGB(244/255,120/255,53/255),
          markersize = 10,
          alpha = 0.8,
@@ -339,7 +339,7 @@ scatter!(buses_str,
 )
 plot!(buses_str, Y_D_LINEAR, color=RGB(244/255,120/255,53/255), lw=2,label = false)  # Add line plot to connect points
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv5_Voltage_Angle.pdf")
+savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_Voltage_Angle.pdf")
 
 
 #Reactive Production Plotting
@@ -401,7 +401,7 @@ reactive = bar(
 bar!(
     x_indices .- 1*offset,  # Center the first group of bars
     Y_reactive_LINEAR,  # Values for the first dataset
-    label = "Linear_Bolognani_OPF",
+    label = "Linear_Thesis_OPF",
     color = RGB(244/255,120/255,53/255),
     legendfontsize = 8,
     bar_width = bar_width,  # Set the width of the bars
@@ -424,7 +424,7 @@ hline!([0], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 
 
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv5_reactive.pdf")
+savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_reactive.pdf")
 #Price Plotting
 ###############################################################################
 ###############################################################################
@@ -440,7 +440,7 @@ max_price = maximum([maximum(Y_prices_ACOPF),  maximum(Y_prices_BTheta), maximum
 
 buses = VD_ACOPF_df.Bus
 bus_count = length(buses)
-y_ticks_values_prices = vcat(1150, collect(range(min_price * 0.99, stop = max_price * 1.01, length = 11)))
+y_ticks_values_prices = vcat(1150, collect(range(min_price * 0.98, stop = max_price * 1.01, length = 11)))
 y_ticks_labels_prices = [@sprintf("%.2f", v) for v in y_ticks_values_prices]
 
 buses_str = string.(buses)
@@ -451,14 +451,14 @@ theme(:wong2)
 
 prices = scatter(buses_str,
             Y_prices_ACOPF,
-            ylim = (min_price*0.99,max_price*1.01),
+            ylim = (min_price*0.98,max_price*1.01),
             xlim = (0,bus_count),
             xlabel = "Buses",
             ylabel = "Price[pu]",
             title = "Price",
             legend = :topleft,
             label = "ACOPF",
-            markersize = 12,
+            markersize = 10,
             color = RGB(142/255,193/255,39/255),
             alpha = 0.6,
             yticks = (y_ticks_values_prices, y_ticks_labels_prices),
@@ -500,7 +500,7 @@ scatter!(
 scatter!(
     buses_str,
     Y_prices_LINEAR,
-    label = "Linear_Bolognani_OPF",
+    label = "Linear_Thesis_OPF",
     color = RGB(244/255,120/255,53/255),
     markersize = 14,
     alpha = 1.2,

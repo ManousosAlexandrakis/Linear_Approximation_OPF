@@ -5,13 +5,14 @@ using XLSX
 ####################################################################                                 ####################################################################
 ####################################################################          Data Handling          ####################################################################
 ####################################################################                                 ####################################################################
-
 #Choose xlsx file you want to read
 #filename = "Paper_nodes_PV.xlsx"
 #filename = "Name of file.xlsx" , xlsx file should be in the same directory as the code
-
 #Alternative way to choose the file
-filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","promised_ehv1_Ruan_for_my_code.xlsx")
+filepath = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας"
+filename = joinpath(filepath,"Paper_nodes_PV.xlsx")
+
+#filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","Paper_nodes_PV.xlsx")
 #filename = joinpath("filepath","The name of the file.xlsx")
 
 
@@ -303,23 +304,27 @@ set_silent(model)
 @constraint(model, UpperBound2[i in Upward_set], production[i] >= minQ[i])
 
 # Voltage magnitude limits for all buses except the slack bus
-for k in Nodes 
-    if k != slack_bus
-        @constraint(model, 0.8 <= V[k] <= 1.2) 
-    end
-end
+@constraint(model,LowerBoundV[k in K_L_buses] ,0.8 <= V[k] ) 
+@constraint(model,UpperBoundV[k in K_L_buses] , V[k] <= 1.2) 
+
+
+
+@constraint(model,injectionsandflows[i in Nodes], sum(f[j] for j in edges_index if Edges.from_bus[j] == i) - sum(f[j] for j in edges_index if Edges.to_bus[j] == i) == active_power_k[i])
+@constraint(model,[i in Nodes], sum(f_q[j] for j in edges_index if Edges.from_bus[j] == i) - sum(f_q[j] for j in edges_index if Edges.to_bus[j] == i) == reactive_power_k[i])
 
 # Active Power Flows on each edge (Taylor Series Approximation)
-@constraint(model, [i in edges_index],f[i] - (Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
+@constraint(model, TaylorActiveFlow[i in edges_index],f[i] - (Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
 / (Rij[i]^2 + Xij[i]^2)  == 0 )
 
 # Reactive Power Flows on each edge (Taylor Series Approximation)
 @constraint(model, [i in edges_index], f_q[i] - (Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
 / (Rij[i]^2 + Xij[i]^2)    == 0)
 
+
+
 #Active Power Flow Limits
-@constraint(model, [i in edges_index],f[i] <=Flowmax_edge_dict[i])
-@constraint(model, [i in edges_index],-f[i] <=Flowmax_edge_dict[i])
+@constraint(model, FlowmaxUpper[i in edges_index],f[i] <=Flowmax_edge_dict[i])
+@constraint(model, FlowmaxDown[i in edges_index],-f[i] <=Flowmax_edge_dict[i])
 
 #Reactive Power Flow Limits
 @constraint(model, [i in edges_index],f_q[i] <=Flowmax_edge_dict[i])
@@ -339,17 +344,17 @@ end
 
 #Pinjection = sumPij  
 # Taylor Series Approximation for Active Power Injection of slack bus
-@constraint(model, TaylorActive[k in Nodes; k == slack_bus], sum((Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
-/ (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.from_bus[i] == k) - sum((Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] 
-- delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == active_power_k[k])
+# @constraint(model, TaylorActive[k in Nodes; k == slack_bus], sum((Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
+# / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.from_bus[i] == k) - sum((Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] 
+# - delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == active_power_k[k])
 
-# Taylor Series Approximation for Rective Power Injection of slack bus
-@constraint(model, [k in Nodes; k == slack_bus], sum((Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
-/ (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.from_bus[i] == k) - sum((Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] 
-- delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == reactive_power_k[k])
+# # Taylor Series Approximation for Rective Power Injection of slack bus
+# @constraint(model, [k in Nodes; k == slack_bus], sum((Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
+# / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.from_bus[i] == k) - sum((Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] 
+# - delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == reactive_power_k[k])
 
 
-@constraint(model, [i in Upward_set], V[i]==1)
+@constraint(model, fixed[i in Upward_set], V[i]==1)
 
 
 # Reactive and Active Power injection equations for all buses
@@ -364,9 +369,44 @@ optimize!(model)
 
 #Dual variables for pricing
 for k in Nodes
-     println(dual(active_power[k]))
+     println("ρ$k = ",dual(active_power[k]))
+end
+for k in Nodes
+    println("σ$k = ",dual(injectionsandflows[k]))
+end
+for k in Upward_set
+    println(dual(fixed[k]))
+end
+for k in edges_index
+    println("ψ$k = ",dual(TaylorActiveFlow[k]))
+end
+for k in edges_index
+    println("λ+$k = ",dual(FlowmaxUpper[k]))
+end
+for k in edges_index
+    println("λ-$k = ",dual(FlowmaxDown[k]))
 end
 
+for k in K_L_buses
+    println("ν$k = ",dual(Voltage[k]))
+end
+for k in K_L_buses
+    println("η$k = ",dual(DeltaConstraint[k]))
+end
+for k in K_L_buses
+    println("ξ+$k = ",dual(UpperBoundV[k]))
+end
+for k in K_L_buses
+    println("ξ-$k = ",dual(LowerBoundV[k]))
+end
+for k in Upward_set
+    println("μ+$k = ",dual(UpperBound1[k]))
+end
+for k in Upward_set
+    println("μ-$k = ",dual(UpperBound2[k]))
+end
+K_L_buses
+dual(Voltage[1])
 ####################################################################                                      ####################################################################
 #################################################################### Results for the optimization problem ####################################################################
 ####################################################################                                      ####################################################################
@@ -426,7 +466,7 @@ println(results_df)
 println(prod_df)
 println(Qreact_df)
 # println(price_df)
-# println(flows_df)
+println(flows_df)
 # println(PowerInjection_df)
 println("Termination Status:", termination_status(model))
 
