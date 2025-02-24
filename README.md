@@ -8,4 +8,4 @@ This repository contains a linear model for the Optimal Power Flow (OPF) problem
 - Decoupled OPF generates the results of the Decoupled model
 - DCOPF_BTheta generates the results of the BTheta model
 - Plots generates the plots for all the models (it includes ACOPF model which is not in the repository)
-
+- Case files' folder contains the input data for 4 different energy systems
