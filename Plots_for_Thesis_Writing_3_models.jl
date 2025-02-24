@@ -2,10 +2,20 @@ using Plots
 #using RDatasets
 using DataFrames
 using LinearAlgebra,Dates
-using XLSX, Plots , PlotThemes,Printf,Interpolations
+using XLSX, Plots , PlotThemes,Printf
 
 
 
+
+filepath1 = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Results/Paper_nodes_PV"
+filepath1 = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Results/Paper_nodes_PV_no_flows_constraints"
+
+ filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
+ filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
+ filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
+ filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
+ filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
+ filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
 
 
 
@@ -59,13 +69,11 @@ X= production_ACOPF_df.bus
 ###########################################
 Y_ACOPF = production_ACOPF_df[!, "p"]
 Y_ACOPF_fixed = production_ACOPF_fixed_df[!, "p"]
-Y_BTheta = production_BTheta_df[!, "production"]
-Y_Decoupled = production_Decoupled_df[!, "production"]
 Y_LINEAR = production_LINEAR_df[!, "production"]
 Y_LINEAR_fixed = production_LINEAR_fixed_active_df[!, "production"]
 
 bus_count = length(X)
-max_production = maximum([maximum(Y_ACOPF), maximum(Y_ACOPF_fixed), maximum(Y_BTheta), maximum(Y_Decoupled),maximum(Y_LINEAR),maximum(Y_LINEAR_fixed)])
+max_production = maximum([maximum(Y_ACOPF), maximum(Y_ACOPF_fixed), maximum(Y_LINEAR),maximum(Y_LINEAR_fixed)])
 
 # Data preparation
 buses = production_ACOPF_df.bus
@@ -105,7 +113,7 @@ production = bar(
 bar!(
     x_indices .- 1*offset,  # Center the first group of bars
     Y_LINEAR,  # Values for the first dataset
-    label = "Linear_Bolognani_OPF",
+    label = "Linear_Thesis_OPF",
     color = RGB(244/255,120/255,53/255),
     legendfontsize = 8,
     bar_width = bar_width,  # Set the width of the bars
@@ -118,7 +126,7 @@ bar!(
  bar!(
     x_indices .+ 0*offset,
      Y_LINEAR_fixed,  # Values for the first dataset
-     label = "Linear_Bolognani_fixed_active_OPF",
+     label = "Linear_Thesis_with_fixed_active_OPF",
      color = :black,
      legendfontsize = 7,
      bar_width = bar_width,  # Set the width of the bars
@@ -128,7 +136,7 @@ bar!(
  bar!(
      x_indices .+ 1*offset,
      Y_ACOPF_fixed,  # Values for the first dataset
-     label = "ACOPF_fixed_Voltages",
+     label = "ACOPF_modified",
      color = :red,
      legendfontsize = 8,
      bar_width = bar_width,  # Set the width of the bars
@@ -138,7 +146,7 @@ bar!(
 
 
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\paper_pv_active.svg")
+ savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\paper_pv_active.svg")
 savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\paper_pv_active.png")
 
 
@@ -208,7 +216,7 @@ V = scatter(buses_str,
 
 scatter!(buses_str,
          Y_V_LINEAR,
-         label = "Linear_Bolognani_OPF",
+         label = "Linear_Thesis_OPF",
          color = RGB(244/255,120/255,53/255),
          markersize = 11,
          alpha = 1,
@@ -218,7 +226,7 @@ plot!(buses_str, Y_V_LINEAR, color= RGB(244/255,120/255,53/255), lw=2,label = fa
 
 scatter!(buses_str,
          Y_V_LINEAR_fixed,
-         label = "Linear_Bolognani_OPF_fixed_active",
+         label = "Linear_Thesis_with_fixed_active_OPF",
          color = :black,
          markersize = 9,
          alpha = 0.6,
@@ -230,7 +238,7 @@ plot!(buses_str, Y_V_LINEAR_fixed, color= :black, lw=1,label = false)  # Add lin
 
 scatter!(buses_str,
 Y_V_ACOPF_fixed,
-label = "ACOPF_fixed_Voltages",
+label = "ACOPF_modified",
 color = :red,
 markersize = 5,
 alpha = 0.9,
@@ -316,7 +324,7 @@ Delta = scatter(buses_str,
 
 scatter!(buses_str,
          Y_D_LINEAR,
-         label = "Linear_Bolognani_OPF",
+         label = "Linear_Thesis_OPF",
          color = RGB(244/255,120/255,53/255),
          markersize = 11,
          alpha = 1,
@@ -326,7 +334,7 @@ plot!(buses_str, Y_D_LINEAR, color=RGB(244/255,120/255,53/255), lw=2,label = fal
 
 scatter!(buses_str,
          Y_D_LINEAR_fixed,
-         label = "Linear_Bolognani_fixed_active_OPF",
+         label = "Linear_Thesis_with_fixed_active_OPF",
          markersize = 7,
          color = :black,
          alpha = 0.6,
@@ -338,7 +346,7 @@ plot!(buses_str, Y_D_LINEAR_fixed, color=:black, lw=1,label = false)
 
 scatter!(buses_str,
 Y_D_ACOPF_fixed,
-label = "ACOPF_fixed_Voltages",
+label = "ACOPF_modified",
 color = :red,
 markersize = 5,
 alpha = 0.9,
@@ -412,7 +420,7 @@ reactive = bar(
 bar!(
     x_indices .- 1*offset,  # Center the first group of bars
     Y_reactive_LINEAR,  # Values for the first dataset
-    label = "Linear_Bolognani_OPF",
+    label = "Linear_Thesis_OPF",
     color = RGB(244/255,120/255,53/255),
     legendfontsize = 8,
     bar_width = bar_width,  # Set the width of the bars
@@ -433,7 +441,7 @@ hline!([0], linestyle = :dash, color = :black, label = "",alpha = 0.5)
  bar!(
      x_indices .+ 0*offset,  # Center the first group of bars
      Y_reactive_LINEAR_fixed,  # Values for the first dataset
-     label = "Linear_Bolognani_fixed_active_OPF",
+     label = "Linear_Thesis_with_fixed_active_OPF",
      color = :black,
      legendfontsize = 7,
      bar_width = bar_width,  # Set the width of the bars
@@ -443,7 +451,7 @@ hline!([0], linestyle = :dash, color = :black, label = "",alpha = 0.5)
  bar!(
      x_indices .+ 1*offset,  # Center the first group of bars
      Y_reactive_ACOPF_fixed,  # Values for the first dataset
-     label = "ACOPF_fixed_Voltages",
+     label = "ACOPF_modified",
      color = :red,
      legendfontsize = 8,
      bar_width = bar_width,  # Set the width of the bars

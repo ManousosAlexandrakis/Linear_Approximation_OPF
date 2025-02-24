@@ -1,19 +1,21 @@
 using Plots
 using DataFrames
 using LinearAlgebra,Dates
-using XLSX, Plots , PlotThemes,Printf,Interpolations
+using XLSX, Plots , PlotThemes,Printf
 
 
 
+filepath = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας"
 
 
+filepath1 = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Results/Paper_nodes_PV"
+ filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
+ filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
+ filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
+ filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
+ filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
+ filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
 
- filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","ACOPF_Paper_nodes_PV.xlsx")
- filename2 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","ACOPF_Paper_nodes_PV_fixed.xlsx")
- filename3 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","BTheta_Paper_nodes_PV.xlsx")
- filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","Decoupled_Paper_nodes_PV.xlsx")
- filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","LINEAR_OPF_Paper_nodes_PV.xlsx")
- filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV","LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
 
 
 # filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV_no_flows_constraints","ACOPF_Paper_nodes_PV.xlsx")
@@ -24,12 +26,13 @@ using XLSX, Plots , PlotThemes,Printf,Interpolations
 # filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV_no_flows_constraints","LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
 
 
-filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv1","ACOPF_ehv1.xlsx")
-filename2 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv1","ACOPF_ehv1_fixed.xlsx")
-filename3 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv1","BTheta_ehv1.xlsx")
-filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv1","Decoupled_ehv1.xlsx")
-filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv1","LINEAR_OPF_ehv1.xlsx")
-filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv1","LINEAR_OPF_ehv1.xlsx")
+filepath2 = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Results/ehv1"
+filename1 = joinpath(filepath2,"ACOPF_ehv1.xlsx")
+filename2 = joinpath(filepath2,"ACOPF_ehv1_fixed.xlsx")
+filename3 = joinpath(filepath2,"BTheta_ehv1.xlsx")
+filename4 = joinpath(filepath2,"Decoupled_ehv1.xlsx")
+filename5 = joinpath(filepath2,"LINEAR_OPF_ehv1.xlsx")
+filename6 = joinpath(filepath2,"LINEAR_OPF_ehv1.xlsx")
 
 filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","ACOPF_ehv5.xlsx")
 filename2 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","ACOPF_ehv5_fixed.xlsx")
@@ -147,8 +150,8 @@ bar!(x_indices .+ 1*offset,  # Center the first group of bars
 
 )
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_active.pdf")
-
+#savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_active.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/paper_pv_active.pdf")
 #Voltage Magnitude Plotting
 ##############################################
 ##############################################
@@ -160,12 +163,8 @@ Y_V_LINEAR = VD_LINEAR_df[!, "vm_pu"]
 max_voltage = maximum([maximum(Y_V_ACOPF),  maximum(Y_V_BTheta), maximum(Y_V_Decoupled),maximum(Y_V_LINEAR)])
 min_voltage = minimum([minimum(Y_V_ACOPF),  minimum(Y_V_BTheta), minimum(Y_V_Decoupled),minimum(Y_V_LINEAR)])
 
+yticks_values_V = range(min_voltage * 0.995, stop = max_voltage*1.005, length = 6)
 
-
-
-yticks_values_V = range(min_voltage * 0.97, stop = max_voltage*1.01, length = 10)
-
-#yticks_values_V = 0.75:0.05:1.25
 yticks_labels_V = [@sprintf("%.2f", v) for v in yticks_values_V]
 
 
@@ -180,7 +179,7 @@ xticks_labels_V = buses_str[1:1:end]
 theme(:wong2)
 V = scatter(buses_str,
          Y_V_ACOPF,
-         ylim = (min_voltage* 0.97,max_voltage*1.01),
+         ylim = (min_voltage* 0.995,max_voltage*1.005),
          xlim = (-0,bus_count),
          xlabel = "Buses",
          ylabel = "Voltage Magnitude[pu]",
@@ -241,7 +240,8 @@ scatter!(buses_str,
 plot!(buses_str, Y_V_LINEAR, color= RGB(244/255,120/255,53/255), lw=2,label = false)  # Add line plot to connect points
 
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_Voltage_Magnitude.pdf")
+#savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_Voltage_Magnitude.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/paper_Voltage_Magnitude.pdf")
 
 #Voltage Angle Plotting
 ##############################################
