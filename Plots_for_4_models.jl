@@ -5,7 +5,6 @@ using XLSX, Plots , PlotThemes,Printf
 
 
 
-filepath = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας"
 
 
 filepath1 = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Results/Paper_nodes_PV"
@@ -14,16 +13,6 @@ filepath1 = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μα�
  filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
  filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
  filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
- filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
-
-
-
-# filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV_no_flows_constraints","ACOPF_Paper_nodes_PV.xlsx")
-# filename2 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV_no_flows_constraints","ACOPF_Paper_nodes_PV_fixed.xlsx")
-# filename3 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV_no_flows_constraints","BTheta_Paper_nodes_PV.xlsx")
-# filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV_no_flows_constraints","Decoupled_Paper_nodes_PV.xlsx")
-# filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV_no_flows_constraints","LINEAR_OPF_Paper_nodes_PV.xlsx")
-# filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Paper_nodes_PV_no_flows_constraints","LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
 
 
 filepath2 = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Results/ehv1"
@@ -32,21 +21,21 @@ filename2 = joinpath(filepath2,"ACOPF_ehv1_fixed.xlsx")
 filename3 = joinpath(filepath2,"BTheta_ehv1.xlsx")
 filename4 = joinpath(filepath2,"Decoupled_ehv1.xlsx")
 filename5 = joinpath(filepath2,"LINEAR_OPF_ehv1.xlsx")
-filename6 = joinpath(filepath2,"LINEAR_OPF_ehv1.xlsx")
 
-filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","ACOPF_ehv5.xlsx")
-filename2 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","ACOPF_ehv5_fixed.xlsx")
-filename3 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","BTheta_ehv5.xlsx")
-filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","Decoupled_ehv5.xlsx")
-filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","LINEAR_OPF_ehv5.xlsx")
-filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv5","LINEAR_OPF_ehv5.xlsx")
 
-filename1 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","ACOPF_ehv4.xlsx")
-filename2 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","ACOPF_ehv4_fixed.xlsx")
-filename3 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","BTheta_ehv4.xlsx")
-filename4 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","Decoupled_ehv4.xlsx")
-filename5 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","LINEAR_OPF_ehv4.xlsx")
-filename6 = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\ehv4","LINEAR_OPF_ehv4.xlsx")
+filepath3 = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Results/ehv5"
+filename1 = joinpath(filepath3,"ACOPF_ehv5.xlsx")
+filename2 = joinpath(filepath3,"ACOPF_ehv5_fixed.xlsx")
+filename3 = joinpath(filepath3,"BTheta_ehv5.xlsx")
+filename4 = joinpath(filepath3,"Decoupled_ehv5.xlsx")
+filename5 = joinpath(filepath3,"LINEAR_OPF_ehv5.xlsx")
+
+filepath4 = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Results/ehv4"
+filename1 = joinpath(filepath4,"ACOPF_ehv4.xlsx")
+filename2 = joinpath(filepath4,"ACOPF_ehv4_fixed.xlsx")
+filename3 = joinpath(filepath4,"BTheta_ehv4.xlsx")
+filename4 = joinpath(filepath4,"Decoupled_ehv4.xlsx")
+filename5 = joinpath(filepath4,"LINEAR_OPF_ehv4.xlsx")
 
 
 
@@ -90,8 +79,14 @@ Y_ACOPF = production_ACOPF_df[!, "p"]
 # Convert buses to a string to treat them as categorical
 buses_str = string.(buses)
 # Define the step size for the y-axis
+lower = 0
+upper = 1.1
+
+step = 0.1
+
+length1 = trunc(Int,-((lower-upper)/(step) - 1))
 #yticks_values_production = range(-0.1, stop = max_production*1.1, length = 10)
-yticks_values_production = vcat(0, collect(range(-0, stop = max_production * 1.1, length = 9)))
+yticks_values_production = vcat(0, collect(range(lower, stop = upper, length = length1)))
 #yticks_values_production = -0.1:0.1:(max_production + 10)
 yticks_labels_production = [@sprintf("%.2f", v) for v in yticks_values_production]
 
@@ -104,7 +99,7 @@ theme(:wong2)
 production = bar(
     x_indices .- 2offset,  # Center the first group of bars
     Y_ACOPF,  # Values for the first dataset
-    ylim = (0,max_production*1.1),
+    ylim = (lower,upper),
     xlim = (0.5,bus_count+2.2),
     xlabel = "Buses",
     ylabel = "Active Power Production [pu]",
@@ -151,7 +146,7 @@ bar!(x_indices .+ 1*offset,  # Center the first group of bars
 )
 
 #savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_active.pdf")
-savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/paper_pv_active.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/ehv4_active.pdf")
 #Voltage Magnitude Plotting
 ##############################################
 ##############################################
@@ -163,7 +158,10 @@ Y_V_LINEAR = VD_LINEAR_df[!, "vm_pu"]
 max_voltage = maximum([maximum(Y_V_ACOPF),  maximum(Y_V_BTheta), maximum(Y_V_Decoupled),maximum(Y_V_LINEAR)])
 min_voltage = minimum([minimum(Y_V_ACOPF),  minimum(Y_V_BTheta), minimum(Y_V_Decoupled),minimum(Y_V_LINEAR)])
 
-yticks_values_V = range(min_voltage * 0.995, stop = max_voltage*1.005, length = 6)
+lower = 0.75
+upper = 1.1
+yticks_values_V = range(lower, stop = upper, length = 12)
+
 
 yticks_labels_V = [@sprintf("%.2f", v) for v in yticks_values_V]
 
@@ -179,7 +177,7 @@ xticks_labels_V = buses_str[1:1:end]
 theme(:wong2)
 V = scatter(buses_str,
          Y_V_ACOPF,
-         ylim = (min_voltage* 0.995,max_voltage*1.005),
+         ylim = (lower,upper),
          xlim = (-0,bus_count),
          xlabel = "Buses",
          ylabel = "Voltage Magnitude[pu]",
@@ -241,7 +239,7 @@ plot!(buses_str, Y_V_LINEAR, color= RGB(244/255,120/255,53/255), lw=2,label = fa
 
 
 #savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_Voltage_Magnitude.pdf")
-savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/paper_Voltage_Magnitude.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/ehv5_Voltage_Magnitude.pdf")
 
 #Voltage Angle Plotting
 ##############################################
@@ -266,7 +264,9 @@ end
 
 #yticks_values_D = min_delta*1.1:((max_delta-min_delta)/8):max_delta*1.1
 #yticks_values_D = range(min_delta * 1.1, stop = max_delta*1.1, length = 10)
-yticks_values_D = vcat(0, collect(range(min_delta * 1.02, stop = max_delta * 1.1, length = 10)))
+lower = -12
+upper = 1
+yticks_values_D = vcat(0, collect(range(lower, stop = upper, length = 14)))
 
 yticks_labels_D = [@sprintf("%.2f", v) for v in yticks_values_D]
 bus_count = length(buses)
@@ -283,7 +283,7 @@ buses_str = string.(buses)
 theme(:wong2)
 Delta = scatter(buses_str,
          Y_D_ACOPF,
-         ylim = (min_delta*1.02,max_delta*1.1),
+         ylim = (lower,upper),
          xlim = (0,bus_count),
          xlabel = "Buses",
          ylabel = "Delta[degrees]",
@@ -339,7 +339,8 @@ scatter!(buses_str,
 )
 plot!(buses_str, Y_D_LINEAR, color=RGB(244/255,120/255,53/255), lw=2,label = false)  # Add line plot to connect points
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_Voltage_Angle.pdf")
+#savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_Voltage_Angle.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/ehv5_Voltage_Angle.pdf")
 
 
 #Reactive Production Plotting
@@ -360,11 +361,10 @@ min_reactive = minimum([minimum(Y_reactive_ACOPF),  minimum(Y_reactive_Decoupled
 
 # yticks_values_q = range(min_reactive * 1.1, stop = max_reactive*1.1, length = 10)
 # yticks_labels_q = [@sprintf("%.2f", v) for v in yticks_values_q]
-yticks_values_q = vcat(0, collect(range(min_reactive * 1.1, stop = max_reactive * 1.1, length = 10)))
-nonzero_indices = findall(x -> x ≠ 0, yticks_values_q)  # Get indices of nonzero elements
-closest_index = nonzero_indices[argmin(abs.(yticks_values_q[nonzero_indices]))]  # Find closest to 0
-# Remove the closest value by filtering
-yticks_values_q = deleteat!(yticks_values_q, closest_index)
+lower =-1.1
+upper =2.1
+yticks_values_q = vcat(0, collect(range(lower, stop = upper, length = 9)))
+
 yticks_labels_q = [@sprintf("%.2f", v) for v in yticks_values_q]
 
 
@@ -384,7 +384,7 @@ theme(:wong2)
 reactive = bar(
     x_indices .- 2offset,  # Center the first group of bars
     Y_reactive_ACOPF,  # Values for the first dataset
-    ylim = (min_reactive * 1.2,max_reactive*1.2),
+    ylim = (lower,upper),
     xlim = (0.5,bus_count+1.2),
     xlabel = "Buses",
     ylabel = "Reactive Power Production [pu]",
@@ -424,7 +424,10 @@ hline!([0], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 
 
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_reactive.pdf")
+#savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_reactive.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/ehv5_reactive.pdf")
+
+
 #Price Plotting
 ###############################################################################
 ###############################################################################
@@ -440,7 +443,13 @@ max_price = maximum([maximum(Y_prices_ACOPF),  maximum(Y_prices_BTheta), maximum
 
 buses = VD_ACOPF_df.Bus
 bus_count = length(buses)
-y_ticks_values_prices = vcat(1150, collect(range(min_price * 0.98, stop = max_price * 1.01, length = 11)))
+step = 10
+lower = 1130
+upper = 1170
+
+length1 = trunc(Int,-((lower-upper)/(step) - 1))
+length1
+y_ticks_values_prices = vcat(1150, collect(range(lower, stop = upper, length = length1)))
 y_ticks_labels_prices = [@sprintf("%.2f", v) for v in y_ticks_values_prices]
 
 buses_str = string.(buses)
@@ -451,7 +460,7 @@ theme(:wong2)
 
 prices = scatter(buses_str,
             Y_prices_ACOPF,
-            ylim = (min_price*0.98,max_price*1.01),
+            ylim = (lower,upper),
             xlim = (0,bus_count),
             xlabel = "Buses",
             ylabel = "Price[pu]",
@@ -512,7 +521,11 @@ hline!([1150], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 #hline!([30], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 
 
-savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_priced.pdf")
+
+#savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_priced.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/ehv5_priced.pdf")
+
+
 # Titles for each subplot
 titles = ["Plot 1", "Plot 2", "Plot 3", "Plot 4"]
 
