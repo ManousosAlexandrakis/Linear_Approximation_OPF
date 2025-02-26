@@ -80,9 +80,9 @@ Y_ACOPF = production_ACOPF_df[!, "p"]
 buses_str = string.(buses)
 # Define the step size for the y-axis
 lower = 0
-upper = 1.1
+upper = 2.2
 
-step = 0.1
+step = 0.2
 
 length1 = trunc(Int,-((lower-upper)/(step) - 1))
 #yticks_values_production = range(-0.1, stop = max_production*1.1, length = 10)
@@ -106,7 +106,7 @@ production = bar(
     title = "Active Power Production",
     label = "ACOPF",  # Label for the legend
     color = RGB(142/255,193/255,39/255),  # Color for the dataset
-    legendfontsize = 8,
+    legendfontsize = 12,
     bar_width = bar_width,  # Set the width of the bars
     size = (775, 500),  # Adjust the size for better spacing
     xticks = (x_indices, buses_str),  # Map numerical x-values to string labels
@@ -118,7 +118,6 @@ bar!(
     Y_LINEAR,  # Values for the first dataset
     label = "Linear_Thesis_OPF",
     color = RGB(244/255,120/255,53/255),
-    legendfontsize = 8,
     bar_width = bar_width,  # Set the width of the bars
 
     yticks = (yticks_values_production, yticks_labels_production),  # Custom y-axis ticks and labels
@@ -129,7 +128,6 @@ bar!(x_indices .+ 0*offset,  # Center the first group of bars
     Y_BTheta,  # Values for the first dataset
     label = "BTHETA_OPF",
     color = RGB(162/255,0/255,255/255),
-    legendfontsize = 8,
     bar_width = bar_width,  # Set the width of the bars
     yticks = (yticks_values_production, yticks_labels_production),  # Custom y-axis ticks and labels
 
@@ -139,7 +137,6 @@ bar!(x_indices .+ 1*offset,  # Center the first group of bars
     Y_Decoupled,  # Values for the first dataset
     label = "Decoupled_OPF",
     color = RGB(0/255,174/255,219/255),
-    legendfontsize = 8,
     bar_width = bar_width,  # Set the width of the bars
     yticks = (yticks_values_production, yticks_labels_production),  # Custom y-axis ticks and labels
 
@@ -158,9 +155,9 @@ Y_V_LINEAR = VD_LINEAR_df[!, "vm_pu"]
 max_voltage = maximum([maximum(Y_V_ACOPF),  maximum(Y_V_BTheta), maximum(Y_V_Decoupled),maximum(Y_V_LINEAR)])
 min_voltage = minimum([minimum(Y_V_ACOPF),  minimum(Y_V_BTheta), minimum(Y_V_Decoupled),minimum(Y_V_LINEAR)])
 
-lower = 0.75
-upper = 1.1
-yticks_values_V = range(lower, stop = upper, length = 12)
+lower = 0.96
+upper = 1.02
+yticks_values_V = range(lower, stop = upper, length = 7)
 
 
 yticks_labels_V = [@sprintf("%.2f", v) for v in yticks_values_V]
@@ -239,7 +236,7 @@ plot!(buses_str, Y_V_LINEAR, color= RGB(244/255,120/255,53/255), lw=2,label = fa
 
 
 #savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_Voltage_Magnitude.pdf")
-savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/ehv5_Voltage_Magnitude.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/paper_Voltage_Magnitude.pdf")
 
 #Voltage Angle Plotting
 ##############################################
@@ -264,9 +261,9 @@ end
 
 #yticks_values_D = min_delta*1.1:((max_delta-min_delta)/8):max_delta*1.1
 #yticks_values_D = range(min_delta * 1.1, stop = max_delta*1.1, length = 10)
-lower = -12
-upper = 1
-yticks_values_D = vcat(0, collect(range(lower, stop = upper, length = 14)))
+lower = -2
+upper = 0.2
+yticks_values_D = vcat(0, collect(range(lower, stop = upper, length = 12)))
 
 yticks_labels_D = [@sprintf("%.2f", v) for v in yticks_values_D]
 bus_count = length(buses)
@@ -297,7 +294,7 @@ Delta = scatter(buses_str,
          xticks = (xticks_values_D,xticks_labels_D),  # Set yticks and labels
          #size = (700, 450),
          size = (1600, 800),
-         legendfontsize = 11, # Reduce legend font size
+         legendfontsize = 13, # Reduce legend font size
          xrotation = 70 # Rotate labels by 45 degrees
 
          # markershape = [:circle :utriangle :diamond],)
@@ -340,7 +337,7 @@ scatter!(buses_str,
 plot!(buses_str, Y_D_LINEAR, color=RGB(244/255,120/255,53/255), lw=2,label = false)  # Add line plot to connect points
 
 #savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_Voltage_Angle.pdf")
-savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/ehv5_Voltage_Angle.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/paper_Voltage_Angle.pdf")
 
 
 #Reactive Production Plotting
@@ -361,9 +358,9 @@ min_reactive = minimum([minimum(Y_reactive_ACOPF),  minimum(Y_reactive_Decoupled
 
 # yticks_values_q = range(min_reactive * 1.1, stop = max_reactive*1.1, length = 10)
 # yticks_labels_q = [@sprintf("%.2f", v) for v in yticks_values_q]
-lower =-1.1
-upper =2.1
-yticks_values_q = vcat(0, collect(range(lower, stop = upper, length = 9)))
+lower =-2.5
+upper =2.5
+yticks_values_q = vcat(0, collect(range(lower, stop = upper, length = 11)))
 
 yticks_labels_q = [@sprintf("%.2f", v) for v in yticks_values_q]
 
@@ -391,7 +388,8 @@ reactive = bar(
     title = "Reactive Power Production",
     label = "ACOPF",  # Label for the legend
     color = RGB(142/255,193/255,39/255),  # Color for the dataset
-    legendfontsize = 8,
+    legend = :bottomleft,
+    legendfontsize = 10,
     bar_width = bar_width,  # Set the width of the bars
     size = (775, 500),  # Adjust the size for better spacing
     xticks = (x_indices, buses_str),  # Map numerical x-values to string labels
@@ -403,7 +401,6 @@ bar!(
     Y_reactive_LINEAR,  # Values for the first dataset
     label = "Linear_Thesis_OPF",
     color = RGB(244/255,120/255,53/255),
-    legendfontsize = 8,
     bar_width = bar_width,  # Set the width of the bars
     yticks = (yticks_values_q, yticks_labels_q),  # Custom y-axis ticks and labels
 )
@@ -413,7 +410,6 @@ bar!(x_indices .+ 0*offset,  # Center the first group of bars
     Y_reactive_Decoupled,  # Values for the first dataset
     label = "Decoupled_OPF",
     color = RGB(0/255,174/255,219/255),
-    legendfontsize = 8,
     bar_width = bar_width,  # Set the width of the bars
     yticks = (yticks_values_q, yticks_labels_q),  # Custom y-axis ticks and labels
 
@@ -425,7 +421,7 @@ hline!([0], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 
 
 #savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\ehv4_reactive.pdf")
-savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/ehv5_reactive.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/paper_reactive.pdf")
 
 
 #Price Plotting
@@ -557,4 +553,5 @@ plot(
     size = (900, 700)
 )
 #savefig("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Plots\\paper_active_reactive_plots.pdf")
+savefig("/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Thesis_Writing/Plots/paper_active_reactive_plots.pdf")
 

@@ -342,18 +342,7 @@ set_silent(model)
 + sum(-R_matrix[complete_mapping[k], complete_mapping[i]] * (reactive_power_k[i]) for i in L_buses)
 + sum(X_matrix[complete_mapping[k], complete_mapping[i]] * (active_power_k[i]) for i in L_buses)) / (slack_v^2))
 
-#Pinjection = sumPij  
-# Taylor Series Approximation for Active Power Injection of slack bus
-# @constraint(model, TaylorActive[k in Nodes; k == slack_bus], sum((Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
-# / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.from_bus[i] == k) - sum((Rij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) + Xij[i] * (delta[Edges.from_bus[i]] 
-# - delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == active_power_k[k])
-
-# # Taylor Series Approximation for Rective Power Injection of slack bus
-# @constraint(model, [k in Nodes; k == slack_bus], sum((Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
-# / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.from_bus[i] == k) - sum((Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] 
-# - delta[Edges.to_bus[i]])) / (Rij[i]^2 + Xij[i]^2) for i in Lines if Edges.to_bus[i] == k) == reactive_power_k[k])
-
-
+# Fixing Voltage Magnitude for generator-buses
 @constraint(model, fixed[i in Upward_set], V[i]==1)
 
 
@@ -367,10 +356,11 @@ set_silent(model)
 # Solve the optimization problem
 optimize!(model)
 
-#Dual variables for pricing
+#Dual Variables for pricing
 for k in Nodes
      println("ρ$k = ",dual(active_power[k]))
 end
+#Dual Variables
 for k in Nodes
     println("σ$k = ",dual(injectionsandflows[k]))
 end
@@ -405,8 +395,7 @@ end
 for k in Upward_set
     println("μ-$k = ",dual(UpperBound2[k]))
 end
-K_L_buses
-dual(Voltage[1])
+
 ####################################################################                                      ####################################################################
 #################################################################### Results for the optimization problem ####################################################################
 ####################################################################                                      ####################################################################
@@ -435,12 +424,12 @@ Qreact_df = DataFrame(
     qmax =[Qmax[i] for i in Upward_set]
 )
 
-# PowerInjection_df = DataFrame(
-#     Bus = Nodes,
-#     q_injection = [value(reactive_power_k[i]) for i in Nodes],
-#     p_injection = [value(active_power_k[i]) for i in Nodes],
+PowerInjection_df = DataFrame(
+     Bus = Nodes,
+     q_injection = [value(reactive_power_k[i]) for i in Nodes],
+     p_injection = [value(active_power_k[i]) for i in Nodes],
     
-# )
+ )
 
 #Results for Prices
 price_df = DataFrame(
@@ -465,9 +454,9 @@ flows_df = DataFrame(
 println(results_df)
 println(prod_df)
 println(Qreact_df)
-# println(price_df)
+println(price_df)
 println(flows_df)
-# println(PowerInjection_df)
+println(PowerInjection_df)
 println("Termination Status:", termination_status(model))
 
 
