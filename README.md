@@ -4,7 +4,7 @@
 This repository contains a linear model for the approximation of the Optimal Power Flow (OPF) problem, developed as part of my diploma thesis under the supervision of [Anthony Papavasiliou](https://ap-rg.eu/) and [Zejun Ruan](https://github.com/zejunr). It includes implementation code, case files in XLSX format, and code for plotting results. Additionally, implementation code for DCOPF and Decoupled OPF is included.
 
 ## Authors
-This code was created by [Manousos Alexandrakis](https://github.com/ManousosAlexandrakis), [Lina Efthymiadou](https://github.com/lina-efthymiadou), [Zejun Ruan](https://github.com/zejunr), listed in alphabetical order. The initial work was carried out by Lina Efthymiadou and Zejun Ruan, while Manousos Alexandrakis finalized the implementation.
+This code was created by [Manousos Alexandrakis](https://github.com/ManousosAlexandrakis), [Lina Efthymiadou](https://github.com/lina-efthymiadou), [Zejun Ruan](https://github.com/zejunr), listed in alphabetical order. The initial work was carried out by Zejun Ruan and Lina Efthymiadou, while Manousos Alexandrakis finalized the implementation.
 
 For any questions or contributions, feel free to open an issue or submit a pull request.
 
