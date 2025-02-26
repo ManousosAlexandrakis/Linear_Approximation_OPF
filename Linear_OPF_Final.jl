@@ -1,22 +1,24 @@
-#Packages
+# Packages
 using DataFrames, JuMP,Gurobi
 using LinearAlgebra
 using XLSX
+
 ####################################################################                                 ####################################################################
 ####################################################################          Data Handling          ####################################################################
 ####################################################################                                 ####################################################################
-#Choose xlsx file you want to read
+
+# Choose xlsx file you want to read
 #filename = "Paper_nodes_PV.xlsx"
-#filename = "Name of file.xlsx" , xlsx file should be in the same directory as the code
-#Alternative way to choose the file
+#filename = "Name of file.xlsx" , XLSX file should be in the same directory as the code
+
+# Alternative way to choose input file
 filepath = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας"
 filename = joinpath(filepath,"Paper_nodes_PV.xlsx")
-
 #filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","Paper_nodes_PV.xlsx")
 #filename = joinpath("filepath","The name of the file.xlsx")
 
 
-#Loading Excel sheets into DataFrames
+# Loading Excel sheets into DataFrames
 gen_data = DataFrame(XLSX.readtable(filename, "gen"))
 Edges = DataFrame(XLSX.readtable(filename, "edges"))
 bus_data = DataFrame(XLSX.readtable(filename, "bus"))
@@ -25,11 +27,11 @@ slack_data = DataFrame(XLSX.readtable(filename, "ext_grid"))
 Upward_data = DataFrame(XLSX.readtable(filename, "Upward"))
 Downward_data = DataFrame(XLSX.readtable(filename, "Downward"))
 
-#Sets explanation:
+# Sets explanation:
 #K = all generators except slack bus
 #L = all buses except slack bus and K
 
-#Sbase of the system
+# Sbase of the system
 Ssystem = 1
 
 # Create a dictionary mapping edges' idx to FlowMax
@@ -38,7 +40,7 @@ for row in eachrow(Edges)
     Flowmax_edge_dict[row.idx] = row.FlowMax
 end
 
-#Data for slack bus(voltage magnitude,voltage degree,bus number)
+# Data for slack bus(voltage magnitude,voltage degree,bus number)
 slack_v = slack_data[1, :vm_pu]  
 slack_degree = slack_data[1,:va_degree]
 slack_bus = slack_data[1,:bus]
@@ -274,13 +276,13 @@ end
 #################################################################### Mathematical optimization model ####################################################################
 ####################################################################                                 ####################################################################
 
-# Create a mathematical optimization model using the Gurobi Optimizer as the solver
+### Create a mathematical optimization model using the Gurobi Optimizer as the solver
 GUROBI_ENV = Gurobi.Env()
 model = Model(() -> Gurobi.Optimizer(GUROBI_ENV))
 set_optimizer_attribute(model, "MIPGap", 0.0) 
 set_silent(model)
 
-# Variables
+### Variables
 @variable(model, V[Nodes])                                  # Variable representing voltage magnitudes of each node
 @variable(model, delta[Nodes])                              # Variable representing voltage angles of each node
 @variable(model, Q[slack_K_buses])                          # Variable representing Reactive Power production by generator buses
@@ -290,7 +292,7 @@ set_silent(model)
 @variable(model, f[edges_index])                            # Variable representing Active Power flow on each edge
 @variable(model, f_q[edges_index])                          # Variable representing Reactive Power flow on each edge
 
-# Constraints for the optimization problem
+### Constraints for the optimization problem
 
 # Limits for the Reactive Power produced by the slack and the K buses
 @constraint(model, [k in slack_K_buses], Qmin[k] <= Q[k] <= Qmax[k]) 
@@ -322,11 +324,11 @@ set_silent(model)
 
 
 
-#Active Power Flow Limits
+# Active Power Flow Limits
 @constraint(model, FlowmaxUpper[i in edges_index],f[i] <=Flowmax_edge_dict[i])
 @constraint(model, FlowmaxDown[i in edges_index],-f[i] <=Flowmax_edge_dict[i])
 
-#Reactive Power Flow Limits
+# Reactive Power Flow Limits
 @constraint(model, [i in edges_index],f_q[i] <=Flowmax_edge_dict[i])
 @constraint(model, [i in edges_index],-f_q[i] <=Flowmax_edge_dict[i])
 
@@ -356,11 +358,11 @@ set_silent(model)
 # Solve the optimization problem
 optimize!(model)
 
-#Dual Variables for pricing
+# Dual Variables for pricing
 for k in Nodes
      println("ρ$k = ",dual(active_power[k]))
 end
-#Dual Variables
+# Dual Variables
 for k in Nodes
     println("σ$k = ",dual(injectionsandflows[k]))
 end
@@ -424,6 +426,7 @@ Qreact_df = DataFrame(
     qmax =[Qmax[i] for i in Upward_set]
 )
 
+# Results for Power Injections
 PowerInjection_df = DataFrame(
      Bus = Nodes,
      q_injection = [value(reactive_power_k[i]) for i in Nodes],
@@ -431,13 +434,13 @@ PowerInjection_df = DataFrame(
     
  )
 
-#Results for Prices
+# Results for Prices
 price_df = DataFrame(
     Bus = buses,
     price = [-dual(active_power[j]) for j in buses]
 )
 
-#Results for Flows     
+# Results for Flows     
 Edges_leng = 1:length(Edges.from_bus)
 from_bus = Edges[:,:from_bus]
 to_bus = Edges[:,:to_bus]
@@ -450,7 +453,7 @@ flows_df = DataFrame(
     Flowmax = [Flowmax_edge_dict[i] for i in Edges_leng ]
 )
 
-#Print the results
+# Print the results
 println(results_df)
 println(prod_df)
 println(Qreact_df)
@@ -460,6 +463,6 @@ println(PowerInjection_df)
 println("Termination Status:", termination_status(model))
 
 
-# Results Stored in an Excel File
+# Results stored in an XLSX file
 #XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\LINEAR_OPF_ehv1.xlsx",  "results" => results_df , "production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
 #XLSX.writetable("filepath.xlsx",  "Results" => results_df , "Production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
