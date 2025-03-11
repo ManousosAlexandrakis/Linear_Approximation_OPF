@@ -12,8 +12,11 @@ using XLSX
 #filename = "Name of file.xlsx" , XLSX file should be in the same directory as the code
 
 # Alternative way to choose input file
-filepath = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας"
-filename = joinpath(filepath,"Paper_nodes_PV.xlsx")
+filepath = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Simple Datasets" 
+filename = joinpath(filepath,"3nodes-test_newV20.xlsx")
+
+#filepath = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας"
+#filename = joinpath(filepath,"Paper_nodes_PV.xlsx")
 #filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","Paper_nodes_PV.xlsx")
 #filename = joinpath("filepath","The name of the file.xlsx")
 
@@ -224,7 +227,7 @@ for row in eachrow(load_data)
     total_qgen_qload[bus] = get(total_qgen_qload, bus, 0.0) - (Qload/Ssystem)
 end
 
-#Reactive power production limits for each generator bus
+# Reactive power production limits for each generator bus
 Qmin = Dict{Int, Float64}()
 Qmax = Dict{Int, Float64}()
 for row in eachrow(gen_data)
@@ -310,7 +313,7 @@ set_silent(model)
 @constraint(model,UpperBoundV[k in K_L_buses] , V[k] <= 1.2) 
 
 
-
+# Power Balance for each node
 @constraint(model,injectionsandflows[i in Nodes], sum(f[j] for j in edges_index if Edges.from_bus[j] == i) - sum(f[j] for j in edges_index if Edges.to_bus[j] == i) == active_power_k[i])
 @constraint(model,[i in Nodes], sum(f_q[j] for j in edges_index if Edges.from_bus[j] == i) - sum(f_q[j] for j in edges_index if Edges.to_bus[j] == i) == reactive_power_k[i])
 
@@ -319,7 +322,7 @@ set_silent(model)
 / (Rij[i]^2 + Xij[i]^2)  == 0 )
 
 # Reactive Power Flows on each edge (Taylor Series Approximation)
-@constraint(model, [i in edges_index], f_q[i] - (Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
+@constraint(model, TaylorReActiveFlow[i in edges_index], f_q[i] - (Xij[i] * (V[Edges.from_bus[i]] - V[Edges.to_bus[i]]) - Rij[i] * (delta[Edges.from_bus[i]] - delta[Edges.to_bus[i]])) 
 / (Rij[i]^2 + Xij[i]^2)    == 0)
 
 
@@ -371,6 +374,9 @@ for k in Upward_set
 end
 for k in edges_index
     println("ψ$k = ",dual(TaylorActiveFlow[k]))
+end
+for k in edges_index
+    println("φ$k = ",dual(TaylorReActiveFlow[k]))
 end
 for k in edges_index
     println("λ+$k = ",dual(FlowmaxUpper[k]))
