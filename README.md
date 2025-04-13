@@ -14,7 +14,7 @@ For any questions or contributions, feel free to open an issue or submit a pull 
 - **OPF_Decoupled**: Generates results for the decoupled model.  
 - **DCOPF_BTheta**: Generates results for the BTheta model.  
 - **Plots**: Creates visualizations for all models (including the ACOPF model, which is not included in this repository).  
-- **Case_Files**: Contains input data for four different energy systems.  
+- **Case_Files**: Contains input data for one energy system.  
 
 
 ## Simple Instructions
