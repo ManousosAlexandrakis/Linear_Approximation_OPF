@@ -12,8 +12,7 @@ using XLSX
 #filename = "Name of file.xlsx" , XLSX file should be in the same directory as the code
 
 # Alternative way to choose input file
-#filepath = "/Users/giorgosalexandrakes/Documents/Διπλωματική_Μανούσος/Διπλωματική/Διπλωματική Κώδικας/Simple Datasets" 
-#filename = joinpath(filepath,"3nodes-test_newV20.xlsx")
+
 
 #filepath = "/Users/malexandrakis/Documents/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
 filepath = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
