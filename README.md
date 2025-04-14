@@ -31,9 +31,22 @@ Make sure that the input case files follow the same formatting as the examples p
 
 If the above steps are followed correctly, the code file should run without issues—only infeasibility could cause an error.
 
-## Plotting Adjustments
 
-The provided plotting code may require some adjustments to produce the desired results. Depending on the case file, modifications might be necessary. Specifically, `upper`, `lower` and `length` must be set to proper values to ensure correct scaling of the y-axis.  
 
-Additionally, the files are loaded using their file paths in the given code—following the same approach should ensure smooth execution.
+## Plotting_Scripts  
+
+This folder contains scripts for generating visualizations from the code's output data.  
+
+### Usage  
+
+Run the plotting scripts to visualize the results. Some parameters may require adjustment for optimal display:  
+
+- **`yticks`** – Adjust if y-axis labels are poorly spaced or unclear.  
+- **`zoom_out`** – Modify to control the zoom level of the plot.  
+
+#### Notes  
+- Ensure the input data is in the correct format before running.  
+- Fine-tune parameters as needed for different datasets.  
+
+
 
