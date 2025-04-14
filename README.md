@@ -13,7 +13,7 @@ For any questions or contributions, feel free to open an issue or submit a pull 
 - **Linear_OPF_Final**: Generates results for the proposed linear model.  
 - **OPF_Decoupled**: Generates results for the decoupled model.  
 - **DCOPF_BTheta**: Generates results for the BTheta model.  
-- **Plots**: Creates visualizations for all models (including the ACOPF model, which is not included in this repository).  
+- **Plotting_Scripts**: Creates visualizations for all models (including the ACOPF model, which is not included in this repository).  
 - **Case_Files**: Contains input data for one energy system.  
 
 
