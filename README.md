@@ -46,7 +46,8 @@ Run the plotting scripts to visualize the results. Some parameters may require a
 
 #### Notes  
 - Ensure the input data is in the correct format before running.  
-- Fine-tune parameters as needed for different datasets.  
+- Fine-tune parameters as needed for different datasets. 
+- The palette used can be viewd here: https://www.color-hex.com/color-palette/894  
 
 
 
