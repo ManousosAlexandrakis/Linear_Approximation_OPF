@@ -3,9 +3,11 @@
 </h1> 
 
 <p align="center">
-  <a href="https://github.com/ManousosAlexandrakis/Linear_Approximation_OPF" title="Linear_Approximation_OPF">
-    <img alt="Linear_Approximation_OPF" src="https://www.ece.ntua.gr/themes/ecetheme/assets/img/pyrforos.svg" width="200px" height="200px" />
-  </a>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="dark-logo.svg">
+    <source media="(prefers-color-scheme: light)" srcset="light-logo.svg">
+    <img alt="Logo" src="light-logo.svg" width="200px">
+  </picture>
 </p>
 
 ## Repository purpose
