@@ -7,12 +7,23 @@ using XLSX, Plots , PlotThemes,Printf
 
 
 # Set the file paths and load data
-# filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV"
-# filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
-# filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
-# filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
-# filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
-# filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
+filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV/"
+filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
+filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
+filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
+filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
+filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
+filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
+
+
+#  filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV_no_flows_constraints/"
+#  filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
+#  filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
+#  filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
+#  filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
+#  filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
+#  filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
+
 
 
 #   filepath1 = "/Users/malexandrakis/Documents/Results/ehv1"
@@ -30,25 +41,30 @@ using XLSX, Plots , PlotThemes,Printf
 #  filename4 = joinpath(filepath1,"Decoupled_ehv5.xlsx")
 #  filename5 = joinpath(filepath1,"LINEAR_OPF_ehv5.xlsx")
 
- filepath1 = "/Users/malexandrakis/Documents/Results/ehv4"
- filename1 = joinpath(filepath1,"ACOPF_ehv4.xlsx")
- filename2 = joinpath(filepath1,"ACOPF_ehv4_fixed.xlsx")
- filename3 = joinpath(filepath1,"BTheta_ehv4.xlsx")
- filename4 = joinpath(filepath1,"Decoupled_ehv4.xlsx")
- filename5 = joinpath(filepath1,"LINEAR_OPF_ehv4.xlsx")
+#  filepath1 = "/Users/malexandrakis/Documents/Results/ehv4"
+#  filename1 = joinpath(filepath1,"ACOPF_ehv4.xlsx")
+#  filename2 = joinpath(filepath1,"ACOPF_ehv4_fixed.xlsx")
+#  filename3 = joinpath(filepath1,"BTheta_ehv4.xlsx")
+#  filename4 = joinpath(filepath1,"Decoupled_ehv4.xlsx")
+#  filename5 = joinpath(filepath1,"LINEAR_OPF_ehv4.xlsx")
 
 
 base_name = basename(filepath1) 
 ##################################################################################
 production_ACOPF_df = DataFrame(XLSX.readtable(filename1, "prod"))
+production_ACOPF_fixed_df = DataFrame(XLSX.readtable(filename2, "prod"))
 production_BTheta_df = DataFrame(XLSX.readtable(filename3, "production"))
 production_Decoupled_df = DataFrame(XLSX.readtable(filename4, "production"))
 production_LINEAR_df = DataFrame(XLSX.readtable(filename5, "production"))
+production_LINEAR_fixed_df = DataFrame(XLSX.readtable(filename6, "production"))
+
 ##################################################################################
 Y_ACOPF = production_ACOPF_df[!, "p"]
+Y_ACOPF_fixed = production_ACOPF_fixed_df[!, "p"]
 Y_BTheta = production_BTheta_df[!, "production"]
 Y_Decoupled = production_Decoupled_df[!, "production"]
 Y_LINEAR = production_LINEAR_df[!, "production"]
+Y_LINEAR_fixed = production_LINEAR_fixed_df[!, "production"]
 
 X= production_ACOPF_df.bus
 ##################################################################################
@@ -57,10 +73,7 @@ X= production_ACOPF_df.bus
 
 
 
-Y_ACOPF = production_ACOPF_df[!, "p"]
-Y_BTheta = production_BTheta_df[!, "production"]
-Y_Decoupled = production_Decoupled_df[!, "production"]
-Y_LINEAR = production_LINEAR_df[!, "production"]
+
 
 bus_count = length(X)
 max_production = maximum([maximum(Y_ACOPF), maximum(Y_BTheta), maximum(Y_Decoupled),maximum(Y_LINEAR)])
@@ -98,9 +111,9 @@ production = bar(
     label = "ACOPF",  # Label for the legend
     color = RGB(237/255,201/255,81/255),  # Color for the dataset
     bar_width = bar_width,  # Set the width of the bars
-    size = (1000, 1000),  # Adjust the size for better spacing
+    size = (1200, 1000),  # Adjust the size for better spacing
     xticks = (x_indices, buses_str),  # Map numerical x-values to string labels
-    yticks = 0:0.2:1.5,  
+    yticks = 0:0.5:4,  
     xtickfontsize = fz, ytickfontsize = fz,
     fontfamily = "Courier New" , 
     titlefontsize = fz,
@@ -122,21 +135,36 @@ bar!(
     bar_width = bar_width,  # Set the width of the bars
 )
 
+# bar!(
+#     x_indices .- 0*offset,  # Center the first group of bars
+#     Y_LINEAR_fixed,  # Values for the first dataset
+#     label = "Linear_Thesis_OPF_with_fixed_active",
+#     color = :green,
+#     bar_width = bar_width,  # Set the width of the bars
+# )
 
-bar!(x_indices .+ 0*offset,  # Center the first group of bars
-    Y_BTheta,  # Values for the first dataset
-    label = "BTHETA_OPF",
-    color = RGB(79/255,55/255,45/255),
-    bar_width = bar_width,  # Set the width of the bars
-)
+# bar!(
+#     x_indices .+1*offset,  # Center the first group of bars
+#     Y_ACOPF_fixed,  # Values for the first dataset
+#     label = "ACOPF_modified",
+#     color = :purple,
+#     bar_width = bar_width,  # Set the width of the bars
+# )
 
-bar!(x_indices .+ 1*offset,  # Center the first group of bars
-    Y_Decoupled,  # Values for the first dataset
-    label = "Decoupled_OPF",
-    color = RGB(0/255,160/255,176/255),
-    bar_width = bar_width,  # Set the width of the bars
+ bar!(x_indices .+ 0*offset,  # Center the first group of bars
+     Y_BTheta,  # Values for the first dataset
+     label = "BTHETA_OPF",
+     color = RGB(79/255,55/255,45/255),
+     bar_width = bar_width,  # Set the width of the bars
+ )
 
-)
+ bar!(x_indices .+ 1*offset,  # Center the first group of bars
+     Y_Decoupled,  # Values for the first dataset
+     label = "Decoupled_OPF",
+     color = RGB(0/255,160/255,176/255),
+     bar_width = bar_width,  # Set the width of the bars
+
+ )
 display(production)
 
 # # Define output filepath
@@ -146,11 +174,12 @@ mkpath(output_dir)  # Creates all necessary parent directories
 
 # # Define versioned filename
 version = 3
+#filename = base_name * "_active_fixed_V$version.pdf"
 filename = base_name * "_active_V$version.pdf"
 save_path = joinpath(output_dir, filename)
 
 # # Save the plot
-#savefig(production, save_path)
+savefig(production, save_path)
 
 
 

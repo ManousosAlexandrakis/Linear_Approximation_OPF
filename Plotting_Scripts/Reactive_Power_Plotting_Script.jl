@@ -17,6 +17,14 @@ using XLSX, Plots , PlotThemes,Printf
 #  filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
 #  filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
 
+#   filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV_no_flows_constraints/"
+#   filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
+#   filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
+#   filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
+#   filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
+#   filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
+#   filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
+
 
 #    filepath1 = "/Users/malexandrakis/Documents/Results/ehv1"
 #    filename1 = joinpath(filepath1,"ACOPF_ehv1.xlsx")
@@ -33,26 +41,29 @@ using XLSX, Plots , PlotThemes,Printf
 #   filename4 = joinpath(filepath1,"Decoupled_ehv5.xlsx")
 #   filename5 = joinpath(filepath1,"LINEAR_OPF_ehv5.xlsx")
 
-  filepath1 = "/Users/malexandrakis/Documents/Results/ehv4"
-  filename1 = joinpath(filepath1,"ACOPF_ehv4.xlsx")
-  filename2 = joinpath(filepath1,"ACOPF_ehv4_fixed.xlsx")
-  filename3 = joinpath(filepath1,"BTheta_ehv4.xlsx")
-  filename4 = joinpath(filepath1,"Decoupled_ehv4.xlsx")
-  filename5 = joinpath(filepath1,"LINEAR_OPF_ehv4.xlsx")
+#   filepath1 = "/Users/malexandrakis/Documents/Results/ehv4"
+#   filename1 = joinpath(filepath1,"ACOPF_ehv4.xlsx")
+#   filename2 = joinpath(filepath1,"ACOPF_ehv4_fixed.xlsx")
+#   filename3 = joinpath(filepath1,"BTheta_ehv4.xlsx")
+#   filename4 = joinpath(filepath1,"Decoupled_ehv4.xlsx")
+#   filename5 = joinpath(filepath1,"LINEAR_OPF_ehv4.xlsx")
 
 
 base_name = basename(filepath1) 
 ##################################################################################
 reactive_ACOPF_df = DataFrame(XLSX.readtable(filename1, "reactive"))
+reactive_ACOPF_fixed_df = DataFrame(XLSX.readtable(filename2,"reactive"))
 reactive_Decoupled_df = DataFrame(XLSX.readtable(filename4, "production"))
 reactive_LINEAR_df = DataFrame(XLSX.readtable(filename5, "Reactive_Production"))
+reactive_LINEAR_fixed_df = DataFrame(XLSX.readtable(filename6,"Reactive_Production"))
 ##################################################################################
 Y_reactive_ACOPF = reactive_ACOPF_df[!, "q_pu"]
+Y_reactive_ACOPF_fixed = reactive_ACOPF_fixed_df[!, "q_pu"]
 Y_reactive_Decoupled = reactive_Decoupled_df[!, "q"]
 Y_reactive_LINEAR = reactive_LINEAR_df[!, "q_pu"]
+Y_reactive_fixed_LINEAR = reactive_LINEAR_fixed_df[!, "q_pu"]
 
 X= reactive_ACOPF_df.Bus
-
 
 
 # #  https://www.color-hex.com/color-palette/894 <-- This is the colour palette that we will be used as a basis
@@ -69,7 +80,8 @@ bus_count = length(X)
 max_reactive = maximum([maximum(Y_reactive_ACOPF),  maximum(Y_reactive_Decoupled), maximum(Y_reactive_LINEAR)])
 min_reactive = minimum([minimum(Y_reactive_ACOPF),  minimum(Y_reactive_Decoupled), minimum(Y_reactive_LINEAR)])
 
-
+max_reactive = maximum([maximum(Y_reactive_ACOPF),  maximum(Y_reactive_ACOPF_fixed), maximum(Y_reactive_LINEAR), maximum(Y_reactive_fixed_LINEAR)])
+min_reactive = minimum([minimum(Y_reactive_ACOPF),  minimum(Y_reactive_ACOPF_fixed), minimum(Y_reactive_LINEAR),minimum(Y_reactive_fixed_LINEAR)])
 
 
 
@@ -110,11 +122,11 @@ reactive = bar(
     #title = "Reactive Power Production",
     label = "ACOPF",  # Label for the legend
     color = RGB(237/255,201/255,81/255),  # Color for the dataset
-    legend = :topright,
+    legend = :bottomright,
     bar_width = bar_width,  # Set the width of the bars
     size = (1000, 1000),  # Adjust the size for better spacing
     xticks = (x_indices, buses_str),  # Map numerical x-values to string labels
-    yticks = -0.8:0.2:1,  
+    yticks = -2:0.2:2,  
     xtickfontsize = fz, ytickfontsize = fz,
     fontfamily = "Courier New" , # Better Unicode support
     titlefontsize = fz,
@@ -136,15 +148,33 @@ bar!(
 
 )
 
+# bar!(
+#     x_indices .- 0*offset,  # Center the first group of bars
+#     Y_reactive_fixed_LINEAR,  # Values for the first dataset
+#     label = "Linear_Thesis_OPF_with_fixed_active",
+#     color = :green,
+#     bar_width = bar_width,  # Set the width of the bars
 
-bar!(x_indices .+ 0*offset,  # Center the first group of bars
-    Y_reactive_Decoupled,  # Values for the first dataset
-    label = "Decoupled_OPF",
-    color = RGB(0/255,160/255,176/255),
-    bar_width = bar_width,  # Set the width of the bars
+# )
+
+# bar!(
+#     x_indices .+ 1*offset,  # Center the first group of bars
+#     Y_reactive_ACOPF_fixed,  # Values for the first dataset
+#     label = "ACOPF_modified",
+#     color = :purple,
+#     bar_width = bar_width,  # Set the width of the bars
+
+# )
 
 
-)
+ bar!(x_indices .+ 0*offset,  # Center the first group of bars
+     Y_reactive_Decoupled,  # Values for the first dataset
+     label = "Decoupled_OPF",
+     color = RGB(0/255,160/255,176/255),
+     bar_width = bar_width,  # Set the width of the bars
+
+
+ )
 
 hline!([0], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 display(reactive)
@@ -155,9 +185,10 @@ mkpath(output_dir)  # Creates all necessary parent directories
 
 # # Define versioned filename
 version = 3
+#filename = base_name * "_reactive_fixed_V$version.pdf"
 filename = base_name * "_reactive_V$version.pdf"
 save_path = joinpath(output_dir, filename)
 
 # # Save the plot
-#savefig(reactive, save_path)
+savefig(reactive, save_path)
 
