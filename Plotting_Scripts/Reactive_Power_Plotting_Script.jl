@@ -53,7 +53,7 @@ X= reactive_ACOPF_df.Bus
 
 
 
-# #  https://www.color-hex.com/color-palette/894 <-- This is the colour palette that we will use as a basis
+# #  https://www.color-hex.com/color-palette/894 <-- This is the colour palette that we will be used as a basis
 
 
 # REACTIVE POWER PRODUCTION Plotting

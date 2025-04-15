@@ -54,7 +54,7 @@ X= production_ACOPF_df.bus
 
 
 
-# #  https://www.color-hex.com/color-palette/894 <-- This is the colour palette that we will use as a basis
+# #  https://www.color-hex.com/color-palette/894 <-- This is the colour palette used as a basis
 
 
 # ACTIVE POWER PRODUCTION Plotting
@@ -75,7 +75,7 @@ Y_ACOPF = production_ACOPF_df[!, "p"]
 
 #ADJUST ONLY zoom_out AND yticks
 
-fz = 18 # fontsize <-- great for IEEE journal templates
+fz = 18 # fontsize 
 zoom_out = 0.25
 y_min = minimum([minimum(Y_ACOPF), minimum(Y_BTheta), minimum(Y_Decoupled),minimum(Y_LINEAR)])
 y_max = maximum([maximum(Y_ACOPF), maximum(Y_BTheta), maximum(Y_Decoupled),maximum(Y_LINEAR)])

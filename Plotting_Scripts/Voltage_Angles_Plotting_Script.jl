@@ -64,8 +64,6 @@ zoom_out = 2.3
 fz = 18 
 
 
-
-
 y_min = min_delta
 y_max = max_delta
 y_median = (y_min + y_max)/2
@@ -166,10 +164,10 @@ display(Delta)
 base_path = "/Users/malexandrakis/Documents/Diploma_Thesis/Plots"
 output_dir = joinpath(base_path, base_name)
 mkpath(output_dir)  # Creates all necessary parent directories
-# 5. Define versioned filename
+# Define versioned filename
 version = 3
 filename = base_name * "_Voltage_Angle_V$version.pdf"
 save_path = joinpath(output_dir, filename)
 
-# 6. Save the plot
+# Save the plot
 savefig(Delta, save_path)
