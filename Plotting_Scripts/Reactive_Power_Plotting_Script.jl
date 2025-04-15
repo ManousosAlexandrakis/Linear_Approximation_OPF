@@ -80,8 +80,8 @@ bus_count = length(X)
 max_reactive = maximum([maximum(Y_reactive_ACOPF),  maximum(Y_reactive_Decoupled), maximum(Y_reactive_LINEAR)])
 min_reactive = minimum([minimum(Y_reactive_ACOPF),  minimum(Y_reactive_Decoupled), minimum(Y_reactive_LINEAR)])
 
-max_reactive = maximum([maximum(Y_reactive_ACOPF),  maximum(Y_reactive_ACOPF_fixed), maximum(Y_reactive_LINEAR), maximum(Y_reactive_fixed_LINEAR)])
-min_reactive = minimum([minimum(Y_reactive_ACOPF),  minimum(Y_reactive_ACOPF_fixed), minimum(Y_reactive_LINEAR),minimum(Y_reactive_fixed_LINEAR)])
+# max_reactive = maximum([maximum(Y_reactive_ACOPF),  maximum(Y_reactive_ACOPF_fixed), maximum(Y_reactive_LINEAR), maximum(Y_reactive_fixed_LINEAR)])
+# min_reactive = minimum([minimum(Y_reactive_ACOPF),  minimum(Y_reactive_ACOPF_fixed), minimum(Y_reactive_LINEAR),minimum(Y_reactive_fixed_LINEAR)])
 
 
 
