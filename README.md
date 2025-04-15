@@ -1,5 +1,5 @@
 <h1 align="center">
-  Linear_Approximation_OPF
+  Linear Approximation OPF
 </h1> 
 
 <p align="center">
