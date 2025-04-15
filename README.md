@@ -5,7 +5,6 @@
     <img alt="Linear_Approximation_OPF src="https://www.ece.ntua.gr/themes/ecetheme/assets/img/pyrforos.svg" width="200px" height="200px" />
   </a>
   <br />
-  Πρότυπο Συγγραφής Διπλωματικής Εργασίας | ΕΜΠ
 </h1>
 
 ## Repository purpose
