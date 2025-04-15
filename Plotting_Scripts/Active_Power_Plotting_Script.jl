@@ -6,9 +6,6 @@ using LinearAlgebra,Dates
 using XLSX, Plots , PlotThemes,Printf
 
 
-
-
-
 # Set the file paths and load data
 # filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV"
 # filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
@@ -48,18 +45,18 @@ production_BTheta_df = DataFrame(XLSX.readtable(filename3, "production"))
 production_Decoupled_df = DataFrame(XLSX.readtable(filename4, "production"))
 production_LINEAR_df = DataFrame(XLSX.readtable(filename5, "production"))
 ##################################################################################
-
+Y_ACOPF = production_ACOPF_df[!, "p"]
+Y_BTheta = production_BTheta_df[!, "production"]
+Y_Decoupled = production_Decoupled_df[!, "production"]
+Y_LINEAR = production_LINEAR_df[!, "production"]
 
 X= production_ACOPF_df.bus
+##################################################################################
+
+# # https://www.color-hex.com/color-palette/894 <-- This is the colour palette used as a basis
 
 
 
-# #  https://www.color-hex.com/color-palette/894 <-- This is the colour palette used as a basis
-
-
-# ACTIVE POWER PRODUCTION Plotting
-###########################################
-###########################################
 Y_ACOPF = production_ACOPF_df[!, "p"]
 Y_BTheta = production_BTheta_df[!, "production"]
 Y_Decoupled = production_Decoupled_df[!, "production"]
@@ -68,34 +65,28 @@ Y_LINEAR = production_LINEAR_df[!, "production"]
 bus_count = length(X)
 max_production = maximum([maximum(Y_ACOPF), maximum(Y_BTheta), maximum(Y_Decoupled),maximum(Y_LINEAR)])
 
-# Data preparation
+# # Data preparation
 buses = production_ACOPF_df.bus
 
-Y_ACOPF = production_ACOPF_df[!, "p"]
-
-#ADJUST ONLY zoom_out AND yticks
-
-fz = 18 # fontsize 
-zoom_out = 0.25
+# # y_range 
 y_min = minimum([minimum(Y_ACOPF), minimum(Y_BTheta), minimum(Y_Decoupled),minimum(Y_LINEAR)])
 y_max = maximum([maximum(Y_ACOPF), maximum(Y_BTheta), maximum(Y_Decoupled),maximum(Y_LINEAR)])
 y_median = (y_min + y_max)/2
 y_range = y_max - y_min
-ylim = (max(y_median - (y_range + zoom_out)/2, 0), 
-        y_median + (y_range + zoom_out)/2)
-xlim = (0.5,bus_count+2.2)
-
-
 
 
 bar_width = 0.2  # Width of each bar
-offset = 0.2
-# Convert buses to a string to treat them as categorical
+offset = bar_width
+
+# # Convert buses to a string to treat them as categorical
 buses_str = string.(buses)
 x_indices = 1:(length(buses_str)+2)/length(buses_str):length(buses_str)+2  # Numerical indices for the buses
 
+# # ADJUST ONLY zoom_out AND yticks
+fz = 18 # fontsize 
+zoom_out = 0.25
 
-# Create a base bar chart for the first dataset
+# # Create a base bar chart for the ACOPF dataset
 production = bar(
     x_indices .- 2offset,  # Center the first group of bars
     Y_ACOPF,  # Values for the first dataset
@@ -111,7 +102,7 @@ production = bar(
     xticks = (x_indices, buses_str),  # Map numerical x-values to string labels
     yticks = 0:0.2:1.5,  
     xtickfontsize = fz, ytickfontsize = fz,
-    fontfamily = "Courier New" , # Better Unicode support
+    fontfamily = "Courier New" , 
     titlefontsize = fz,
     xguidefontsize = fz,
     yguidefontsize = fz,
@@ -147,7 +138,21 @@ bar!(x_indices .+ 1*offset,  # Center the first group of bars
 
 )
 display(production)
-savefig("/Users/malexandrakis/Documents/Diploma_Thesis/Plots/" * base_name * "_active_V3.pdf")
+
+# # Define output filepath
+base_path = "/Users/malexandrakis/Documents/Diploma_Thesis/Plots"
+output_dir = joinpath(base_path, base_name)
+mkpath(output_dir)  # Creates all necessary parent directories
+
+# # Define versioned filename
+version = 3
+filename = base_name * "_active_V$version.pdf"
+save_path = joinpath(output_dir, filename)
+
+# # Save the plot
+#savefig(production, save_path)
+
+
 
 
 

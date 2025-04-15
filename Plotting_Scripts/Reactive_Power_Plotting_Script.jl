@@ -9,7 +9,7 @@ using XLSX, Plots , PlotThemes,Printf
 
 
 
-# Set the file paths and load data
+# # Set the file paths and load data
 #  filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV"
 #  filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
 #  filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
@@ -47,7 +47,9 @@ reactive_ACOPF_df = DataFrame(XLSX.readtable(filename1, "reactive"))
 reactive_Decoupled_df = DataFrame(XLSX.readtable(filename4, "production"))
 reactive_LINEAR_df = DataFrame(XLSX.readtable(filename5, "Reactive_Production"))
 ##################################################################################
-
+Y_reactive_ACOPF = reactive_ACOPF_df[!, "q_pu"]
+Y_reactive_Decoupled = reactive_Decoupled_df[!, "q"]
+Y_reactive_LINEAR = reactive_LINEAR_df[!, "q_pu"]
 
 X= reactive_ACOPF_df.Bus
 
@@ -56,16 +58,12 @@ X= reactive_ACOPF_df.Bus
 # #  https://www.color-hex.com/color-palette/894 <-- This is the colour palette that we will be used as a basis
 
 
-# REACTIVE POWER PRODUCTION Plotting
-###########################################
-###########################################
-Y_reactive_ACOPF = reactive_ACOPF_df[!, "q_pu"]
-Y_reactive_Decoupled = reactive_Decoupled_df[!, "q"]
-Y_reactive_LINEAR = reactive_LINEAR_df[!, "q_pu"]
+
+
 
 buses = reactive_ACOPF_df.Bus
-# Convert buses to a string to treat them as categorical
-buses_str = string.(buses)
+# # Convert buses to a string to treat them as categorical
+
 bus_count = length(X)
 
 max_reactive = maximum([maximum(Y_reactive_ACOPF),  maximum(Y_reactive_Decoupled), maximum(Y_reactive_LINEAR)])
@@ -75,7 +73,7 @@ min_reactive = minimum([minimum(Y_reactive_ACOPF),  minimum(Y_reactive_Decoupled
 
 
 
-fz = 18 # fontsize <-- great for IEEE journal templates
+fz = 18 # fontsize 
 zoom_out = -0.2
 y_min = max_reactive
 y_max = min_reactive
@@ -89,8 +87,9 @@ xlim = (0.5,bus_count+2.2)
 
 
 bar_width = 0.2  # Width of each bar
-offset = 0.2
-# Convert buses to a string to treat them as categorical
+offset = bar_width
+
+# # Convert buses to a string to treat them as categorical
 buses_str = string.(buses)
 x_indices = 1:(length(buses_str)+2)/length(buses_str):length(buses_str)+2  # Numerical indices for the buses
 
@@ -99,7 +98,7 @@ x_indices = 1:(length(buses_str)+2)/length(buses_str):length(buses_str)+2  # Num
 
 
 
-# Create a base bar chart for the first dataset
+# # Create a base bar chart for the first dataset
 reactive = bar(
     x_indices .- 2offset,  # Center the first group of bars
     Y_reactive_ACOPF,  # Values for the first dataset
@@ -149,16 +148,16 @@ bar!(x_indices .+ 0*offset,  # Center the first group of bars
 
 hline!([0], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 display(reactive)
-#savefig("/Users/malexandrakis/Documents/Diploma_Thesis/Plots/" * base_name * "_reactive_V3.pdf")
 
 base_path = "/Users/malexandrakis/Documents/Diploma_Thesis/Plots"
 output_dir = joinpath(base_path, base_name)
 mkpath(output_dir)  # Creates all necessary parent directories
-# 5. Define versioned filename
+
+# # Define versioned filename
 version = 3
 filename = base_name * "_reactive_V$version.pdf"
 save_path = joinpath(output_dir, filename)
 
-# 6. Save the plot
-savefig(reactive, save_path)
+# # Save the plot
+#savefig(reactive, save_path)
 

@@ -151,10 +151,11 @@ display(prices)
 base_path = "/Users/malexandrakis/Documents/Diploma_Thesis/Plots"
 output_dir = joinpath(base_path, base_name)
 mkpath(output_dir)  # Creates all necessary parent directories
-# 5. Define versioned filename
+
+# # Define versioned filename
 version = 4
 filename = base_name * "_priced_V$version.pdf"
 save_path = joinpath(output_dir, filename)
 
-# 6. Save the plot
-savefig(prices, save_path)
+# # Save the plot
+#savefig(prices, save_path)
