@@ -1,4 +1,5 @@
-# Linear_Approximation_OPF
+<p align="center"># Linear_Approximation_OPF
+</p>
 
 <p align="center">
   <a href="https://github.com/ManousosAlexandrakis/Linear_Approximation_OPF" title="Linear_Approximation_OPF">
