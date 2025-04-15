@@ -1,6 +1,5 @@
-# Linear_Approximation_OPF
 <h1 align="center">
-  Αλλαγή βασικών πληροφοριών
+  Linear_Approximation_OPF
 </h1> 
 
 <p align="center">
