@@ -1,5 +1,7 @@
-<p align="center"># Linear_Approximation_OPF
-</p>
+# Linear_Approximation_OPF
+<h1 align="center">
+  Αλλαγή βασικών πληροφοριών
+</h1> 
 
 <p align="center">
   <a href="https://github.com/ManousosAlexandrakis/Linear_Approximation_OPF" title="Linear_Approximation_OPF">
