@@ -54,7 +54,16 @@ This folder contains scripts for generating visualizations from the code's outpu
 Run the plotting scripts to visualize the results. Some parameters may require adjustment for optimal display:  
 
 - **`yticks`** – Adjust if y-axis labels are poorly spaced or unclear.  
-- **`zoom_out`** – Modify to control the zoom level of the plot.  
+- **`zoom_out`** – Modify to control the zoom level of the plot.
+
+#### Example:
+<p align="center">
+  <img src="Resources/Example_Plotting.gif" alt="Demo Animation" width="600"/>
+</p>
+
+![Demo Animation](Resources/Resources/Example_Plotting.gif)
+
+
 
 #### Notes  
 - Ensure the input data is in the correct format before running.  
