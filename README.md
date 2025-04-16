@@ -31,8 +31,12 @@ To ensure the code files run correctly, you must load the case files properly. T
 
 1. **Use the full file path**  
 2. **Use only the filename** (This works only if the case file is in the same directory as the code file.)  
+### Example:
+![How to read input XLSX file](Resources/input_code_format.png)
 
-The same approach applies to the output data XLSX file.  
+The same approach applies to the output data XLSX file. 
+### Example:
+![How to write output XLSX file](Resources/output_code_format.png)
 
 Make sure that the input case files follow the same formatting as the examples provided in the `Case_Files` folder.
 
