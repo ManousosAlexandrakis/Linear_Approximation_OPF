@@ -65,7 +65,7 @@ If the above steps are followed correctly, the code file should run without issu
 
 
 
-## Plotting_Scripts  
+## Plotting Scripts  
 
 This folder contains scripts for generating visualizations from the code's output data.
 
