@@ -50,7 +50,9 @@ Replace **`PackageName`** with each package required for this project (e.g. Plot
 To ensure the code files run correctly, you must load the case files properly. There are two ways to do this:
 
 1. **Use the full file path**  
-2. **Use only the filename** (This works only if the case file is in the same directory as the code file.)  
+2. **Use only the filename** (This works only if the case file is in the same directory as the code file.)
+
+:warning: **Important note:** The format of file paths differs between operating systems. The examples shown are based on macOS; Windows users should adjust the paths accordingly (e.g., use double backslashes \\ instead of forward slashes /).  
 ### Example:
 ![How to read input XLSX file](Resources/input_code_format.png)
 
@@ -71,7 +73,7 @@ This folder contains scripts for generating visualizations from the code's outpu
 
 ### How to Plot: Step-by-Step
 1. Make sure you load input data in the right way
-#### Example for input:
+#### Example for input 
 ![How to read input XLSX file for plot](Resources/input_code_for_plots.png)
 
 2. Some parameters may require adjustment for optimal display:  
@@ -79,7 +81,7 @@ This folder contains scripts for generating visualizations from the code's outpu
 - **`yticks`** – Adjust if y-axis labels are poorly spaced or unclear.  
 - **`zoom_out`** – Modify to control the zoom level of the plot.
 
-#### Example plotting:
+### 📊 Example Plotting:
 <p align="center">
   <img src="Resources/Example_Plotting.gif" alt="Demo Animation" width="1000"/>
 </p>
@@ -91,7 +93,7 @@ This folder contains scripts for generating visualizations from the code's outpu
 
 
 
-#### Notes  
+#### 📌 Notes  
 - Ensure the input data is in the correct format before running.  
 - Fine-tune parameters as needed for different datasets. 
 - The palette used can be viewd here: https://www.color-hex.com/color-palette/894  
