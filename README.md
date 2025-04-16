@@ -32,7 +32,7 @@ To ensure the code files run correctly, you must load the case files properly. T
 1. **Use the full file path**  
 2. **Use only the filename** (This works only if the case file is in the same directory as the code file.)  
 ### Example:
-![How to read input XLSX file](Resources/input code format.png)
+![How to read input XLSX file](Resources/.png)
 
 The same approach applies to the output data XLSX file.  
 
