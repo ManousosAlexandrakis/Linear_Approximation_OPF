@@ -12,14 +12,12 @@ using XLSX
 #filename = "Name of file.xlsx" , XLSX file should be in the same directory as the code
 
 # Alternative way to choose input file
+# filename = joinpath("filepath","The name of the file.xlsx")   
 
+#  filepath = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
+#  filename = joinpath(filepath,"case_ieee123_modified.xlsx")
 
-#filepath = "/Users/malexandrakis/Documents/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
-filepath = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
-filepath = "/Users/malexandrakis/Documents/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
-filename = joinpath(filepath,"case_ieee123_modified.xlsx")
-#filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","Paper_nodes_PV.xlsx")
-#filename = joinpath("filepath","The name of the file.xlsx")
+ 
 
 
 # Loading Excel sheets into DataFrames
@@ -31,9 +29,9 @@ slack_data = DataFrame(XLSX.readtable(filename, "ext_grid"))
 Upward_data = DataFrame(XLSX.readtable(filename, "Upward"))
 Downward_data = DataFrame(XLSX.readtable(filename, "Downward"))
 
-# Sets explanation:
-#K = all generators except slack bus
-#L = all buses except slack bus and K
+# # Sets explanation:
+# K = all generators except slack bus
+# L = all buses except slack bus and K
 
 # Sbase of the system
 Ssystem = 1
@@ -362,48 +360,51 @@ set_silent(model)
 # Solve the optimization problem
 optimize!(model)
 
-# Dual Variables for pricing
-for k in Nodes
-     println("ρ$k = ",dual(active_power[k]))
-end
-# Dual Variables
-for k in Nodes
-    println("σ$k = ",dual(injectionsandflows[k]))
-end
-for k in Upward_set
-    println(dual(fixed[k]))
-end
-for k in edges_index
-    println("ψ$k = ",dual(TaylorActiveFlow[k]))
-end
-for k in edges_index
-    println("φ$k = ",dual(TaylorReActiveFlow[k]))
-end
-for k in edges_index
-    println("λ+$k = ",dual(FlowmaxUpper[k]))
-end
-for k in edges_index
-    println("λ-$k = ",dual(FlowmaxDown[k]))
-end
+# # Dual Variables for pricing
 
-for k in K_L_buses
-    println("ν$k = ",dual(Voltage[k]))
-end
-for k in K_L_buses
-    println("η$k = ",dual(DeltaConstraint[k]))
-end
-for k in K_L_buses
-    println("ξ+$k = ",dual(UpperBoundV[k]))
-end
-for k in K_L_buses
-    println("ξ-$k = ",dual(LowerBoundV[k]))
-end
-for k in Upward_set
-    println("μ+$k = ",dual(UpperBound1[k]))
-end
-for k in Upward_set
-    println("μ-$k = ",dual(UpperBound2[k]))
-end
+# for k in Nodes
+#      println("ρ$k = ",dual(active_power[k]))
+# end
+
+# # Dual Variables
+
+# for k in Nodes
+#     println("σ$k = ",dual(injectionsandflows[k]))
+# end
+# for k in Upward_set
+#     println(dual(fixed[k]))
+# end
+# for k in edges_index
+#     println("ψ$k = ",dual(TaylorActiveFlow[k]))
+# end
+# for k in edges_index
+#     println("φ$k = ",dual(TaylorReActiveFlow[k]))
+# end
+# for k in edges_index
+#     println("λ+$k = ",dual(FlowmaxUpper[k]))
+# end
+# for k in edges_index
+#     println("λ-$k = ",dual(FlowmaxDown[k]))
+# end
+
+# for k in K_L_buses
+#     println("ν$k = ",dual(Voltage[k]))
+# end
+# for k in K_L_buses
+#     println("η$k = ",dual(DeltaConstraint[k]))
+# end
+# for k in K_L_buses
+#     println("ξ+$k = ",dual(UpperBoundV[k]))
+# end
+# for k in K_L_buses
+#     println("ξ-$k = ",dual(LowerBoundV[k]))
+# end
+# for k in Upward_set
+#     println("μ+$k = ",dual(UpperBound1[k]))
+# end
+# for k in Upward_set
+#     println("μ-$k = ",dual(UpperBound2[k]))
+# end
 
 ####################################################################                                      ####################################################################
 #################################################################### Results for the optimization problem ####################################################################
@@ -460,16 +461,29 @@ flows_df = DataFrame(
     Flowmax = [Flowmax_edge_dict[i] for i in Edges_leng ]
 )
 
-# Print the results
+# # Print the results
+println("")
+println("Voltage magnitudes [p.u.] and Voltage angles [°]:")
 println(results_df)
+println("")
+println("Active power production [p.u.]:")
 println(prod_df)
+println("")
+println("Reactive power production [p.u.]:")
 println(Qreact_df)
+println("")
+println("Nodal prices [€/MWh]:")
 println(price_df)
+println("")
+println("Active and Reactive power flows for lines [p.u.]:")
 println(flows_df)
+println("")
+println("Active and reactive power injections [p.u.]:")
 println(PowerInjection_df)
+println("")
 println("Termination Status:", termination_status(model))
 
 
 # Results stored in an XLSX file
-#XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\LINEAR_OPF_ehv1.xlsx",  "results" => results_df , "production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
-#XLSX.writetable("filepath.xlsx",  "Results" => results_df , "Production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
+#filepath2 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV/LINEAR_OPF_ehv1.xlsx"
+XLSX.writetable("filepath2",  "Results" => results_df , "Production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   

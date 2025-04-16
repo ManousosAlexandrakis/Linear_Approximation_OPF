@@ -11,8 +11,7 @@ using XLSX,Gurobi
 #filename = "Name of file.xlsx" , xlsx file should be in the same directory as the code
 
 # Alternative way to choose the file
-filename = joinpath("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας","promised_ehv1_Ruan_for_my_code.xlsx")
-#filename = joinpath("filepath","The name of the file.xlsx")
+filename = joinpath("filepath","The name of the file.xlsx")
 
 # Loading Excel sheets into DataFrames
 sgen_data = DataFrame(XLSX.readtable(filename, "gen"))
