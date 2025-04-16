@@ -6,47 +6,15 @@ using LinearAlgebra,Dates
 using XLSX, Plots , PlotThemes,Printf
 
 
-# Set the file paths and load data
-filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV/"
-filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
+# # Set the file paths and load data
+filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV/" # Input folder filepath
+# Name of each XLSX file in the input folder that we want to plot
+filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")          
 filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
 filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
 filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
 filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
 filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
-
-
-#  filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV_no_flows_constraints/"
-#  filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
-#  filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
-#  filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
-#  filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
-#  filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
-#  filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
-
-
-
-#   filepath1 = "/Users/malexandrakis/Documents/Results/ehv1"
-#   filename1 = joinpath(filepath1,"ACOPF_ehv1.xlsx")
-#   filename2 = joinpath(filepath1,"ACOPF_ehv1_fixed.xlsx")
-#   filename3 = joinpath(filepath1,"BTheta_ehv1.xlsx")
-#   filename4 = joinpath(filepath1,"Decoupled_ehv1.xlsx")
-#   filename5 = joinpath(filepath1,"LINEAR_OPF_ehv1.xlsx")
-
-
-#  filepath1 = "/Users/malexandrakis/Documents/Results/ehv5"
-#  filename1 = joinpath(filepath1,"ACOPF_ehv5.xlsx")
-#  filename2 = joinpath(filepath1,"ACOPF_ehv5_fixed.xlsx")
-#  filename3 = joinpath(filepath1,"BTheta_ehv5.xlsx")
-#  filename4 = joinpath(filepath1,"Decoupled_ehv5.xlsx")
-#  filename5 = joinpath(filepath1,"LINEAR_OPF_ehv5.xlsx")
-
-#  filepath1 = "/Users/malexandrakis/Documents/Results/ehv4"
-#  filename1 = joinpath(filepath1,"ACOPF_ehv4.xlsx")
-#  filename2 = joinpath(filepath1,"ACOPF_ehv4_fixed.xlsx")
-#  filename3 = joinpath(filepath1,"BTheta_ehv4.xlsx")
-#  filename4 = joinpath(filepath1,"Decoupled_ehv4.xlsx")
-#  filename5 = joinpath(filepath1,"LINEAR_OPF_ehv4.xlsx")
 
 
 base_name = basename(filepath1) 
@@ -70,8 +38,6 @@ X= production_ACOPF_df.bus
 ##################################################################################
 
 # # https://www.color-hex.com/color-palette/894 <-- This is the colour palette used as a basis
-
-
 
 
 
@@ -113,7 +79,7 @@ production = bar(
     bar_width = bar_width,  # Set the width of the bars
     size = (1200, 1000),  # Adjust the size for better spacing
     xticks = (x_indices, buses_str),  # Map numerical x-values to string labels
-    yticks = 0:0.5:4,  
+    yticks = 0:0.5:3,  
     xtickfontsize = fz, ytickfontsize = fz,
     fontfamily = "Courier New" , 
     titlefontsize = fz,
@@ -168,15 +134,16 @@ bar!(
 display(production)
 
 # # Define output filepath
-base_path = "/Users/malexandrakis/Documents/Diploma_Thesis/Plots"
-output_dir = joinpath(base_path, base_name)
+base_path = "/Users/malexandrakis/Documents/Diploma_Thesis/Plots" # Choose the ouput Folder in which plot will be stored
+output_dir = joinpath(base_path, base_name) 
 mkpath(output_dir)  # Creates all necessary parent directories
 
 # # Define versioned filename
-version = 3
+version = 6
+
 #filename = base_name * "_active_fixed_V$version.pdf"
-filename = base_name * "_active_V$version.pdf"
-save_path = joinpath(output_dir, filename)
+filename = base_name * "_active_V$version.pdf" # Output file name will start with the name of the input folder
+save_path = joinpath(output_dir, filename)  
 
 # # Save the plot
 savefig(production, save_path)
