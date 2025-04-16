@@ -58,8 +58,11 @@ Run the plotting scripts to visualize the results. Some parameters may require a
 
 #### Example:
 <p align="center">
-  <img src="Resources/.gif" alt="Demo Animation" width="600"/>
+  <img src="Resources/Example_Plotting.gif" alt="Demo Animation" width="600"/>
 </p>
+
+![Demo Animation](Resources/Resources/Example_Plotting.gif)
+
 
 
 #### Notes  
