@@ -1,5 +1,5 @@
 <h1 align="center">
-  Linear Approximation OPF
+  A Linear Approximation for the Optimal Power Flow Problem 
 </h1> 
 
 <p align="center">
@@ -52,7 +52,7 @@ To ensure the code files run correctly, you must load the case files properly. T
 1. **Use the full file path**  
 2. **Use only the filename** (This works only if the case file is in the same directory as the code file.)
 
-:warning: **Important note:** The format of file paths differs between operating systems. The examples shown are based on macOS; Windows users should adjust the paths accordingly (e.g., use double backslashes \\ instead of forward slashes /).  
+:warning: **Important note:** The format of file paths differs between operating systems. The examples shown are based on macOS; Windows users should adjust the paths accordingly (e.g., use double backslashes \ \ instead of forward slashes /).  
 ### Example:
 ![How to read input XLSX file](Resources/input_code_format.png)
 
