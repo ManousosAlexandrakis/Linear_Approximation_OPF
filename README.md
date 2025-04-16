@@ -8,7 +8,7 @@
   </a>
 </p>
 
-## Repository purpose
+## Repository's purpose
 This repository contains a linear model for the approximation of the Optimal Power Flow (OPF) problem, developed as part of my diploma thesis under the supervision of Anthony Papavasiliou and ZeJun Ruan. It includes implementation code, case files in XLSX format, and code for plotting results. Additionally, implementation code for DCOPF and Decoupled OPF models is included.
 
 ## Authors
