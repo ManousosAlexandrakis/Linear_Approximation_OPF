@@ -86,7 +86,7 @@ This folder contains scripts for generating visualizations from the code's outpu
 
 3. Make sure to save the plot to your desired folder with a filename of your choice.
 #### Example for plot saving:
-![How to save plot](Resources/output_code_for_plots.png)
+![How to save plot](Resources/ouput_code_for_plots.png)
 
 
 
