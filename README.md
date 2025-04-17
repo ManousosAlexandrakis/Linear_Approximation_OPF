@@ -30,7 +30,7 @@ To run this project, you’ll need to have the Julia programming language instal
 
 ### Setup Steps
 1. **Install Julia:** 
-Download and install Julia from the official website: https://julialang.org/downloads
+Download and install [Julia application](https://julialang.org/downloads) 
 
 2. **Open the Project in VS Code (or your preferred IDE):**
 Make sure you have the Julia extension installed in VS Code for best support.
@@ -45,6 +45,37 @@ Then, install the necessary packages by typing:
 add PackageName
 ```
 Replace **`PackageName`** with each package required for this project (e.g. Plots, JuMP, etc.).
+
+4. **Install an Optimizer**
+
+This project uses the **Gurobi Optimizer**, a powerful commercial solver. To use Gurobi, make sure you have:
+
+- A valid **Gurobi license** (Free academic licenses are available)
+- The **[Gurobi application](https://www.gurobi.com/downloads/gurobi-software/)** installed on your system
+- The **Gurobi Julia package** added to your environment (add Gurobi package as shown in step 3)
+
+To install the package in Julia, open the Julia REPL and enter:
+
+```julia
+] add Gurobi
+```
+#### Note: Using Gurobi in Your Code
+
+After installing Gurobi, you can initialize and use it as your solver with the following setup:
+
+```julia
+# Create a mathematical optimization model using the Gurobi Optimizer as the solver
+GUROBI_ENV = Gurobi.Env()
+model = Model(() -> Gurobi.Optimizer(GUROBI_ENV))
+set_optimizer_attribute(model, "MIPGap", 0.0) 
+set_silent(model)
+```
+
+
+If you prefer a free and open-source alternative, you can use GLPK instead. It works well for most linear optimization problems. Install GLPK with:
+```
+] add GLPK
+```
 
 ### How to Run the Code
 To ensure the code files run correctly, you must load the case files properly. There are two ways to do this:
