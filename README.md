@@ -120,7 +120,7 @@ This folder contains scripts for generating visualizations from the code's outpu
 After saving the figure as a PDF, it will look like this:
 
 
-[View Saved Figure (PDF)](Resources/paper_pv_active.pdf)
+[View Saved Figure (png)](Example_Plots/paper_pv_active_V3.png)
 
 3. Make sure to save the plot to your desired folder with a filename of your choice.
 #### Example for plot saving:
