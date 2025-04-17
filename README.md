@@ -117,6 +117,11 @@ This folder contains scripts for generating visualizations from the code's outpu
   <img src="Resources/Example_Plotting.gif" alt="Demo Animation" width="1000"/>
 </p>
 
+After saving the figure as a PDF, it will look like this:
+
+
+[View Saved Figure (PDF)](Resources/paper_pv_active.pdf)
+
 3. Make sure to save the plot to your desired folder with a filename of your choice.
 #### Example for plot saving:
 ![How to save plot](Resources/ouput_code_for_plots.png)
