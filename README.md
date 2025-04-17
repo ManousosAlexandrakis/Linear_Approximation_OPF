@@ -9,7 +9,7 @@
 </p>
 
 ## Repository's purpose
-This repository contains a linear model for the approximation of the Optimal Power Flow (OPF) problem, developed as part of my diploma thesis under the supervision of Anthony Papavasiliou and ZeJun Ruan. It includes implementation code, case files in XLSX format, and code for plotting results. Additionally, implementation code for DCOPF and Decoupled OPF models is included.
+This repository contains a linear model for the approximation of the Optimal Power Flow (OPF) problem, developed as part of my diploma thesis under the supervision of Anthony Papavasiliou and ZeJun Ruan. It includes implementation code, case files in XLSX format, and code for plotting results. Additionally, implementation code for DCOPF Bθ and Decoupled OPF models is included.
 
 ## Authors
 This code was created by [Manousos Alexandrakis](https://github.com/ManousosAlexandrakis), [Lina Efthymiadou](https://github.com/lina-efthymiadou), [ZeJun Ruan](https://github.com/zejunr), listed in alphabetical order. The initial work was carried out by ZeJun Ruan and Lina Efthymiadou, while Manousos Alexandrakis finalized the implementation.
@@ -91,7 +91,7 @@ The same approach applies to the output data XLSX file.
 ### Example:
 ![How to write output XLSX file](Resources/output_code_format.png)
 
-Make sure that the input case files follow the same formatting as the examples provided in the `Case_Files` folder.
+Make sure that the input case files follow the same formatting as the examples provided in the [`Case_Files`](./Case_Files) folder.
 
 
 If the above steps are followed correctly, the code file should run without issues—only infeasibility could cause an error.
@@ -120,9 +120,15 @@ This folder contains scripts for generating visualizations from the code's outpu
 After saving the figure as a PDF, it will look like this:
 
 
-![View Saved Figure (png)](Example_Plots/paper_pv_active_V3-1.png)
+<p align="center">
+  <img src="Example_Plots/paper_pv_active_V3-1.png" alt="View Saved Figure (PNG)" width="500"/>
+</p>
+
+More plotting examples can be found in the [`Example_Plots`](./Example_Plots) folder.
+
 
 3. Make sure to save the plot to your desired folder with a filename of your choice.
+
 #### Example for plot saving:
 ![How to save plot](Resources/ouput_code_for_plots.png)
 
