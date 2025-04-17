@@ -117,7 +117,7 @@ This folder contains scripts for generating visualizations from the code's outpu
 - **`yticks`** – Adjust if y-axis labels are poorly spaced or unclear.  
 - **`zoom_out`** – Modify to control the zoom level of the plot.
 
-### 📊 Example Plotting:
+### 📊 Example Plot:
 <p align="center">
   <img src="Resources/Example_Plotting.gif" alt="Demo Animation" width="1000"/>
 </p>
