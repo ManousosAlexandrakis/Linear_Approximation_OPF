@@ -2,8 +2,8 @@ using Plots
 using Plots.PlotMeasures
 using StatsPlots
 using DataFrames
-using LinearAlgebra,Dates
-using XLSX, Plots , PlotThemes,Printf
+using LinearAlgebra
+using XLSX, Printf
 
 
 # # Set the file paths and load data
@@ -37,7 +37,7 @@ Y_LINEAR_fixed = production_LINEAR_fixed_df[!, "production"]
 X= production_ACOPF_df.bus
 ##################################################################################
 
-# # https://www.color-hex.com/color-palette/894 <-- This is the colour palette used as a basis
+# # https://www.color-hex.com/color-palette/894 <- The colour palette 
 
 
 
@@ -79,7 +79,7 @@ production = bar(
     bar_width = bar_width,  # Set the width of the bars
     size = (1200, 1000),  # Adjust the size for better spacing
     xticks = (x_indices, buses_str),  # Map numerical x-values to string labels
-    yticks = 0:0.5:3,  
+    yticks = 0:0.2:3,  
     xtickfontsize = fz, ytickfontsize = fz,
     fontfamily = "Courier New" , 
     titlefontsize = fz,

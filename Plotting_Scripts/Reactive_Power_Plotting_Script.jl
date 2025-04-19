@@ -1,9 +1,8 @@
 using Plots
 using Plots.PlotMeasures
-using StatsPlots
 using DataFrames
-using LinearAlgebra,Dates
-using XLSX, Plots , PlotThemes,Printf
+using LinearAlgebra
+using XLSX, Printf
 
 
 
@@ -66,9 +65,7 @@ Y_reactive_fixed_LINEAR = reactive_LINEAR_fixed_df[!, "q_pu"]
 X= reactive_ACOPF_df.Bus
 
 
-# #  https://www.color-hex.com/color-palette/894 <-- This is the colour palette that we will be used as a basis
-
-
+# #  https://www.color-hex.com/color-palette/894 <-- The colour palette 
 
 
 
@@ -91,11 +88,6 @@ y_min = max_reactive
 y_max = min_reactive
 y_median = (y_min + y_max)/2
 y_range = y_max - y_min
-ylim = (y_median - abs((y_range + zoom_out)/2), 
-        y_median + abs((y_range + zoom_out)/2))
-xlim = (0.5,bus_count+2.2)
-
-
 
 
 bar_width = 0.2  # Width of each bar
@@ -104,10 +96,6 @@ offset = bar_width
 # # Convert buses to a string to treat them as categorical
 buses_str = string.(buses)
 x_indices = 1:(length(buses_str)+2)/length(buses_str):length(buses_str)+2  # Numerical indices for the buses
-
-
-
-
 
 
 # # Create a base bar chart for the first dataset
@@ -167,14 +155,14 @@ bar!(
 # )
 
 
- bar!(x_indices .+ 0*offset,  # Center the first group of bars
+bar!(x_indices .+ 0*offset,  # Center the first group of bars
      Y_reactive_Decoupled,  # Values for the first dataset
      label = "Decoupled_OPF",
      color = RGB(0/255,160/255,176/255),
      bar_width = bar_width,  # Set the width of the bars
 
 
- )
+)
 
 hline!([0], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 display(reactive)
@@ -190,5 +178,5 @@ filename = base_name * "_reactive_V$version.pdf"
 save_path = joinpath(output_dir, filename)
 
 # # Save the plot
-savefig(reactive, save_path)
+#savefig(reactive, save_path)
 

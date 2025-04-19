@@ -1,19 +1,19 @@
-# Packages
-using DataFrames,JuMP
-using XLSX,Gurobi
+# # Packages
+using DataFrames, JuMP
+using XLSX, Gurobi
 
 ####################################################################                                 ####################################################################
 ####################################################################          Data Handling          ####################################################################
 ####################################################################                                 ####################################################################
 
-# Choose xlsx file you want to read
+# # Choose xlsx file you want to read
 #filename = "Paper_nodes_PV.xlsx"
 #filename = "Name of file.xlsx" , xlsx file should be in the same directory as the code
 
-# Alternative way to choose the file
+# # Alternative way to choose the file
 filename = joinpath("filepath","The name of the file.xlsx")
 
-# Loading Excel sheets into DataFrames
+# # Loading Excel sheets into DataFrames
 sgen_data = DataFrame(XLSX.readtable(filename, "gen"))
 Edges = DataFrame(XLSX.readtable(filename, "edges"))
 bus_data = DataFrame(XLSX.readtable(filename, "bus"))
@@ -22,19 +22,19 @@ slack_data = DataFrame(XLSX.readtable(filename, "ext_grid"))
 Upward_data = DataFrame(XLSX.readtable(filename, "Upward"))
 Downward_data = DataFrame(XLSX.readtable(filename, "Downward"))
 
-#Data for slack bus(voltage magnitude,voltage degree,bus number)
+# # Data for slack bus(voltage magnitude,voltage degree,bus number)
 slack_v = slack_data[1, :vm_pu]  
 slack_degree = slack_data[1,:va_degree]
 slack_bus = slack_data[1,:bus]
 
 buses = bus_data[:, :bus]
 edges_index = Edges[:,:idx]
-# Create a dictionary to store the index of each bus
+# # Create a dictionary to store the index of each bus
 slack_index = findfirst(bus_data[:, :bus] .== slack_bus)
 bus_id_to_index = Dict(bus_data[setdiff(1:end, slack_index), :bus] .=> 1:size(bus_data, 1)-1)
 bus_id_to_index[slack_bus] = size(bus_data, 1)
 
-# Create a dictionary mapping edges' idx to FlowMax
+# # Create a dictionary mapping edges' idx to FlowMax
 Flowmax_dict = Dict{Tuple{Int, Int}, Float64}()
 for row in eachrow(Edges)
     Flowmax_dict[(row.from_bus, row.to_bus)] = row.FlowMax
@@ -42,10 +42,10 @@ for row in eachrow(Edges)
 end
 
 
-#Sbase of the system
+# # Sbase of the system
 Ssystem = 1
 
-# Create a dictionary to store connected buses
+# # Create a dictionary to store connected buses
 connected_buses_dict = Dict{Int, Vector{Int}}()
 for row in eachrow(Edges)
     From = row.from_bus
@@ -63,18 +63,18 @@ for row in eachrow(Edges)
 end
 
 
-# Total number of buses and edges
+# # Total number of buses and edges
 n = size(bus_data,1)
 Edges_leng = 1:length(Edges.from_bus)
 
-# Create an array to store all the Nodes
+# # Create an array to store all the Nodes
 Nodes = Int[]
 for row in eachrow(bus_data)
     bus = row.bus
     push!(Nodes, bus)
 end
 
-# Create dictionaries to store generator buses' Marginal Cost, Minimum and Maximum Active Power production limits
+# # Create dictionaries to store generator buses' Marginal Cost, Minimum and Maximum Active Power production limits
 PU = Dict{Int,Float64}()
 MinQ = Dict{Int, Float64}()
 MaxQ = Dict{Int, Float64}()
@@ -89,7 +89,7 @@ for row in eachrow(Upward_data)
     MaxQ[name] = u_maxquantity
 end
 
-# Create an array to store all the buses that can offer upward flexibility
+# # Create an array to store all the buses that can offer upward flexibility
 Upward_set = Int[]
 for row in eachrow(Upward_data)
     bus = row.Bus
@@ -99,7 +99,7 @@ for row in eachrow(Upward_data)
 end
 buses_except_upward = setdiff(buses, Upward_set)
 
-# Create Y matrix
+# # Create Y matrix
 global y = zeros(Complex, n, n)
 
 for row in eachrow(Edges)
@@ -125,14 +125,14 @@ for k in Nodes
     end
 end
 
-#println("Admittance Matrix (Ykk):")
-#println(Y)
+# println("Admittance Matrix (Ykk):")
+# println(Y)
 
-# Create B matrix
+# # Create B matrix
 B = imag.(Y)
 
 
-# Active Load for each bus
+# # Active Load for each bus
 global total_p= 0.0
 total_pgen_pload = Dict{Int, Float64}()
 for row in eachrow(load_data)
@@ -143,7 +143,7 @@ for row in eachrow(load_data)
 end
 
 
-# Create Load_set
+# # Create Load_set
 Load_set = Int[]
 for row in eachrow(load_data)
     load_buses = row.bus
@@ -152,7 +152,7 @@ end
 Buses_without_load =  setdiff(buses, Load_set)
 
 
-# Load_Dict
+# # Load_Dict
 # Add buses and their load values from load_data
 Load_dict = Dict{Int, Float64}()
 for row in eachrow(load_data)
@@ -169,7 +169,7 @@ Load = Load_dict
 #################################################################### Mathematical optimization model ####################################################################
 ####################################################################                                 ####################################################################
 
-# Create a mathematical optimization model using the Gurobi Optimizer as the solver
+# # Create a mathematical optimization model using the Gurobi Optimizer as the solver
 GUROBI_ENV = Gurobi.Env()
 model = Model(() -> Gurobi.Optimizer(GUROBI_ENV))
 set_optimizer_attribute(model, "MIPGap", 0.0) 
@@ -177,40 +177,43 @@ set_silent(model)
 
 
 
-#Variables
+### Variables
 @variable(model, f[1:n,1:n])   # Variable representing Active Power flow on each edge(both directions)
 @variable(model, p[Nodes]>=0)  # Variable representing Active Power production by generator buses
 @variable(model, delta[Nodes]) # Variable representing voltage angles of each node
 @variable(model, V[Nodes])     # Variable representing voltage magnitudes of each node
 
-# Real Power Flow calculation for each edge
+# # Real Power Flow calculation for each edge
 @constraint(model,[m in Nodes,n in connected_buses_dict[m]],B[bus_id_to_index[m], bus_id_to_index[n]] *(delta[m] - delta[n])==f[bus_id_to_index[m], bus_id_to_index[n]]) 
-# Voltage for all buses is considered 1
+
+# # Voltage for all buses is considered 1
 @constraint(model,[m in Nodes], V[m] == 1)
-# Voltage angle for slack bus is considered 0
+
+# # Voltage angle for slack bus is considered 0
 @constraint(model, delta[slack_bus] == 0)
-# Real Power Limits for Generators
+
+# # Real Power Limits for Generators
 @constraint(model,PowerProductionLimits[i=Upward_set] , MinQ[i] <= p[i]  <= MaxQ[i])
 
-# Real Power Limit for Edges' Flows
+# #Real Power Limit for Edges' Flows
 @constraint(model,[m in Nodes,n in connected_buses_dict[m]] ,  f[bus_id_to_index[m], bus_id_to_index[n]] <= Flowmax_dict[m,n])  
 
-#Real Power Production of non Generators is 0
+# # Real Power Production of non Generators is 0
 @constraint(model, [n in buses_except_upward], p[n]==0)
 
-# Power injection of node n = Sum of ejected power flows from node n
+# # Power injection of node n = Sum of ejected power flows from node n
 @constraint(model, price[n in Nodes], sum(f[bus_id_to_index[n], bus_id_to_index[m]] for m in connected_buses_dict[n]) ==p[n] - Load[n] )
 
 
 
-# Objective Function
+### Objective Function
 @objective(model, Min,  sum(PU[i]*p[i] for i in Upward_set))
 
-# Solve the optimization problem
+# # Solve the optimization problem
 optimize!(model)
  
 
-#Dual variables for pricing
+# # Dual variables for pricing
 for k in Nodes
     println(dual(price[k]))
 end
@@ -218,16 +221,16 @@ end
 #################################################################### Results for the optimization problem ####################################################################
 ####################################################################                                      ####################################################################
 
-#Results for Prices
+# # Results for Prices
 price_df = DataFrame(
     Bus = Nodes,
     node_price = [-dual(price[j]) for j in Nodes]
 )
 
-
+println("Objective value:c ")
 @show objective_value(model)
 
-# Results for the Voltage Magnitude and Voltage Angle
+# # Results for the Voltage Magnitude and Voltage Angle
 results_df = DataFrame(
     Bus = buses,
     V_pu = [value(V[i]) for i in buses],
@@ -235,13 +238,13 @@ results_df = DataFrame(
 
 )
 
-# Results for the Active Power production
+# # Results for the Active Power production
 production_df = DataFrame(
     Bus = Upward_set,
     production = [value(p[i]) for i in Upward_set],
 )
 
-#Results for Flows  
+# # Results for Flows  
 flows_df = DataFrame(
     Edge = edges_index,
     from_bus = [Edges.from_bus[i] for i in Edges_leng],
@@ -249,14 +252,22 @@ flows_df = DataFrame(
     Flow = [value(f[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng],
 )
 
-#Print the results
+# # Print the results
+println("")
+println("Voltage magnitudes [p.u.] and Voltage angles [°]:")
 println(results_df)
+println("")
+println("Active power production [p.u.]:")
 println(production_df)
+println("")
+println("Nodal prices [€/MWh]:")
 println(price_df)
+println("")
+println("Active power flows for lines [p.u.]:")
 println(flows_df)
 
 println("Termination Status:", termination_status(model))
 
-# Results Stored in an Excel File
-XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\BTheta_ehv1.xlsx", "flows"=> flows_df, "results" => results_df, "production" => production_df, "price" => price_df)
+# # Results Stored in an Excel File
+#XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\BTheta_ehv1.xlsx", "flows"=> flows_df, "results" => results_df, "production" => production_df, "price" => price_df)
 #XLSX.writetable("filepath.xlsx",  "Results" => results_df , "Production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   

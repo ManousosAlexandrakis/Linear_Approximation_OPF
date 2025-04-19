@@ -1,9 +1,8 @@
 using Plots
 using Plots.PlotMeasures
-using StatsPlots
 using DataFrames
 using LinearAlgebra,Dates
-using XLSX, Plots , PlotThemes,Printf
+using XLSX, Printf
 
 
 # # Set the file paths and load data
@@ -63,6 +62,7 @@ Y_D_Decoupled = VD_Decoupled_df[!, "Delta"]
 Y_D_LINEAR = VD_LINEAR_df[!, "va_degree"]
 Y_D_LINEAR_fixed = VD_LINEAR_fixed_df[!, "va_degree"]
 
+# #  https://www.color-hex.com/color-palette/894 <-- The colour palette 
 
 # # y_range
 max_delta = maximum([maximum(Y_D_ACOPF), maximum(Y_D_BTheta), maximum(Y_D_Decoupled), maximum(Y_D_LINEAR)])
@@ -125,7 +125,7 @@ hline!([0], linestyle = :dash, color = :black, label = "",alpha = 0.4)
 plot!(buses_str, Y_D_ACOPF, color=RGB(237/255,201/255,81/255), lw=2,label = false)  # Add line plot to connect points
 
 
- scatter!(buses_str,
+scatter!(buses_str,
  Y_D_Decoupled,
  label = "DECOUPLED_OPF",
  color = RGB(0/255,160/255,176/255),
@@ -161,7 +161,7 @@ plot!(buses_str, Y_D_LINEAR, color=RGB(204/255,42/255,54/255), lw=2,label = fals
 # )
 # plot!(buses_str, Y_D_ACOPF_fixed, color=:purple, lw=2,label = false)  # Add line plot to connect points
 
- scatter!(buses_str,
+scatter!(buses_str,
  Y_D_BTheta,
  label = "BTHETA_OPF",
  color = RGB(79/255,55/255,45/255),
@@ -184,4 +184,4 @@ filename = base_name * "_Voltage_Angle_V$version.pdf"
 save_path = joinpath(output_dir, filename)
 
 # # Save the plot
- savefig(Delta, save_path)
+#savefig(Delta, save_path)
