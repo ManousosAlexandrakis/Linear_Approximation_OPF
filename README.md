@@ -81,6 +81,7 @@ If you prefer a free and open-source alternative, you can use GLPK instead. It w
 ```
 ] add GLPK
 ```
+A list of solvers is available at [YALMIP](https://yalmip.github.io/allsolvers/)
 
 ### How to Run the Code
 To ensure the code files run correctly, you must load the case files properly. There are two ways to do this:
