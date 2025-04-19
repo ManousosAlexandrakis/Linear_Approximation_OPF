@@ -49,7 +49,9 @@ Then, install the necessary packages by typing:
 ```
 add PackageName
 ```
-Replace **`PackageName`** with each package required for this project (e.g. Plots, JuMP, etc.).
+Replace **`PackageName`** with each package required for this project.
+
+**Required Packages:** DataFrames, JuMP, Gurobi, LinearAlgebra, XLSX, Plots, Printf
 
 4. **Install an Optimizer**
 
