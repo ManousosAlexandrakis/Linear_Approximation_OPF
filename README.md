@@ -23,11 +23,34 @@ For any questions or contributions, feel free to open an issue or submit a pull 
 
 ## Files Explanation
 
-- **Linear_OPF_Final**: Generates results for the proposed linear model.  
-- **OPF_Decoupled**: Generates results for the decoupled model.  
-- **DCOPF_BTheta**: Generates results for the BTheta model.  
-- **Plotting_Scripts**: Creates visualizations for all models (including the ACOPF model, which is not included in this repository).  
-- **Case_Files**: Contains input data for one energy system.  
+- **Case_Files**: Contains input data for one energy system.
+- **DC_BTheta_OPF_Functions:**
+    1. [`create_matrices_DC_BTheta`](DC_BTheta_OPF_Functions/create_matrices_DC_BTheta.jl): Creates Y and B matrices used in code.
+    2. [`get_data_DC_BTheta`](DC_BTheta_OPF_Functions/get_data_DC_BTheta.jl): Loads and analyzes the input data.
+    3. [`get_functions_DC_BTheta`](DC_BTheta_OPF_Functions/get_functions_DC_BTheta.jl): Contains functions for mathematical model creation, problem solving, result printing, and plot creation.
+- **Decoupled_OPF_Functions:**
+    1. [`create_matrices_Decoupled`](Decoupled_OPF_Functions/create_matrices_Decoupled.jl): Creates Y and B matrices used in code.
+    2. [`get_data_Decoupled`](Decoupled_OPF_Functions/get_data_Decoupled.jl): Loads and analyzes the input data.
+    3. [`get_functions_Decoupled`](Decoupled_OPF_Functions/get_functions_Decoupled.jl): Contains functions for mathematical model creation, problem solving, result printing, and plot creation.
+- **Thesis_Linear_OPF_Functions**:
+    1. [`mapping_and_matrices_creation_Thesis_Linear`](Thesis_Linear_OPF_Functions/mapping_and_matrices_creation_Thesis_Linear.jl): Maps the buses and creates the Y and Z matrices.
+    2. [`get_data_Thesis_Linear`](Thesis_Linear_OPF_Functions/get_data_Thesis_Linear.jl): Loads and analyzes the input data.
+    3. [`get_functions_Thesis_Linear`](Thesis_Linear_OPF_Functions/get_functions_Thesis_Linear.jl): Contains functions for mathematical model creation, problem solving, result printing, and plot creation.
+- **main_code:** 
+  1. [`Thesis_Linear_OPF_main`](main_code/Thesis_Linear_OPF_main.jl): Runs the proposed linear model.
+  2. [`DC_Btheta_OPF_main`](main_code/DC_Btheta_OPF_main.jl): Runs the BTheta model.
+  3. [`Decoupled_OPF_main`](main_code/Decoupled_OPF_main.jl): Runs the Decoupled model.
+
+This folder contains standalone scripts that run the entire problem without using modularized functions. The codes are written in a fully expanded form for clarity and completeness.
+
+- **Plotting_Scripts:** Creates visualizations for all models (including the ACOPF model, which is not included in this repository).
+
+- **Resources:** Contains images from example plotting.
+
+- **Thesis_Linear_OPF_conv**, **DC_BTheta_OPF_conv**, **Decoupled_OPF_conv**:
+- These scripts provide an easier and more organized way to run the Thesis Linear, BTheta, and Decoupled OPF models, respectively, based on the modular functions from their corresponding folders.
+  - You can specify the XLSX output filename and file path for saving results.
+  - Plots are automatically generated; figure appearance can be customized by adjusting the `zoom_out` and `y_ticks_range` parameters.
 
 
 ## Simple Instructions
@@ -108,7 +131,7 @@ If the above steps are followed correctly, the code file should run without issu
 
 ## Plotting Scripts  
 
-This folder contains scripts for generating visualizations from the code's output data.
+This folder contains scripts for generating visualizations in order to compare the results of the 4 different models.
 
 ### How to Plot: Step-by-Step
 1. Make sure you load input data in the right way
