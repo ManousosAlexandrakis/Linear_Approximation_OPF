@@ -45,7 +45,7 @@ This folder contains standalone scripts that run the entire problem without usin
 
 - **Plotting_Scripts:** Creates visualizations for all models (including the ACOPF model, which is not included in this repository).
 
-- **Resources:** Contains images from example plotting.
+- **Resources:** Contains images used in readme file.
 
 - **Thesis_Linear_OPF_conv**, **DC_BTheta_OPF_conv**, **Decoupled_OPF_conv**:
   - These scripts provide an easier and more organized way to run the Thesis Linear, BTheta, and Decoupled OPF models, respectively, based on the modular functions from their     corresponding folders.
