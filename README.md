@@ -14,7 +14,7 @@
 ![Static Badge](https://img.shields.io/badge/Julia_version-1.11.4-green)
 
 # Repository's purpose
-This repository contains a linear model for the approximation of the Optimal Power Flow (OPF) problem, developed as part of my diploma thesis under the supervision of [Prof. Anthony Papavasiliou](https://ap-rg.eu/) and ZeJun Ruan. It includes implementation code, case files in XLSX format, and code for plotting results. Additionally, implementation code for DCOPF Bθ and Decoupled OPF models is included.
+This repository contains a linear model for the approximation of the Optimal Power Flow (OPF) problem, developed as part of my diploma thesis under the supervision of [Prof. Anthony Papavasiliou](https://ap-rg.eu/) and ZeJun Ruan. It includes implementation code, case files in XLSX format, and code for plotting results. Additionally, implementation code for DC BTHeta and Decoupled OPF models is included.
 
 # Authors
 This code was created by [Manousos Alexandrakis](https://github.com/ManousosAlexandrakis), [Lina Efthymiadou](https://github.com/lina-efthymiadou), [ZeJun Ruan](https://github.com/zejunr), listed in alphabetical order. The initial work was carried out by ZeJun Ruan and Lina Efthymiadou, while Manousos Alexandrakis finalized the implementation.
@@ -108,11 +108,10 @@ If you prefer a free and open-source alternative, you can use GLPK instead. It w
 ```
 A list of solvers is available at [YALMIP](https://yalmip.github.io/allsolvers/)
 
-## How to Run the Code
+## How to Run the Code: Step-by-Step
 To run the code, you can use either the scripts in the main_code folder or the **Thesis_Linear_OPF_conv**, **DC_BTheta_OPF_conv**, and **Decoupled_OPF_conv** files.
 For an easier and smoother experience, it is recommended to use the **_conv** files.
 
-### Steps
 
 1. The first step is to include the functions. To do this, use the filepath to the functions folder.
 #### Example:
