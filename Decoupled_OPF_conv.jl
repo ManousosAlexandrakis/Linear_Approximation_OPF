@@ -10,8 +10,7 @@ using LinearAlgebra
 include("/Users/malexandrakis/Documents/Οικονομική και Αξιόπιστη/Decoupled_OPF_Functions/get_data_Decoupled.jl")
 include("/Users/malexandrakis/Documents/Οικονομική και Αξιόπιστη/Decoupled_OPF_Functions/create_matrices_Decoupled.jl")
 include("/Users/malexandrakis/Documents/Οικονομική και Αξιόπιστη/Decoupled_OPF_Functions/get_functions_Decoupled.jl")
-# include("/Users/malexandrakis/Documents/Οικονομική και Αξιόπιστη/Decoupled_OPF_Functions/mapping_and_matrices_creation_Thesis_Linear.jl")
-# include("/Users/malexandrakis/Documents/Οικονομική και Αξιόπιστη/Decoupled_OPF_Functions/get_functions_Thesis_Linear.jl")
+
 
 # Load the data (all variables will be available globally)
 filename = "case_ieee123_modified.xlsx"
@@ -35,22 +34,23 @@ println("Sample B matrix element: ", B[1,2])
 # # Choose solver
 solver = "gurobi"
 
-# # Output file path
-#OUTPATH = "" # Name the folder for the results
-OUTPATH = "Results_Decoupled" 
+# # # Output file path
+# #OUTPATH = "" # Name the folder for the results
+# OUTPATH = "Results_Decoupled" 
 
-# Create the output folder if it doesn't exist
-if !ispath(OUTPATH)
-    mkpath(OUTPATH)
-    println("New directory created: ", OUTPATH)
-end
+# # Create the output folder if it doesn't exist
+# if !ispath(OUTPATH)
+#     mkpath(OUTPATH)
+#     println("New directory created: ", OUTPATH)
+# end
 
-#output_file_name = ""
-ouput_file_name = "Decoupled_OPF_Results.xlsx"
-results_path = joinpath(pwd(), OUTPATH, ouput_file_name)
+# #output_file_name = ""
+# ouput_file_name = "Decoupled_OPF_Results.xlsx"
+# results_path = joinpath(pwd(), OUTPATH, ouput_file_name)
 
-println("Results path: ", results_path)
+# println("Results path: ", results_path)
 
+setup_results_path("Results_Decoupled", "Decoupled_OPF_Results.xlsx")
 
 
 DC_BTheta_OPF_model = create_decoupled_opf_problem()

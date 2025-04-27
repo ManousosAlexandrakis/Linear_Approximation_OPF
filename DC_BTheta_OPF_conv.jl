@@ -34,19 +34,22 @@ solver = "gurobi"
 
 # # Output file path
 #OUTPATH = "" # Name the folder for the results
-OUTPATH = "Results_DC_BTheta" 
+# OUTPATH = "Results_DC_BTheta" 
 
-# Create the output folder if it doesn't exist
-if !ispath(OUTPATH)
-    mkpath(OUTPATH)
-    println("New directory created: ", OUTPATH)
-end
+# # Create the output folder if it doesn't exist
+# if !ispath(OUTPATH)
+#     mkpath(OUTPATH)
+#     println("New directory created: ", OUTPATH)
+# end
 
-#output_file_name = ""
-ouput_file_name = "DC_BTheta_OPF_Results.xlsx"
-results_path = joinpath(pwd(), OUTPATH, ouput_file_name)
+# #output_file_name = ""
+# ouput_file_name = "DC_BTheta_OPF_Results.xlsx"
+# results_path = joinpath(pwd(), OUTPATH, ouput_file_name)
 
-println("Results path: ", results_path)
+# println("Results path: ", results_path)
+
+setup_results_path("Results_DC_BTheta", "DC_BTheta_OPF_Results.xlsx")
+
 
 DC_BTheta_OPF_model = create_dc_opf_problem()
 
