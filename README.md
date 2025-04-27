@@ -108,11 +108,10 @@ If you prefer a free and open-source alternative, you can use GLPK instead. It w
 ```
 A list of solvers is available at [YALMIP](https://yalmip.github.io/allsolvers/)
 
-## How to Run the Code
+## How to Run the Code: Step-by-Step
 To run the code, you can use either the scripts in the main_code folder or the **Thesis_Linear_OPF_conv**, **DC_BTheta_OPF_conv**, and **Decoupled_OPF_conv** files.
 For an easier and smoother experience, it is recommended to use the **_conv** files.
 
-### Steps
 
 1. The first step is to include the functions. To do this, use the filepath to the functions folder.
 #### Example:
