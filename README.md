@@ -111,6 +111,16 @@ A list of solvers is available at [YALMIP](https://yalmip.github.io/allsolvers/)
 ### How to Run the Code
 To run the code, you can use either the scripts in the main_code folder or the **Thesis_Linear_OPF_conv**, **DC_BTheta_OPF_conv**, and **Decoupled_OPF_conv** files.
 For an easier and smoother experience, it is recommended to use the **_conv** files.
+
+**Steps:**
+
+1. The first step is to include the functions. To do this you have to use the filepath of the functions folder.
+#### Example:
+2. Secondly, you have to load the input XLSX file. Write the filename and the filepath to the appropriate spaces
+#### Example:
+3. Choose the output folder name and the ouutput XLSX filename. The output folder will contain plots and results in XLSX file.
+#### Example:
+4. 
 To ensure the code files run correctly, you must load the case files properly. There are two ways to do this:
 
 1. **Use the full file path**  
