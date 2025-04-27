@@ -178,9 +178,6 @@ function create_results_dataframes(model, case = "case_ieee123_modified")
     println(price_df)
 
 
-
-
-
     println("")
     println(" Active and Reactive power flows for lines [p.u.]:")
     println("")
@@ -216,6 +213,26 @@ println("")
 println("Termination Status:", termination_status(model))
 
 end
+
+
+
+function setup_results_path(folder_name::String, file_name::String)
+    global OUTPATH = folder_name  # Update globals with input values
+    global output_file_name = file_name
+    
+    # Create directory if needed
+    if !ispath(OUTPATH)
+        mkpath(OUTPATH)
+        println("Created directory: ", OUTPATH)
+    end
+    
+    # Construct full path
+    global results_path = joinpath(pwd(), OUTPATH, output_file_name)
+    println("Results will be saved at: ", results_path)
+    
+    return results_path
+end
+
 
 
 
