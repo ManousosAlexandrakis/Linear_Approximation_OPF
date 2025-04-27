@@ -33,7 +33,7 @@ println("Case name: ", case)
 # # Create the bus matrices (mapped Y, mapped Z matrix and the submatrices of Z matrix)
 create_bus_matrices()
 
-# # CHOOSE SOLVER
+# # Choose solver
 solver = "gurobi"
 
 # # Create the OPF model and solve the Linear OPF problem
