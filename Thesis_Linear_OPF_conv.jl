@@ -1,31 +1,25 @@
 # Load the required packages
 using CSV, DataFrames, JuMP, Gurobi, Plots, StatsPlots, GLPK
-using Printf, XLSX
-using Plots
-using Plots.PlotMeasures
-using LinearAlgebra
+using Printf, XLSX , LinearAlgebra, Plots, Plots.PlotMeasures
 
-
-# include("filepath to_your_functions.jl")
+# # include("filepath to_your_functions.jl")
 # Example usage:
 include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/get_data_Thesis_Linear.jl")
 include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/mapping_and_matrices_creation_Thesis_Linear.jl")
 include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/get_functions_Thesis_Linear.jl")
 
-
 # # Load the input data
 # Choose input filename and path
 # Example usage:
-filename = "case_ieee123_modified.xlsx"
-load_power_system_data_thesis_linear_opf("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files", 
+# filename = "case_ieee123_modified.xlsx"
+# load_power_system_data_thesis_linear_opf("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files", 
+#     filename,
+#     Ssystem=1)
+
+filename = "file name of the system studied.xlsx"
+load_power_system_data_thesis_linear_opf("Filepath to your system studied", 
     filename,
     Ssystem=1)
-
-    # filename = "file name of the system studied.xlsx"
-    # load_power_system_data_thesis_linear_opf("Filepath to your system studied", 
-    #     filename,
-    #     Ssystem=1)
-
 
 case = splitext(filename)[1] 
 println("Case name: ", case)
@@ -35,7 +29,6 @@ create_bus_matrices()
 
 # # Choose solver
 solver = "gurobi"
-
 # # Create the OPF model and solve the Linear OPF problem
 Linear_Thesis_OPF_model = create_opf_model()
 # # Objective value
@@ -44,16 +37,14 @@ println("Objective value: ", objective_value(Linear_Thesis_OPF_model))
 # # Output file path
 #setup_results_path("Output folder name", "Output file name.xlsx")
 # Example usage:
-setup_results_path("Results_Thesis_Linear", "Thesis_Linear_OPF_Results.xlsx")
-# setup_results_path("", "")
+# setup_results_path("Results_Thesis_Linear", "Thesis_Linear_OPF_Results.xlsx")
 
+setup_results_path("", "")
 
 # # Printing the results
 create_results_dataframes(Linear_Thesis_OPF_model)
 
-######################################################################################################################
 #################################################### CREATE PLOTS ####################################################
-######################################################################################################################
 # # Create plot for the Active Power Production
 create_active_plot_Thesis_Linear(prod_df,OUTPATH, case;zoom_out=0.5, yticks_range=0:1:3)
 
