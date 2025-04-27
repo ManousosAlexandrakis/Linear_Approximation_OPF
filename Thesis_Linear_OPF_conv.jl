@@ -4,9 +4,13 @@ using Printf, XLSX , LinearAlgebra, Plots, Plots.PlotMeasures
 
 # # include("filepath to_your_functions.jl")
 # Example usage:
-include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/get_data_Thesis_Linear.jl")
-include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/mapping_and_matrices_creation_Thesis_Linear.jl")
-include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/get_functions_Thesis_Linear.jl")
+# include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/get_data_Thesis_Linear.jl")
+# include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/mapping_and_matrices_creation_Thesis_Linear.jl")
+# include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/get_functions_Thesis_Linear.jl")
+
+include(".../Thesis_Linear_OPF_Functions/get_data_Thesis_Linear.jl")
+include(".../Thesis_Linear_OPF_Functions/mapping_and_matrices_creation_Thesis_Linear.jl")
+include(".../Thesis_Linear_OPF_Functions/get_functions_Thesis_Linear.jl")
 
 # # Load the input data
 # Choose input filename and path
