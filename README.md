@@ -48,7 +48,7 @@ This folder contains standalone scripts that run the entire problem without usin
 - **Resources:** Contains images used in readme file.
 
 - **Thesis_Linear_OPF_conv**, **DC_BTheta_OPF_conv**, **Decoupled_OPF_conv**:
-  - These scripts provide an easier and more organized way to run the Thesis Linear, BTheta, and Decoupled OPF models, respectively, based on the modular functions from their     corresponding folders.
+  - These scripts provide an easier and more organized way to run the Thesis Linear, BTheta and Decoupled OPF models, respectively, based on the modular functions from their     corresponding folders.
   - You can specify the XLSX output filename and file path for saving results.
   - Plots are automatically generated; figure appearance can be customized by adjusting the `zoom_out` and `y_ticks_range` parameters.
 
@@ -109,7 +109,7 @@ If you prefer a free and open-source alternative, you can use GLPK instead. It w
 A list of solvers is available at [YALMIP](https://yalmip.github.io/allsolvers/)
 
 ## How to Run the Code: Step-by-Step
-To run the code, you can use either the scripts in the main_code folder or the **Thesis_Linear_OPF_conv**, **DC_BTheta_OPF_conv**, and **Decoupled_OPF_conv** files.
+To run the code, you can use either the scripts in the main_code folder or the **Thesis_Linear_OPF_conv**, **DC_BTheta_OPF_conv** and **Decoupled_OPF_conv** files.
 For an easier and smoother experience, it is recommended to use the **_conv** files.
 
 
