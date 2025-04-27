@@ -13,15 +13,15 @@
 
 ![Static Badge](https://img.shields.io/badge/Julia_version-1.11.4-green)
 
-## Repository's purpose
+# Repository's purpose
 This repository contains a linear model for the approximation of the Optimal Power Flow (OPF) problem, developed as part of my diploma thesis under the supervision of [Prof. Anthony Papavasiliou](https://ap-rg.eu/) and ZeJun Ruan. It includes implementation code, case files in XLSX format, and code for plotting results. Additionally, implementation code for DCOPF Bθ and Decoupled OPF models is included.
 
-## Authors
+# Authors
 This code was created by [Manousos Alexandrakis](https://github.com/ManousosAlexandrakis), [Lina Efthymiadou](https://github.com/lina-efthymiadou), [ZeJun Ruan](https://github.com/zejunr), listed in alphabetical order. The initial work was carried out by ZeJun Ruan and Lina Efthymiadou, while Manousos Alexandrakis finalized the implementation.
 
 For any questions or contributions, feel free to open an issue or submit a pull request.
 
-## Files Explanation
+# Files Explanation
 
 - **Case_Files**: Contains input data for one energy system.
 - **DC_BTheta_OPF_Functions:**
@@ -53,10 +53,10 @@ This folder contains standalone scripts that run the entire problem without usin
   - Plots are automatically generated; figure appearance can be customized by adjusting the `zoom_out` and `y_ticks_range` parameters.
 
 
-## Simple Instructions
+# Simple Instructions
 To run this project, you’ll need to have the Julia programming language installed, along with a few required packages. Although any IDE will work, this project was developed using Visual Studio Code with the Julia extension.
 
-### Setup Steps
+## Setup Steps
 1. **Install Julia:** 
 Download and install [Julia application](https://julialang.org/downloads) 
 
@@ -89,7 +89,7 @@ To install the package in Julia, open the Julia REPL and enter:
 ```julia
 ] add Gurobi
 ```
-#### Note: Using Gurobi in Your Code
+### Note: Using Gurobi in Your Code
 
 After installing Gurobi, you can initialize and use it as your solver with the following setup:
 
@@ -108,37 +108,36 @@ If you prefer a free and open-source alternative, you can use GLPK instead. It w
 ```
 A list of solvers is available at [YALMIP](https://yalmip.github.io/allsolvers/)
 
-### How to Run the Code
+## How to Run the Code
 To run the code, you can use either the scripts in the main_code folder or the **Thesis_Linear_OPF_conv**, **DC_BTheta_OPF_conv**, and **Decoupled_OPF_conv** files.
 For an easier and smoother experience, it is recommended to use the **_conv** files.
 
-**Steps:**
+### Steps
 
-1. The first step is to include the functions. To do this you have to use the filepath of the functions folder.
+1. The first step is to include the functions. To do this, use the filepath to the functions folder.
 #### Example:
-2. Secondly, you have to load the input XLSX file. Write the filename and the filepath to the appropriate spaces
+![include_functions](Resources/include_functions.png)
+
+
+2. Load the input XLSX file. Fill in the filename and the filepath in the appropriate sections.
 #### Example:
-3. Choose the output folder name and the ouutput XLSX filename. The output folder will contain plots and results in XLSX file.
+![load_input_data](Resources/load_input_data.png)
+
+:warning: **Important note:** The format of file paths differs between operating systems. The examples shown are based on macOS; Windows users should adjust the paths accordingly (e.g., use double backslashes \ \ instead of forward slashes /). Make sure that the input case files follow the same formatting as the examples provided in the [`Case_Files`](./Case_Files) folder.
+
+3. Choose the output folder name and the ouutput XLSX filename. The output folder will contain the plots and the XLSX file with results.
 #### Example:
-4. 
-To ensure the code files run correctly, you must load the case files properly. There are two ways to do this:
+![output_filename_and_folder](Resources/output_filename_and_folder.png)
 
-1. **Use the full file path**  
-2. **Use only the filename** (This works only if the case file is in the same directory as the code file.)
+4. Fine-tune the plotting parameters. Adjust the values of **`zoom_out`** and **`yticks_range`** if needed for better figure appearance.
 
-:warning: **Important note:** The format of file paths differs between operating systems. The examples shown are based on macOS; Windows users should adjust the paths accordingly (e.g., use double backslashes \ \ instead of forward slashes /).  
-### Example:
-![How to read input XLSX file](Resources/input_code_format.png)
+If the above steps are followed correctly, the code should run without issues.
+The only reason for an error would typically be infeasibility in the optimization model.
 
-The same approach applies to the output data XLSX file. 
-### Example:
-![How to write output XLSX file](Resources/output_code_format.png)
-
-Make sure that the input case files follow the same formatting as the examples provided in the [`Case_Files`](./Case_Files) folder.
-
-
-If the above steps are followed correctly, the code file should run without issues—only infeasibility could cause an error.
-
+### Example for running the code:
+<p align="center">
+  <img src="Resources/Running_the_code.gif" alt="Demo Animation" width="1000"/>
+</p>
 
 
 ## Plotting Scripts  
