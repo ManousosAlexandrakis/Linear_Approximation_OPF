@@ -8,9 +8,9 @@ using LinearAlgebra
 
 # include("filepath to_your_functions.jl")
 # Example usage:
-include("/Users/malexandrakis/Documents/Οικονομική και Αξιόπιστη/Thesis_Linear_OPF_Functions/get_data_Thesis_Linear.jl")
-include("/Users/malexandrakis/Documents/Οικονομική και Αξιόπιστη/Thesis_Linear_OPF_Functions/mapping_and_matrices_creation_Thesis_Linear.jl")
-include("/Users/malexandrakis/Documents/Οικονομική και Αξιόπιστη/Thesis_Linear_OPF_Functions/get_functions_Thesis_Linear.jl")
+include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/get_data_Thesis_Linear.jl")
+include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/mapping_and_matrices_creation_Thesis_Linear.jl")
+include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Thesis_Linear_OPF_Functions/get_functions_Thesis_Linear.jl")
 
 
 # # Load the input data
@@ -58,19 +58,15 @@ create_results_dataframes(Linear_Thesis_OPF_model)
 create_active_plot_Thesis_Linear(prod_df,OUTPATH, case;zoom_out=0.5, yticks_range=0:1:3)
 
 # # Create plot for the Reactive Power Production
-
-#create_reactive_plot_Thesis_Linear(df_name,write OUTPATH, write case;zoom_out= write a positive value, yticks_range=ymin:ystep:ymax)
+#create_reactive_plot_Thesis_Linear(df_name,write OUTPATH, write case;zoom_out= write a negative value, yticks_range=ymin:ystep:ymax)
 create_reactive_plot_Thesis_Linear(Qreact_df,OUTPATH, case;zoom_out=-0.19, yticks_range=-0.2:0.2:2)
 
 # # Create plot for the Voltage Magnitude 
-
-#create_reactive_plot_Thesis_Linear(df_name,OUTPATH, "name of the system studied";zoom_out=negative value, yticks_range=ymin:ystep:ymax)
+#create_reactive_plot_Thesis_Linear(df_name,OUTPATH, "name of the system studied";zoom_out=positive value, yticks_range=ymin:ystep:ymax)
 create_voltage_magnitude_plot_Thesis_Linear(results_df,OUTPATH, case;zoom_out=0.2, yticks_range=0.8:0.02:1.2)
 
 # # Create plot for the Voltage Angles
-
 create_voltage_angles_plot_Thesis_Linear(results_df,OUTPATH, case;zoom_out=0.1, yticks_range=-10:0.2:0.2)
 
 # # Create plot for the Nodal Prices
-
-# create_nodal_prices_plot_Thesis_Linear(price_df,OUTPATH, case;zoom_out=12, yticks_range=5:2:50)
+ create_nodal_prices_plot_Thesis_Linear(price_df,OUTPATH, case;zoom_out=12, yticks_range=5:2:50)

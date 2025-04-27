@@ -1,3 +1,6 @@
+pwd()
+
+
 function create_decoupled_opf_problem()
     # Create Gurobi environment and model
     if solver == "gurobi"
