@@ -1,11 +1,8 @@
-using DataFrames, JuMP
-using XLSX, Gurobi
+using CSV, DataFrames, JuMP, Gurobi, Plots, StatsPlots, GLPK
+using Printf, XLSX
 using Plots
 using Plots.PlotMeasures
-using StatsPlots
-using DataFrames
 using LinearAlgebra
-using XLSX, Printf
 
 
 # include("filepath to_your_functions.jl")
