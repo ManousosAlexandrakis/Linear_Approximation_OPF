@@ -179,7 +179,7 @@ More plotting examples can be found in the [`Example_Plots`](./Example_Plots) fo
 ####  Notes  
 - Ensure the input data is in the correct format before running.  
 - Fine-tune parameters as needed for different datasets. 
-- The palette used can be viewd here: https://www.color-hex.com/color-palette/894  
+- The palette used for plotting can be viewd here: https://www.color-hex.com/color-palette/894  
 
 
 
