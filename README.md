@@ -41,7 +41,7 @@ For any questions or contributions, feel free to open an issue or submit a pull 
   2. [`DC_Btheta_OPF_main`](main_code/DC_Btheta_OPF_main.jl) → Runs the BTheta model.
   3. [`Decoupled_OPF_main`](main_code/Decoupled_OPF_main.jl) → Runs the Decoupled model.
 
-This folder contains standalone scripts that run the entire problem without using modularized functions. The codes are written in a fully expanded form for clarity and completeness.
+The [`main_code`](main_code) folder contains standalone scripts that run the entire problem without using modularized functions. The codes are written in a fully expanded form for clarity and completeness.
 
 - **Plotting_Scripts →** Creates visualizations for all models (including the ACOPF model, which is not included in this repository).
 
