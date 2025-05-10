@@ -153,7 +153,7 @@ This folder contains scripts for generating visualizations in order to compare t
 - **`yticks`** – Adjust if y-axis labels are poorly spaced or unclear.  
 - **`zoom_out`** – Modify to control the zoom level of the plot.
 
-### 📊 Plotting Example:
+### Plotting Example:
 <p align="center">
   <img src="Resources/Example_Plotting.gif" alt="Demo Animation" width="1000"/>
 </p>
@@ -176,7 +176,7 @@ More plotting examples can be found in the [`Example_Plots`](./Example_Plots) fo
 
 
 
-#### 📌 Notes  
+####  Notes  
 - Ensure the input data is in the correct format before running.  
 - Fine-tune parameters as needed for different datasets. 
 - The palette used can be viewd here: https://www.color-hex.com/color-palette/894  
