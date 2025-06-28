@@ -1,7 +1,6 @@
 # # Packages
 using DataFrames, JuMP
 using XLSX, Gurobi
-
 ####################################################################                                 ####################################################################
 ####################################################################          Data Handling          ####################################################################
 ####################################################################                                 ####################################################################
@@ -12,6 +11,10 @@ using XLSX, Gurobi
 
 # # Alternative way to choose the file
 filename = joinpath("filepath","The name of the file.xlsx")
+
+# Example
+#filepath = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
+#filename = joinpath(filepath,"case_ieee123_modified.xlsx")
 
 # # Loading Excel sheets into DataFrames
 sgen_data = DataFrame(XLSX.readtable(filename, "gen"))
@@ -177,6 +180,8 @@ set_silent(model)
 
 
 
+
+
 ### Variables
 @variable(model, f[1:n,1:n])   # Variable representing Active Power flow on each edge(both directions)
 @variable(model, p[Nodes]>=0)  # Variable representing Active Power production by generator buses
@@ -210,7 +215,10 @@ set_silent(model)
 @objective(model, Min,  sum(PU[i]*p[i] for i in Upward_set))
 
 # # Solve the optimization problem
+start = time()
 optimize!(model)
+elapsed = (time() - start) * 1000  # convert seconds to milliseconds
+println("Solve time: $(round(elapsed; digits=3)) ms")
  
 
 # # Dual variables for pricing

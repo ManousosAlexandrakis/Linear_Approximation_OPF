@@ -1,8 +1,7 @@
 # Packages
 using DataFrames, JuMP,Gurobi
 using LinearAlgebra
-using XLSX
-
+using XLSX, BenchmarkTools
 ####################################################################                                 ####################################################################
 ####################################################################          Data Handling          ####################################################################
 ####################################################################                                 ####################################################################
@@ -14,8 +13,9 @@ using XLSX
 # Alternative way to choose input file
 # filename = joinpath("filepath","The name of the file.xlsx")   
 
-#  filepath = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
-#  filename = joinpath(filepath,"case_ieee123_modified.xlsx")
+# Example
+# filepath = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
+# filename = joinpath(filepath,"case_ieee123_modified.xlsx")
 
 
 # Loading Excel sheets into DataFrames
@@ -360,7 +360,11 @@ set_silent(model)
 @objective(model, Max,  -  sum(PU[i]*production[i] for i in Upward_set))
 
 # # Solve the optimization problem
+start = time()
 optimize!(model)
+elapsed = (time() - start) * 1000  # convert seconds to milliseconds
+println("Solve time: $(round(elapsed; digits=3)) ms")
+
 
 # # Dual Variables for pricing
 
@@ -464,26 +468,26 @@ flows_df = DataFrame(
 )
 
 # # Print the results
-println("")
-println("Voltage magnitudes [p.u.] and Voltage angles [°]:")
-println(results_df)
-println("")
-println("Active power production [p.u.]:")
-println(prod_df)
-println("")
-println("Reactive power production [p.u.]:")
-println(Qreact_df)
-println("")
-println("Nodal prices [€/MWh]:")
-println(price_df)
-println("")
-println("Active and Reactive power flows for lines [p.u.]:")
-println(flows_df)
-println("")
-println("Active and reactive power injections [p.u.]:")
-println(PowerInjection_df)
-println("")
-println("Termination Status:", termination_status(model))
+# println("")
+# println("Voltage magnitudes [p.u.] and Voltage angles [°]:")
+# println(results_df)
+# println("")
+# println("Active power production [p.u.]:")
+# println(prod_df)
+# println("")
+# println("Reactive power production [p.u.]:")
+# println(Qreact_df)
+# println("")
+# println("Nodal prices [€/MWh]:")
+# println(price_df)
+# println("")
+# println("Active and Reactive power flows for lines [p.u.]:")
+# println(flows_df)
+# println("")
+# println("Active and reactive power injections [p.u.]:")
+# println(PowerInjection_df)
+# println("")
+# println("Termination Status:", termination_status(model))
 
 
 # # Results stored in an XLSX file
