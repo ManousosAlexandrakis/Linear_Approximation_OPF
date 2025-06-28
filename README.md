@@ -19,7 +19,7 @@ This repository contains a linear model for the approximation of the Optimal Pow
 
 # Thesis Presentation
 
-📄 You can view or download the full presentation as a PDF:
+📄 You can view or download the full presentation (in English) as a PDF:
 [View Thesis Presentation (PDF)](Thesis_presentation/Thesis_presentation_Manousos.pdf)
 
 
