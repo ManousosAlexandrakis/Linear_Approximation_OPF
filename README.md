@@ -11,7 +11,16 @@
   </a>
 </p>
 
-![Static Badge](https://img.shields.io/badge/Julia_version-1.11.4-green)
+
+<p>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/Julia_Programming_Language_Logo.svg" alt="Julia logo" width="56" style="vertical-align:middle; margin-right: 12px;">
+  <img src="https://img.shields.io/badge/Julia--version-1.11.4-E34C26?style=for-the-badge" alt="Julia version badge">
+</p>
+<p>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python logo" width="40" style="vertical-align:middle; margin-right: 26px;">
+  <img src="https://img.shields.io/badge/Python--version-3.13.3-3776AB?style=for-the-badge" alt="Python version badge">
+</p>
+
 
 # Repository's purpose
 This repository contains a linear model for the approximation of the Optimal Power Flow (OPF) problem, developed as part of the diploma thesis of Manousos Alexandrakis under the supervision of [Prof. Anthony Papavasiliou](https://ap-rg.eu/) and Zejun Ruan. It includes implementation code, case files in XLSX format, and code for plotting results. Additionally, implementation code for DC BTheta and Decoupled OPF models is included.
