@@ -44,15 +44,15 @@ For any questions or contributions, feel free to open an issue or submit a pull 
     2. [`get_data_Thesis_Linear`](Thesis_Linear_OPF_Functions/get_data_Thesis_Linear.jl) → Loads and analyzes the input data.
     3. [`get_functions_Thesis_Linear`](Thesis_Linear_OPF_Functions/get_functions_Thesis_Linear.jl) → Contains functions for mathematical model creation, problem solving, result printing, and plot creation.
 - **main_code:** 
-  1. [`Thesis_Linear_OPF_main`](main_code/Thesis_Linear_OPF_main.jl) → Runs the proposed linear model.
-  2. [`DC_Btheta_OPF_main`](main_code/DC_Btheta_OPF_main.jl) → Runs the BTheta model.
-  3. [`Decoupled_OPF_main`](main_code/Decoupled_OPF_main.jl) → Runs the Decoupled model.
+    1. [`Thesis_Linear_OPF_main`](main_code/Thesis_Linear_OPF_main.jl) → Runs the proposed linear model.
+    2. [`DC_Btheta_OPF_main`](main_code/DC_Btheta_OPF_main.jl) → Runs the BTheta model.
+    3. [`Decoupled_OPF_main`](main_code/Decoupled_OPF_main.jl) → Runs the Decoupled model.
  - **main_code_python:** 
-  1. [`Thesis_Linear_OPF_main`](main_code/Thesis_Linear_OPF_main.jl) → Runs the proposed linear model with python code.
-  2. [`DC_Btheta_OPF_main`](main_code/DC_Btheta_OPF_main.jl) → Runs the BTheta model with python code.
-  3. [`Decoupled_OPF_main`](main_code/Decoupled_OPF_main.jl) → Runs the Decoupled model with python code.
+    1. [`Thesis_Linear_OPF_main`](main_code/Thesis_Linear_OPF_main.jl) → Runs the proposed linear model with python code.
+    2. [`DC_Btheta_OPF_main`](main_code/DC_Btheta_OPF_main.jl) → Runs the BTheta model with python code.
+    3. [`Decoupled_OPF_main`](main_code/Decoupled_OPF_main.jl) → Runs the Decoupled model with python code.
 
-The [`main_code`](main_code) folder contains standalone scripts that run the entire problem without using modularized functions. The codes are written in a fully expanded form for clarity and completeness.
+The [`main_code`](main_code)/[`main_code_python`](main_code_python) folder contains standalone scripts that run the entire problem without using modularized functions. The codes are written in a fully expanded form for clarity and completeness.
 
 - **Plotting_Scripts →** Creates visualizations for all models (including the ACOPF model, which is not included in this repository).
 
