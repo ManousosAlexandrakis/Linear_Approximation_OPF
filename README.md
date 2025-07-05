@@ -47,6 +47,10 @@ For any questions or contributions, feel free to open an issue or submit a pull 
   1. [`Thesis_Linear_OPF_main`](main_code/Thesis_Linear_OPF_main.jl) → Runs the proposed linear model.
   2. [`DC_Btheta_OPF_main`](main_code/DC_Btheta_OPF_main.jl) → Runs the BTheta model.
   3. [`Decoupled_OPF_main`](main_code/Decoupled_OPF_main.jl) → Runs the Decoupled model.
+ - **main_code_python:** 
+  1. [`Thesis_Linear_OPF_main`](main_code/Thesis_Linear_OPF_main.jl) → Runs the proposed linear model with python code.
+  2. [`DC_Btheta_OPF_main`](main_code/DC_Btheta_OPF_main.jl) → Runs the BTheta model with python code.
+  3. [`Decoupled_OPF_main`](main_code/Decoupled_OPF_main.jl) → Runs the Decoupled model with python code.
 
 The [`main_code`](main_code) folder contains standalone scripts that run the entire problem without using modularized functions. The codes are written in a fully expanded form for clarity and completeness.
 
