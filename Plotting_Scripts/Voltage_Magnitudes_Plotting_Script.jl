@@ -14,14 +14,20 @@ using XLSX, Plots , PlotThemes,Printf
 #  filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
 #  filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
 
-filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV_no_flows_constraints/"
-filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
-filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
-filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
-filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
-filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
-filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
+# filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV_no_flows_constraints/"
+# filename1 = joinpath(filepath1,"ACOPF_Paper_nodes_PV.xlsx")
+# filename2 = joinpath(filepath1,"ACOPF_Paper_nodes_PV_fixed.xlsx")
+# filename3 = joinpath(filepath1,"BTheta_Paper_nodes_PV.xlsx")
+# filename4 = joinpath(filepath1,"Decoupled_Paper_nodes_PV.xlsx")
+# filename5 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV.xlsx")
+# filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
 
+
+filepath1 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV/"
+filename1 = joinpath(filepath1,"AC_results_case_ieee123_python.xlsx")
+filename3 = joinpath(filepath1,"BTheta_results_case_ieee123_python.xlsx")
+filename4 = joinpath(filepath1,"Decoupled_results_case_ieee123.xlsx")
+filename5 = joinpath(filepath1,"Bolognani_results_case_ieee123_python.xlsx")
 
 # filepath1 = "/Users/malexandrakis/Documents/Results/ehv1"
 # filename1 = joinpath(filepath1,"ACOPF_ehv1.xlsx")
@@ -52,18 +58,18 @@ base_name = basename(filepath1)
 
 ##################################################################################
 VD_ACOPF_df = DataFrame(XLSX.readtable(filename1, "Results"))
-VD_ACOPF_fixed_df = DataFrame(XLSX.readtable(filename2, "Results"))
+#VD_ACOPF_fixed_df = DataFrame(XLSX.readtable(filename2, "Results"))
 VD_BTheta_df = DataFrame(XLSX.readtable(filename3, "Results"))
 VD_Decoupled_df = DataFrame(XLSX.readtable(filename4, "Results"))
 VD_LINEAR_df = DataFrame(XLSX.readtable(filename5, "Results"))
-VD_LINEAR_fixed_df = DataFrame(XLSX.readtable(filename6, "Results"))
+#VD_LINEAR_fixed_df = DataFrame(XLSX.readtable(filename6, "Results"))
 ##################################################################################
 Y_V_ACOPF = VD_ACOPF_df[!, "vm_pu"]
-Y_V_ACOPF_fixed = VD_ACOPF_fixed_df[!, "vm_pu"]
+#Y_V_ACOPF_fixed = VD_ACOPF_fixed_df[!, "vm_pu"]
 Y_V_BTheta = VD_BTheta_df[!, "vm_pu"]
 Y_V_Decoupled = VD_Decoupled_df[!, "vm_pu"]
 Y_V_LINEAR = VD_LINEAR_df[!, "vm_pu"]
-Y_V_LINEAR_fixed = VD_LINEAR_fixed_df[!, "vm_pu"]
+#Y_V_LINEAR_fixed = VD_LINEAR_fixed_df[!, "vm_pu"]
 
 max_voltage = maximum([maximum(Y_V_ACOPF),  maximum(Y_V_BTheta), maximum(Y_V_Decoupled),maximum(Y_V_LINEAR)])
 min_voltage = minimum([minimum(Y_V_ACOPF),  minimum(Y_V_BTheta), minimum(Y_V_Decoupled),minimum(Y_V_LINEAR)])
@@ -99,12 +105,12 @@ V = scatter(
       xlabel = "Buses",
       ylabel = "Voltage Magnitude [p.u.]",
       #title = "Voltage Magnitude",
-      legend = :bottomright,
+      legend = :topright,
       label = "ACOPF",
       markersize = 11,
       color = RGB(237/255,201/255,81/255),  # Color for the dataset
       #alpha = 0.8,
-      markerstrokewidth = 1,
+      markerstrokewidth = 0,
       yticks = 0.9:0.01:1.1,
       xticks = (xticks_values_V,xticks_labels_V),  # Set xticks and labels
       xrotation = 0, # Rotate labels by 45 degrees
@@ -132,7 +138,7 @@ scatter!(
     Y_V_BTheta,
     label = "BTHETA_OPF",
     color = RGB(79/255,55/255,45/255),
-    markerstrokewidth = 1,
+    markerstrokewidth = 0.8,
     markersize = 11,
     #alpha = 0.6,
     markershape = :xcross
@@ -145,7 +151,7 @@ plot!(buses_str, Y_V_BTheta, color= RGB(79/255,55/255,45/255), lw=2,label = fals
      label = "DECOUPLED_OPF",
      color = RGB(0/255,160/255,176/255),
      markersize = 11,
-     markerstrokewidth = 1,
+     markerstrokewidth = 0,
      #alpha = 0.9,
      #markershape = :xcross
  )
@@ -158,7 +164,7 @@ scatter!(
     label = "Linear_Thesis_OPF",
     color = RGB(204/255,42/255,54/255),
     markersize = 11,
-    markerstrokewidth = 1,
+    markerstrokewidth = 0,
     #alpha = 0.7,
     #markershape = :hex
 )
