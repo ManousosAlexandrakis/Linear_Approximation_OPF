@@ -1,5 +1,5 @@
 <h1 align="center">
-  A Linear Approximation for the Optimal Power Flow Problem 
+  Comparison of Alternative Linear Approximations of Optimal Power Flow Problem
 </h1> 
 
 
@@ -23,7 +23,8 @@
 
 
 # Repository's purpose
-This repository contains a linear model for the approximation of the Optimal Power Flow (OPF) problem, developed as part of the diploma thesis of Manousos Alexandrakis under the supervision of [Prof. Anthony Papavasiliou](https://ap-rg.eu/) and Zejun Ruan. It includes implementation code, case files in XLSX format, and code for plotting results. Additionally, implementation code for DC BTheta and Decoupled OPF models is included.
+This repository presents three linear approximation models for the Optimal Power Flow (OPF) problem, alongside the full AC-OPF formulation. The models were developed as part of the diploma thesis of Manousos Alexandrakis under the supervision of [Prof. Anthony Papavasiliou](https://ap-rg.eu/) and Zejun Ruan. It includes implementation code (both in julia and python), case files in XLSX format, and code for plotting results. The thesis introduces a novel linear OPF model inspired by the linearization approach of Saverio Bolognani and Sandro Zampieri in their work “On the existence and linear approximation of the power flow solution in power distribution networks.” This proposed model is benchmarked against two established linear models from the literature: the BTheta and the Decoupled formulations.
+
 
 
 # Thesis Presentation
@@ -60,10 +61,11 @@ For any questions or contributions, feel free to open an issue or submit a pull 
     1. [`Thesis_Linear_OPF_main_in_python`](main_code_python/Thesis_Linear_OPF_main_in_python.py) → Runs the proposed linear model with python code.
     2. [`DC_Btheta_OPF_main_in_python`](main_code_python/DC_BTheta_OPF_main_in_python.py) → Runs the BTheta model with python code.
     3. [`Decoupled_OPF_main_in_python`](main_code_python/Decoupled_OPF_main_in_python.py) → Runs the Decoupled model with python code.
+    4. [`AC-OPF_main_in_python`](main_code_python/AC-OPF_main_in_python.py) → Runs the AC model with python code.
 
 The [`main_code`](main_code)/[`main_code_python`](main_code_python) folder contains standalone scripts that run the entire problem without using modularized functions. The codes are written in a fully expanded form for clarity and completeness.
 
-- **Plotting_Scripts →** Creates visualizations for all models (including the ACOPF model, which is not included in this repository).
+- **Plotting_Scripts →** Creates visualizations for all models (including the [`AC-OPF_model`](main_code_python/AC-OPF_main_in_python.py)).
 
 - **Resources →** Contains images used in readme file.
 
