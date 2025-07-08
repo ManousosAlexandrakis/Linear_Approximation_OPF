@@ -19,20 +19,20 @@ filename6 = joinpath(filepath1,"LINEAR_OPF_Paper_nodes_PV_fixed_active.xlsx")
 
 base_name = basename(filepath1) 
 ##################################################################################
-production_ACOPF_df = DataFrame(XLSX.readtable(filename1, "prod"))
-production_ACOPF_fixed_df = DataFrame(XLSX.readtable(filename2, "prod"))
-production_BTheta_df = DataFrame(XLSX.readtable(filename3, "production"))
-production_Decoupled_df = DataFrame(XLSX.readtable(filename4, "production"))
-production_LINEAR_df = DataFrame(XLSX.readtable(filename5, "production"))
-production_LINEAR_fixed_df = DataFrame(XLSX.readtable(filename6, "production"))
+production_ACOPF_df = DataFrame(XLSX.readtable(filename1, "Production"))
+production_ACOPF_fixed_df = DataFrame(XLSX.readtable(filename2, "Production"))
+production_BTheta_df = DataFrame(XLSX.readtable(filename3, "Production"))
+production_Decoupled_df = DataFrame(XLSX.readtable(filename4, "Production"))
+production_LINEAR_df = DataFrame(XLSX.readtable(filename5, "Production"))
+production_LINEAR_fixed_df = DataFrame(XLSX.readtable(filename6, "Production"))
 
 ##################################################################################
-Y_ACOPF = production_ACOPF_df[!, "p"]
-Y_ACOPF_fixed = production_ACOPF_fixed_df[!, "p"]
-Y_BTheta = production_BTheta_df[!, "production"]
-Y_Decoupled = production_Decoupled_df[!, "production"]
-Y_LINEAR = production_LINEAR_df[!, "production"]
-Y_LINEAR_fixed = production_LINEAR_fixed_df[!, "production"]
+Y_ACOPF = production_ACOPF_df[!, "p_pu"]
+Y_ACOPF_fixed = production_ACOPF_fixed_df[!, "p_pu"]
+Y_BTheta = production_BTheta_df[!, "p_pu"]
+Y_Decoupled = production_Decoupled_df[!, "p_pu"]
+Y_LINEAR = production_LINEAR_df[!, "p_pu"]
+Y_LINEAR_fixed = production_LINEAR_fixed_df[!, "p_pu"]
 
 X= production_ACOPF_df.bus
 ##################################################################################

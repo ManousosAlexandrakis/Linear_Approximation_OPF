@@ -9,11 +9,11 @@ using XLSX,Gurobi
 # filename = "Name of file.xlsx" , xlsx file should be in the same directory as the code
 
 # Alternative way to choose the file
-filename = joinpath("filepath","The name of the file.xlsx")
+#filename = joinpath("filepath","The name of the file.xlsx")
 
 # Example
-#filepath = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
-#filename = joinpath(filepath,"case_ieee123_modified.xlsx")
+filepath = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
+filename = joinpath(filepath,"case_ieee123_modified.xlsx")
 
 
 # Loading Excel sheets into DataFrames
@@ -42,6 +42,12 @@ Flowmax_dict = Dict{Tuple{Int, Int}, Float64}()
 for row in eachrow(Edges)
     Flowmax_dict[(row.from_bus, row.to_bus)] = row.FlowMax
     Flowmax_dict[(row.to_bus, row.from_bus)] = row.FlowMax
+end
+
+# # Create a dictionary mapping edges' idx to FlowMax
+Flowmax_edge_dict = Dict{Int, Float64}()
+for row in eachrow(Edges)
+    Flowmax_edge_dict[row.idx] = row.FlowMax
 end
 
 #Sbase of the system
@@ -121,7 +127,7 @@ for row in eachrow(Edges)
     From_Bus = bus_id_to_index[row.from_bus]
     To_Bus = bus_id_to_index[row.to_bus]
     x = row.X_pu
-    row.R_pu = 0
+    #row.R_pu = 0
     r = row.R_pu
     local z = r + x .* im
     y[From_Bus,To_Bus] = 1 ./ z[1]
@@ -275,30 +281,43 @@ println("Solve time: $(round(elapsed; digits=2)) ms")
 #Results for production and injection
 results_df = DataFrame(
     Bus = buses,
-    V_pu = [value(V[i]) for i in buses],
-    Delta = [rad2deg(value(delta[i])) for i in buses],
-
+    vm_pu = [value(V[i]) for i in buses],
+    va_degrees = [rad2deg(value(delta[i])) for i in buses],
 )
 
 
-production_df = DataFrame(
+production_df = DataFrame(   
+    "Bus" => Upward_set,
+    "p_pu" => [value(p[i]) for i in Upward_set],
+    "pmax_pu" => [MaxQ[i] for i in Upward_set],
+    "pmin_pu" => [MinQ[i] for i in Upward_set],
+    "PU_euro/MWh" => [PU[i] for i in Upward_set],
+)
+
+# # Results for the Reactive Power production
+Qreact_df = DataFrame(
     Bus = Upward_set,
-    production = [value(p[i]) for i in Upward_set],
-    q = [value(Q[i]) for i in Upward_set],
+    q_pu = [value(Q[i]) for i in Upward_set],
+    qmin_pu = [Qmin[i] for i in Upward_set],
+    qmax_pu =[Qmax[i] for i in Upward_set]
 )
 
+
+# # Results for Flows  
 flows_df = DataFrame(
     Edge = edges_index,
     from_bus = [Edges.from_bus[i] for i in Edges_leng],
     flows_to = [Edges.to_bus[i] for i in Edges_leng],
-    Flow_p = [value(f[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng],
-    Flow_q = [value(j[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng],
-
+    Flow_p_pu_from = [value(f[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng],
+    Flow_p_pu_to = [value(f[bus_id_to_index[Edges.to_bus[i]], bus_id_to_index[Edges.from_bus[i]]]) for i in Edges_leng],
+    Flow_q_pu_from = [value(j[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng],
+    Flow_q_pu_to = [value(j[bus_id_to_index[Edges.to_bus[i]], bus_id_to_index[Edges.from_bus[i]]]) for i in Edges_leng],
+    Flowmax_pu = [Flowmax_edge_dict[i] for i in Edges_leng ]
 )
 
 price_df = DataFrame(
-    Bus = Nodes,
-    node_price = [-dual(price[j]) for j in Nodes]
+    "Bus" => Nodes,
+    "nodal_price_euro/MWh" => [-dual(price[j]) for j in Nodes]
 )
 
 #Print the results
@@ -311,4 +330,4 @@ println("Termination Status:", termination_status(model))
 
 # Results Stored in an Excel File
 #XLSX.writetable("C:\\Users\\alexa\\OneDrive\\Υπολογιστής\\Διπλωματική\\Διπλωματική Κώδικας\\Thesis_Writing\\Results\\Decoupled_ehv1.xlsx", "flows"=> flows_df, "results" => results_df, "production" => production_df, "price" => price_df)
-#XLSX.writetable("filepath.xlsx",  "Results" => results_df , "Production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
+# XLSX.writetable("filepath.xlsx",  "Results" => results_df , "Production" => production_df ,  "Reactive" => Qreact_df, "LMP" => price_df,"Flows"=> flows_df)   

@@ -4,27 +4,27 @@ using Printf, XLSX , LinearAlgebra, Plots, Plots.PlotMeasures
 
 # include("filepath to_your_functions.jl")
 # # Example usage:
-# include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/DC_BTheta_OPF_Functions/get_data_DC_BTheta.jl")
-# include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/DC_BTheta_OPF_Functions/create_matrices_DC_BTheta.jl")
-# include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/DC_BTheta_OPF_Functions/get_functions_DC_BTheta.jl")
-include(".../DC_BTheta_OPF_Functions/get_data_DC_BTheta.jl")
-include(".../DC_BTheta_OPF_Functions/create_matrices_DC_BTheta.jl")
-include(".../DC_BTheta_OPF_Functions/get_functions_DC_BTheta.jl")
+include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/DC_BTheta_OPF_Functions/get_data_DC_BTheta.jl")
+include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/DC_BTheta_OPF_Functions/create_matrices_DC_BTheta.jl")
+include("/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/DC_BTheta_OPF_Functions/get_functions_DC_BTheta.jl")
+# include(".../DC_BTheta_OPF_Functions/get_data_DC_BTheta.jl")
+# include(".../DC_BTheta_OPF_Functions/create_matrices_DC_BTheta.jl")
+# include(".../DC_BTheta_OPF_Functions/get_functions_DC_BTheta.jl")
 
 # # Load the input data
 # Choose input filename and path
 # Example usage:
-# filename = "case_ieee123_modified.xlsx"
-# load_power_system_data_dc_btheta_opf(
-#     "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files", 
-#     filename,
-#     Ssystem=1
-# )
-filename = "file name of the system studied.xlsx"
-load_power_system_data_thesis_linear_opf("Filepath to your system studied", 
-filename,
- Ssystem=1
+filename = "case_ieee123_modified.xlsx"
+load_power_system_data_dc_btheta_opf(
+    "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files", 
+    filename,
+    Ssystem=1
 )
+# filename = "file name of the system studied.xlsx"
+# load_power_system_data_thesis_linear_opf("Filepath to your system studied", 
+# filename,
+#  Ssystem=1
+# )
   
 case = splitext(filename)[1] 
 println("Case name: ", case)

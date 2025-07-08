@@ -51,17 +51,17 @@ base_name = basename(filepath1)
 # #  https://www.color-hex.com/color-palette/894 <-- The colour palette 
 
 ##################################################################################
-VD_ACOPF_df = DataFrame(XLSX.readtable(filename1, "bus"))
-VD_ACOPF_fixed_df = DataFrame(XLSX.readtable(filename2, "bus"))
-VD_BTheta_df = DataFrame(XLSX.readtable(filename3, "results"))
-VD_Decoupled_df = DataFrame(XLSX.readtable(filename4, "results"))
-VD_LINEAR_df = DataFrame(XLSX.readtable(filename5, "results"))
-VD_LINEAR_fixed_df = DataFrame(XLSX.readtable(filename6, "results"))
+VD_ACOPF_df = DataFrame(XLSX.readtable(filename1, "Results"))
+VD_ACOPF_fixed_df = DataFrame(XLSX.readtable(filename2, "Results"))
+VD_BTheta_df = DataFrame(XLSX.readtable(filename3, "Results"))
+VD_Decoupled_df = DataFrame(XLSX.readtable(filename4, "Results"))
+VD_LINEAR_df = DataFrame(XLSX.readtable(filename5, "Results"))
+VD_LINEAR_fixed_df = DataFrame(XLSX.readtable(filename6, "Results"))
 ##################################################################################
 Y_V_ACOPF = VD_ACOPF_df[!, "vm_pu"]
 Y_V_ACOPF_fixed = VD_ACOPF_fixed_df[!, "vm_pu"]
-Y_V_BTheta = VD_BTheta_df[!, "V_pu"]
-Y_V_Decoupled = VD_Decoupled_df[!, "V_pu"]
+Y_V_BTheta = VD_BTheta_df[!, "vm_pu"]
+Y_V_Decoupled = VD_Decoupled_df[!, "vm_pu"]
 Y_V_LINEAR = VD_LINEAR_df[!, "vm_pu"]
 Y_V_LINEAR_fixed = VD_LINEAR_fixed_df[!, "vm_pu"]
 

@@ -127,8 +127,8 @@ function create_decoupled_opf_results(model, case="case_ieee123_modified")
     # Voltage Magnitude and Angle Results
     global results_df = DataFrame(
         Bus = buses,
-        V_pu = [value(V[i]) for i in buses],
-        Delta = [rad2deg(value(delta[i])) for i in buses]
+        vm_pu = [value(V[i]) for i in buses],
+        va_degrees = [rad2deg(value(delta[i])) for i in buses],
     )
     println(results_df)
 
@@ -136,22 +136,36 @@ function create_decoupled_opf_results(model, case="case_ieee123_modified")
     println("Active power production [p.u.]:")
     println("")
     # Active Power Production Results
-    global production_df = DataFrame(
-        Bus = Upward_set,
-        production = [value(p[i]) for i in Upward_set],
-        q = [value(Q[i]) for i in Upward_set],
+    global production_df = DataFrame(   
+        "Bus" => Upward_set,
+        "p_pu" => [value(p[i]) for i in Upward_set],
+        "pmax_pu" => [MaxQ[i] for i in Upward_set],
+        "pmin_pu" => [MinQ[i] for i in Upward_set],
+        "PU_euro/MWh" => [PU[i] for i in Upward_set],
     )
     println(production_df)
+
+    println("")
+    println("Reactive power production:")
+    println("")
+    global Qreact_df = DataFrame(
+        Bus = Upward_set,
+        q_pu = [value(Q[i]) for i in Upward_set],
+        qmin_pu = [Qmin[i] for i in Upward_set],
+        qmax_pu =[Qmax[i] for i in Upward_set]
+    )
+    print(Qreact_df)
+
 
     println("")
     println("Nodal prices [€/MWh]:")
     println("")
     # Nodal Price Results
-     global price_df = DataFrame(
-         Bus = Nodes,
-         node_price = [price[j] for j in Nodes]
+    global price_df = DataFrame(
+    "Bus" => Nodes,
+    "nodal_price_euro/MWh" => [price[j] for j in Nodes]
     )
-     println(price_df)
+    println(price_df)
 
     println("")
     println("Active power flows for lines [p.u.]:")
@@ -161,9 +175,11 @@ function create_decoupled_opf_results(model, case="case_ieee123_modified")
         Edge = edges_index,
         from_bus = [Edges.from_bus[i] for i in Edges_leng],
         flows_to = [Edges.to_bus[i] for i in Edges_leng],
-        Flow_p = [value(f[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng],
-        Flow_q = [value(j[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng],
-    
+        Flow_p_pu_from = [value(f[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng],
+        Flow_p_pu_to = [value(f[bus_id_to_index[Edges.to_bus[i]], bus_id_to_index[Edges.from_bus[i]]]) for i in Edges_leng],
+        Flow_q_pu_from = [value(j[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng],
+        Flow_q_pu_to = [value(j[bus_id_to_index[Edges.to_bus[i]], bus_id_to_index[Edges.from_bus[i]]]) for i in Edges_leng],
+        Flowmax_pu = [Flowmax_edge_dict[i] for i in Edges_leng ]
     )
     println(flows_df)
 
@@ -197,7 +213,7 @@ function create_decoupled_opf_results(model, case="case_ieee123_modified")
         results_path,
         "Results" => results_df,
         "Production" => production_df,
-        "Price" => price_df,
+        "LMP" => price_df,
         "Flows" => flows_df
     )
     print("")
@@ -217,13 +233,6 @@ end
 
 
 
-
-
-
-
-
-
-
 function create_active_plot_Decoupled(
     result_df,
     OUTPATH="",
@@ -235,7 +244,7 @@ function create_active_plot_Decoupled(
     # Τα plots χρειάζονται ως δεδομένα εισόδου arrays ή matrices. 
     # Εδώ δημιουργώ από το result_df ένα Matrix με όλες τοσ στήλες εκτός από την πρώτη Time. 
     production_Decoupled_df = result_df   # Δημιουργώ μια λίστα με τα ονόματα των γεννητριών 
-    Y_Decoupled = production_Decoupled_df[!, "production"]
+    Y_Decoupled = production_Decoupled_df[!, "p_pu"]
     X= production_Decoupled_df.Bus
     # που αντιστοιχούν στα ονόματα στις στήλες μου στο result_df.
     bus_count = length(X)
@@ -300,15 +309,15 @@ end
 
 
 function create_reactive_plot_Decoupled(
-    result_df,
+    Qreact_df,
     OUTPATH="",
     case="";
     zoom_out=-0.25,
     yticks_range::Union{StepRangeLen,Vector,AbstractRange}=0:5:2,  # Proper yticks parameter
 )
 
-    reactive_Decoupled_df = result_df
-    Y_reactive_Decoupled = reactive_Decoupled_df[!, "q"]
+    reactive_Decoupled_df = Qreact_df
+    Y_reactive_Decoupled = reactive_Decoupled_df[!, "q_pu"]
     X= reactive_Decoupled_df.Bus
     # που αντιστοιχούν στα ονόματα στις στήλες μου στο result_df.
     bus_count = length(X)
@@ -365,7 +374,6 @@ function create_reactive_plot_Decoupled(
         minorgrid = :true,
     )
     
-    #Για περισσότερα attributes https://docs.juliaplots.org/latest/attributes/
     hline!([0], linestyle = :dash, color = :black, label = "",alpha = 0.5)
 
     display(reactive)
@@ -386,7 +394,7 @@ function create_voltage_magnitude_plot_Decoupled(
 
 
     VD_Decoupled_df = result_df
-    Y_V_Decoupled = VD_Decoupled_df[!, "V_pu"]
+    Y_V_Decoupled = VD_Decoupled_df[!, "vm_pu"]
 
     max_voltage = maximum(Y_V_Decoupled)
     min_voltage = minimum(Y_V_Decoupled)
@@ -460,7 +468,7 @@ function create_voltage_angles_plot_Decoupled(
 
 
     VD_Decoupled_df = result_df
-    Y_D_Decoupled = VD_Decoupled_df[!, "Delta"]
+    Y_D_Decoupled = VD_Decoupled_df[!, "va_degrees"]
 
     max_angle = maximum(Y_D_Decoupled)
     min_angle = minimum(Y_D_Decoupled)
@@ -534,7 +542,7 @@ function create_nodal_prices_plot_Decoupled(
 
 
     prices_Decoupled_df = result_df
-    Y_prices_Decoupled = prices_Decoupled_df[!, "node_price"]
+    Y_prices_Decoupled = prices_Decoupled_df[!, "nodal_price_euro/MWh"]
 
     max_price = maximum(Y_prices_Decoupled)
     min_price = minimum(Y_prices_Decoupled)

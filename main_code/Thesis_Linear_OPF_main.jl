@@ -14,8 +14,8 @@ using XLSX, BenchmarkTools
 # filename = joinpath("filepath","The name of the file.xlsx")   
 
 # Example
-# filepath = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
-# filename = joinpath(filepath,"case_ieee123_modified.xlsx")
+filepath = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files"
+filename = joinpath(filepath,"case_ieee123_modified.xlsx")
 
 
 # Loading Excel sheets into DataFrames
@@ -420,38 +420,38 @@ println("Solve time: $(round(elapsed; digits=3)) ms")
 results_df = DataFrame(
     Bus = Nodes,
     vm_pu = [value(V[i]) for i in Nodes],
-    va_degree = [rad2deg(value(delta[i])) for i in Nodes]
+    va_degrees = [rad2deg(value(delta[i])) for i in Nodes]
 )
 
 # # Results for the Active Power production
 prod_df = DataFrame(   
-    bus = Upward_set,
-    production = [value(production[i]) for i in Upward_set],
-    pmax = [maxQ[i] for i in Upward_set],
-    pmin =[minQ[i] for i in Upward_set],
-    PU = [PU[i] for i in Upward_set],
+    "Bus" => Upward_set,
+    "p_pu" => [value(production[i]) for i in Upward_set],
+    "pmax_pu" => [maxQ[i] for i in Upward_set],
+    "pmin_pu" => [minQ[i] for i in Upward_set],
+    "PU_euro/MWh" => [PU[i] for i in Upward_set],
 )
 
 # # Results for the Reactive Power production
 Qreact_df = DataFrame(
     Bus = Upward_set,
     q_pu = [value(Q[i]) for i in Upward_set],
-    qmin = [Qmin[i] for i in Upward_set],
-    qmax =[Qmax[i] for i in Upward_set]
+    qmin_pu = [Qmin[i] for i in Upward_set],
+    qmax_pu =[Qmax[i] for i in Upward_set]
 )
 
 # # Results for Power Injections
 PowerInjection_df = DataFrame(
      Bus = Nodes,
-     q_injection = [value(reactive_power_k[i]) for i in Nodes],
-     p_injection = [value(active_power_k[i]) for i in Nodes],
+     q_injection_pu = [value(reactive_power_k[i]) for i in Nodes],
+     p_injection_pu = [value(active_power_k[i]) for i in Nodes],
     
  )
 
 # # Results for Prices
 price_df = DataFrame(
-    Bus = buses,
-    price = [-dual(active_power[j]) for j in buses]
+    "Bus" => buses,
+    "nodal_price_euro/MWh" => [-dual(active_power[j]) for j in buses]
 )
 
 # # Results for Flows     
@@ -460,36 +460,38 @@ from_bus = Edges[:,:from_bus]
 to_bus = Edges[:,:to_bus]
 flows_df = DataFrame(
     Edge = edges_index,
-     from_bus = [from_bus[i] for i in Edges_leng],
+    from_bus = [from_bus[i] for i in Edges_leng],
     flows_to = [to_bus[i] for i in Edges_leng],
-    Flow_Active = [value(f[i]) for i in Edges_leng],
-    Flow_Reactive = [value(f_q[i]) for i in Edges_leng],
-    Flowmax = [Flowmax_edge_dict[i] for i in Edges_leng ]
+    Flow_p_pu_from = [value(f[i]) for i in Edges_leng],
+    Flow_p_pu_to = [-value(f[i]) for i in Edges_leng],
+    Flow_q_pu_from = [value(f_q[i]) for i in Edges_leng],
+    Flow_q_pu_to = [-value(f_q[i]) for i in Edges_leng],
+    Flowmax_pu = [Flowmax_edge_dict[i] for i in Edges_leng ]
 )
 
 # # Print the results
-# println("")
-# println("Voltage magnitudes [p.u.] and Voltage angles [°]:")
-# println(results_df)
-# println("")
-# println("Active power production [p.u.]:")
-# println(prod_df)
-# println("")
-# println("Reactive power production [p.u.]:")
-# println(Qreact_df)
-# println("")
-# println("Nodal prices [€/MWh]:")
-# println(price_df)
-# println("")
-# println("Active and Reactive power flows for lines [p.u.]:")
-# println(flows_df)
-# println("")
-# println("Active and reactive power injections [p.u.]:")
-# println(PowerInjection_df)
-# println("")
-# println("Termination Status:", termination_status(model))
+println("")
+println("Voltage magnitudes [p.u.] and Voltage angles [°]:")
+println(results_df)
+println("")
+println("Active power production [p.u.]:")
+println(prod_df)
+println("")
+println("Reactive power production [p.u.]:")
+println(Qreact_df)
+println("")
+println("Nodal prices [€/MWh]:")
+println(price_df)
+println("")
+println("Active and Reactive power flows for lines [p.u.]:")
+println(flows_df)
+println("")
+println("Active and reactive power injections [p.u.]:")
+println(PowerInjection_df)
+println("")
+println("Termination Status:", termination_status(model))
 
 
 # # Results stored in an XLSX file
 # filepath2 = "/Users/malexandrakis/Documents/Results/Paper_nodes_PV/LINEAR_OPF_ehv1.xlsx"
-#XLSX.writetable("filepath2",  "Results" => results_df , "Production" => prod_df ,  "Reactive_Production" => Qreact_df, "Price" => price_df,"Flows"=> flows_df)   
+# XLSX.writetable("filepath2",  "Results" => results_df , "Production" => prod_df ,  "Reactive" => Qreact_df, "LMP" => price_df,"Flows"=> flows_df)   

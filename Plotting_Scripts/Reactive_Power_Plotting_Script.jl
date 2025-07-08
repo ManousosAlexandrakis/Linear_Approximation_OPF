@@ -50,15 +50,15 @@ using XLSX, Printf
 
 base_name = basename(filepath1) 
 ##################################################################################
-reactive_ACOPF_df = DataFrame(XLSX.readtable(filename1, "reactive"))
-reactive_ACOPF_fixed_df = DataFrame(XLSX.readtable(filename2,"reactive"))
-reactive_Decoupled_df = DataFrame(XLSX.readtable(filename4, "production"))
-reactive_LINEAR_df = DataFrame(XLSX.readtable(filename5, "Reactive_Production"))
-reactive_LINEAR_fixed_df = DataFrame(XLSX.readtable(filename6,"Reactive_Production"))
+reactive_ACOPF_df = DataFrame(XLSX.readtable(filename1, "Reactive"))
+reactive_ACOPF_fixed_df = DataFrame(XLSX.readtable(filename2,"Reactive"))
+reactive_Decoupled_df = DataFrame(XLSX.readtable(filename4, "Reactive"))
+reactive_LINEAR_df = DataFrame(XLSX.readtable(filename5, "Reactive"))
+reactiveReactiveLINEAR_fixed_df = DataFrame(XLSX.readtable(filename6,"Reactive"))
 ##################################################################################
 Y_reactive_ACOPF = reactive_ACOPF_df[!, "q_pu"]
 Y_reactive_ACOPF_fixed = reactive_ACOPF_fixed_df[!, "q_pu"]
-Y_reactive_Decoupled = reactive_Decoupled_df[!, "q"]
+Y_reactive_Decoupled = reactive_Decoupled_df[!, "q_pu"]
 Y_reactive_LINEAR = reactive_LINEAR_df[!, "q_pu"]
 Y_reactive_fixed_LINEAR = reactive_LINEAR_fixed_df[!, "q_pu"]
 

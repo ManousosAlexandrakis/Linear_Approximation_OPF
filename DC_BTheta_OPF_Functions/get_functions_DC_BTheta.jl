@@ -82,8 +82,8 @@ function create_dc_opf_results(model, case="case_ieee123_modified")
     # Voltage Magnitude and Angle Results
     global results_df = DataFrame(
         Bus = buses,
-        V_pu = [value(V[i]) for i in buses],
-        Delta = [rad2deg(value(delta[i])) for i in buses]
+        vm_pu = [value(V[i]) for i in buses],
+        va_degrees = [rad2deg(value(delta[i])) for i in buses]
     )
     println(results_df)
 
@@ -92,10 +92,11 @@ function create_dc_opf_results(model, case="case_ieee123_modified")
     println("")
     # Active Power Production Results
     global production_df = DataFrame(
-        Bus = Upward_set,
-        production = [value(p[i]) for i in Upward_set],
-        pmax = [MaxQ[i] for i in Upward_set],  # Assuming maxQ exists
-        pmin = [MinQ[i] for i in Upward_set]   # Assuming minQ exists
+        "Bus" => Upward_set,
+        "p_pu" => [value(p[i]) for i in Upward_set],
+        "pmax_pu" => [MaxQ[i] for i in Upward_set],  # Assuming maxQ exists
+        "pmin_pu" => [MinQ[i] for i in Upward_set],  # Assuming minQ exists
+        "PU_euro/MWh" => [PU[i] for i in Upward_set],
     )
     println(production_df)
 
@@ -103,9 +104,9 @@ function create_dc_opf_results(model, case="case_ieee123_modified")
     println("Nodal prices [€/MWh]:")
     println("")
     # Nodal Price Results
-     global price_df = DataFrame(
-         Bus = Nodes,
-         node_price = [price[j] for j in Nodes]
+    global price_df = DataFrame(
+    "Bus" => Nodes,
+    "nodal_price_euro/MWh" => [price[j] for j in Nodes]
     )
      println(price_df)
 
@@ -117,7 +118,9 @@ function create_dc_opf_results(model, case="case_ieee123_modified")
         Edge = edges_index,
         from_bus = [Edges.from_bus[i] for i in Edges_leng],
         flows_to = [Edges.to_bus[i] for i in Edges_leng],
-        Flow = [value(f[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng], 
+        Flow_p_pu_from = [value(f[bus_id_to_index[Edges.from_bus[i]], bus_id_to_index[Edges.to_bus[i]]]) for i in Edges_leng], 
+        Flow_p_pu_to = [value(f[bus_id_to_index[Edges.to_bus[i]], bus_id_to_index[Edges.from_bus[i]]]) for i in Edges_leng], 
+        Flowmax_pu = [Flowmax_edge_dict[i] for i in Edges_leng ]
     )
     println(flows_df)
 
@@ -135,7 +138,7 @@ function create_dc_opf_results(model, case="case_ieee123_modified")
         results_path,
         "Results" => results_df,
         "Production" => production_df,
-        "Price" => price_df,
+        "LMP" => price_df,
         "Flows" => flows_df
     )
     print("")
@@ -186,7 +189,7 @@ function create_active_plot_DC_BTheta(
     # Τα plots χρειάζονται ως δεδομένα εισόδου arrays ή matrices. 
     # Εδώ δημιουργώ από το result_df ένα Matrix με όλες τοσ στήλες εκτός από την πρώτη Time. 
     production_BTheta_df = result_df   # Δημιουργώ μια λίστα με τα ονόματα των γεννητριών 
-    Y_BTheta = production_BTheta_df[!, "production"]
+    Y_BTheta = production_BTheta_df[!, "p_pu"]
     X= production_BTheta_df.Bus
     # που αντιστοιχούν στα ονόματα στις στήλες μου στο result_df.
     bus_count = length(X)
@@ -265,7 +268,7 @@ function create_voltage_magnitude_plot_BTheta(
 
 
     VD_BTheta_df = result_df
-    Y_V_BTheta = VD_BTheta_df[!, "V_pu"]
+    Y_V_BTheta = VD_BTheta_df[!, "vm_pu"]
 
     max_voltage = maximum(Y_V_BTheta)
     min_voltage = minimum(Y_V_BTheta)
@@ -343,7 +346,7 @@ function create_voltage_angles_plot_BTheta(
 
 
     VD_BTheta_df = result_df
-    Y_D_BTheta = VD_BTheta_df[!, "Delta"]
+    Y_D_BTheta = VD_BTheta_df[!, "va_degrees"]
 
     max_angle = maximum(Y_D_BTheta)
     min_angle = minimum(Y_D_BTheta)
@@ -417,7 +420,7 @@ function create_nodal_prices_plot_BTheta(
 
 
     prices_BTheta_df = result_df
-    Y_prices_BTheta = prices_BTheta_df[!, "node_price"]
+    Y_prices_BTheta = prices_BTheta_df[!, "nodal_price_euro/MWh"]
 
     max_price = maximum(Y_prices_BTheta)
     min_price = minimum(Y_prices_BTheta)

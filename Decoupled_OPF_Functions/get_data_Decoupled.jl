@@ -48,6 +48,12 @@ function load_power_system_data_decoupled_opf(filepath::String, filename::String
         Flowmax_dict[(row.to_bus, row.from_bus)] = row.FlowMax / Ssystem
     end
 
+    # # Create a dictionary mapping edges' idx to FlowMax
+    global Flowmax_edge_dict = Dict{Int, Float64}()
+    for row in eachrow(Edges)
+        Flowmax_edge_dict[row.idx] = row.FlowMax
+    end
+
     # Create connected buses dictionary
     global connected_buses_dict = Dict{Int, Vector{Int}}()
     for row in eachrow(Edges)

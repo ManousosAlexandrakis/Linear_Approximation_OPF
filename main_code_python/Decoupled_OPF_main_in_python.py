@@ -12,7 +12,8 @@ def load_excel(filepath,sheet_name, fill_empty_values = True):
         
     return output_dataframe
 
-excel_directory = ".//"
+excel_directory = "//Users//malexandrakis//Library//CloudStorage//OneDrive-Personal//Diploma_Thesis/Linear_Approximation_OPF//Case_Files//"
+#filepath = "//Users//malexandrakis//Library//CloudStorage//OneDrive-Personal//Diploma_Thesis/Linear_Approximation_OPF//Case_Files//"
 
 filename = "case_ieee123_modified.xlsx"
 
@@ -158,16 +159,16 @@ def active_power_flow(model,m,n):
     return model.f[bus_id_to_index[m],bus_id_to_index[n]] == B[bus_id_to_index[m], bus_id_to_index[n]] *(model.delta[m] - model.delta[n])
 connected_bus_pairs = [(m, n) for m in buses for n in connected_buses_dict[m]]
 model.active_power_flow = Constraint(connected_bus_pairs, rule=active_power_flow)
-
+print("Real Power Flow Constraints:")
+for key in model.active_power_flow:
+    print(f"Constraint {key}: {model.active_power_flow[key].expr}")
 
 def reactive_power_flow(model,m,n):
     return model.fq[bus_id_to_index[m],bus_id_to_index[n]] == B[bus_id_to_index[m], bus_id_to_index[n]] *(model.u[m] - model.u[n])
 connected_bus_pairs = [(m, n) for m in buses for n in connected_buses_dict[m]]
 model.reactive_power_flow = Constraint(connected_bus_pairs, rule=reactive_power_flow)
 
-# print("Real Power Flow Constraints:")
-# for key in model.active_power_flow:
-#     print(f"Constraint {key}: {model.active_power_flow[key].expr}")
+
 
 # # Voltage magnitude for all buses is considered 1 p.u.
 def voltage_magnitude_upper_limit(model, m):
@@ -319,6 +320,7 @@ production_df = DataFrame({
     "pmin_pu":[MinQ[i] for i in list(Upward_set)],
     "PU_euro/MWh" : [PU[i] for i in list(Upward_set)]
 })
+print(production_df)
 
 Qreact_df = DataFrame({
     "Bus": list(Upward_set),
@@ -326,6 +328,7 @@ Qreact_df = DataFrame({
     "qmax_pu": [Qmax[i] for i in list(Upward_set)],
     "qmin_pu":[Qmin[i] for i in list(Upward_set)]
 })
+print(Qreact_df)
 #print(">> Voltages at each bus:")
 
 # Print voltage results for each bus
@@ -338,11 +341,13 @@ results_df = DataFrame({
     "vm_pu": [value(model.u[i]) for i in buses],
     "va_degrees": [rad2deg(value(model.delta[i])) for i in buses],
 })
+print(results_df)
 
 price_df = DataFrame({
     "Bus": buses,
     "nodal_price_euro/MWh": [model.dual[model.nodal_power_balance[i]] for i in buses]
 })
+print(price_df)
 
 from_bus = Edges["from_bus"].tolist()
 to_bus = Edges["to_bus"].tolist()
@@ -354,14 +359,16 @@ flows_df = DataFrame({
     "Flow_q_pu": [value(model.fq[bus_id_to_index[Edges["from_bus"].iloc[i]], bus_id_to_index[Edges["to_bus"].iloc[i]]]) for i in range(Edges_leng)],
     "Flowmax_pu": [Flowmax_edge_dict[i] for i in range(len(Edges))]
 })
+print(flows_df)
 
 
-    
-writer = pd.ExcelWriter(excel_directory + "Decoupled_results_case_ieee123.xlsx", engine='xlsxwriter')
+filepath1 = "//Users//malexandrakis//Documents//Results//Paper_nodes_PV//"
 
-results_df.to_excel(writer, sheet_name="results", index=False)
-production_df.to_excel(writer, sheet_name="production", index=False)
-price_df.to_excel(writer, sheet_name="price", index=False)
-flows_df.to_excel(writer, sheet_name="flows", index=False)
+writer = pd.ExcelWriter(filepath1 + "Decoupled_results_case_ieee123.xlsx", engine='xlsxwriter')
+
+results_df.to_excel(writer, sheet_name="Results", index=False)
+production_df.to_excel(writer, sheet_name="Production", index=False)
+price_df.to_excel(writer, sheet_name="LMP", index=False)
+flows_df.to_excel(writer, sheet_name="Flows", index=False)
 
 writer.close()

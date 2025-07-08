@@ -40,15 +40,15 @@ using XLSX, Printf
 base_name = basename(filepath1) 
 
 ##################################################################################
-prices_ACOPF_df = DataFrame(XLSX.readtable(filename1, "price"))
-prices_BTheta_df = DataFrame(XLSX.readtable(filename3, "price"))
-prices_Decoupled_df = DataFrame(XLSX.readtable(filename4, "price"))
-prices_LINEAR_df = DataFrame(XLSX.readtable(filename5, "Price"))
+prices_ACOPF_df = DataFrame(XLSX.readtable(filename1, "LMP"))
+prices_BTheta_df = DataFrame(XLSX.readtable(filename3, "LMP"))
+prices_Decoupled_df = DataFrame(XLSX.readtable(filename4, "LMP"))
+prices_LINEAR_df = DataFrame(XLSX.readtable(filename5, "LMP"))
 ##################################################################################
-Y_prices_ACOPF = prices_ACOPF_df[!, "node_price"]
-Y_prices_BTheta = prices_BTheta_df[!, "node_price"]
-Y_prices_Decoupled = prices_Decoupled_df[!, "node_price"]
-Y_prices_LINEAR = prices_LINEAR_df[!, "price"]
+Y_prices_ACOPF = prices_ACOPF_df[!, "nodal_price_euro/MWh"]
+Y_prices_BTheta = prices_BTheta_df[!, "nodal_price_euro/MWh"]
+Y_prices_Decoupled = prices_Decoupled_df[!, "nodal_price_euro/MWh"]
+Y_prices_LINEAR = prices_LINEAR_df[!, "nodal_price_euro/MWh"]
 
 # # https://www.color-hex.com/color-palette/894 <- The colour palette 
 

@@ -14,7 +14,8 @@ def load_excel(filepath,sheet_name, fill_empty_values = True):
         
     return output_dataframe
 
-excel_directory = ".//"
+excel_directory = "/Users/malexandrakis/Library/CloudStorage/OneDrive-Personal/Diploma_Thesis/Linear_Approximation_OPF/Case_Files/"
+
 
 filename = "case_ieee123_modified.xlsx"
 
@@ -373,11 +374,19 @@ Qreact_df = DataFrame({
 
 
 # # Results for Prices
-price_df = DataFrame({
-    "Bus":  buses,
-    "nodal_price_euro/MWh": [model.dual[model.power_flow_equation[i]] for i in buses]
-})
+# price_df = DataFrame({
+#     "Bus":  buses,
+#     "nodal_price_euro/MWh": [model.dual[model.power_flow_equation[i]] for i in buses]
+# })
 
+price_df = pd.DataFrame({
+    "Bus": buses,
+    "nodal_price_euro/MWh": [
+        model.dual[model.power_flow_equation[i]] if i in list(Upward_set) 
+        else -model.dual[model.power_flow_equation[i]] 
+        for i in buses
+    ]
+})
 # # Results for Flows     
 import cmath
 
@@ -458,3 +467,21 @@ print("Active and reactive power injections [p.u.]:")
 
 
 print("Termination Status:", results.solver.termination_condition)
+
+filepath1 = "//Users//malexandrakis//Documents//Results//Paper_nodes_PV//"
+
+writer = pd.ExcelWriter(filepath1 + "AC_results_case_ieee123_python.xlsx", engine='xlsxwriter')
+
+# results_df.to_excel(writer, sheet_name="results", index=False)
+# prod_df.to_excel(writer, sheet_name="production", index=False)
+# Qreact_df.to_excel(writer,sheet_name="reactive")
+# price_df.to_excel(writer, sheet_name="price", index=False)
+# flows_df.to_excel(writer, sheet_name="flows", index=False)
+
+results_df.to_excel(writer, sheet_name="Results", index=False)
+prod_df.to_excel(writer, sheet_name="Production", index=False)
+Qreact_df.to_excel(writer,sheet_name="Reactive")
+price_df.to_excel(writer, sheet_name="LMP", index=False)
+flows_df.to_excel(writer, sheet_name="Flows", index=False)
+
+writer.close()

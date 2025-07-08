@@ -123,7 +123,7 @@ function create_results_dataframes(model, case = "case_ieee123_modified")
    global results_df = DataFrame(
         Bus = Nodes,
         vm_pu = [value(V[i]) for i in Nodes],
-        va_degree = [rad2deg(value(delta[i])) for i in Nodes]
+        va_degrees = [rad2deg(value(delta[i])) for i in Nodes]
     )
     println(results_df)
 
@@ -132,12 +132,12 @@ function create_results_dataframes(model, case = "case_ieee123_modified")
     println(" Active power production [p.u.]:")
     println("")
    # Active Power Production Results
-   global prod_df = DataFrame(
-    bus = Upward_set,
-    production = [value(production[i]) for i in Upward_set],
-    pmax = [maxQ[i] for i in Upward_set],
-    pmin = [minQ[i] for i in Upward_set],
-    PU = [PU[i] for i in Upward_set]
+   global prod_df = DataFrame(   
+    "Bus" => Upward_set,
+    "p_pu" => [value(production[i]) for i in Upward_set],
+    "pmax_pu" => [maxQ[i] for i in Upward_set],
+    "pmin_pu" => [minQ[i] for i in Upward_set],
+    "PU_euro/MWh" => [PU[i] for i in Upward_set],
 )
     println(prod_df)
 
@@ -149,8 +149,8 @@ function create_results_dataframes(model, case = "case_ieee123_modified")
         global Qreact_df = DataFrame(
             Bus = slack_K_buses,
             q_pu = [value(Q[i]) for i in slack_K_buses],
-            qmin = [Qmin[i] for i in slack_K_buses],
-            qmax = [Qmax[i] for i in slack_K_buses]
+            qmin_pu = [Qmin[i] for i in slack_K_buses],
+            qmax_pu = [Qmax[i] for i in slack_K_buses]
         )
         println(Qreact_df)
 
@@ -160,8 +160,8 @@ function create_results_dataframes(model, case = "case_ieee123_modified")
         println("")
         global PowerInjection_df = DataFrame(
             Bus = Nodes,
-            q_injection = [value(reactive_power_k[i]) for i in Nodes],
-            p_injection = [value(active_power_k[i]) for i in Nodes]
+            q_injection_pu = [value(reactive_power_k[i]) for i in Nodes],
+            p_injection_pu = [value(active_power_k[i]) for i in Nodes]
         )
         println(PowerInjection_df)
 
@@ -172,9 +172,10 @@ function create_results_dataframes(model, case = "case_ieee123_modified")
     println("") 
     # Nodal Price Results
     global  price_df = DataFrame(
-        Bus = Nodes,
-        price = [price[j] for j in Nodes]  # Using all nodes
-    )
+    "Bus" => buses,
+    "nodal_price_euro/MWh" => [-dual(active_power[j]) for j in buses]
+)
+
     println(price_df)
 
 
@@ -183,13 +184,15 @@ function create_results_dataframes(model, case = "case_ieee123_modified")
     println("")
     # Power Flow Results
     global flows_df = DataFrame(
-        Edge = edges_index,
-        from_bus = Edges.from_bus,
-        to_bus = Edges.to_bus,
-        Flow_Active = [value(f[i]) for i in edges_index],
-        Flow_Reactive = [value(f_q[i]) for i in edges_index],
-        Flowmax = [Flowmax_edge_dict[i] for i in edges_index]
-    )
+    Edge = edges_index,
+    from_bus = [from_bus[i] for i in Edges_leng],
+    flows_to = [to_bus[i] for i in Edges_leng],
+    Flow_p_pu_from = [value(f[i]) for i in Edges_leng],
+    Flow_p_pu_to = [-value(f[i]) for i in Edges_leng],
+    Flow_q_pu_from = [value(f_q[i]) for i in Edges_leng],
+    Flow_q_pu_to = [-value(f_q[i]) for i in Edges_leng],
+    Flowmax_pu = [Flowmax_edge_dict[i] for i in Edges_leng ]
+)
     println(flows_df)
 
     # Check if file exists before writing
@@ -198,8 +201,8 @@ if !isfile(results_path)
         results_path,
         "Results" => results_df,
         "Production" => prod_df,
-        "Reactive_Production" => Qreact_df,
-        "Price" => price_df,
+        "Reactive" => Qreact_df,
+        "LMP" => price_df,
         "Flows" => flows_df
     )
     print("")
@@ -248,15 +251,15 @@ function create_active_plot_Thesis_Linear(
     # Τα plots χρειάζονται ως δεδομένα εισόδου arrays ή matrices. 
     # Εδώ δημιουργώ από το result_df ένα Matrix με όλες τοσ στήλες εκτός από την πρώτη Time. 
     production_LINEAR_df = result_df   # Δημιουργώ μια λίστα με τα ονόματα των γεννητριών 
-    Y_LINEAR = production_LINEAR_df[!, "production"]
-    X= production_LINEAR_df.bus
+    Y_LINEAR = production_LINEAR_df[!, "p_pu"]
+    X= production_LINEAR_df.Bus
     # που αντιστοιχούν στα ονόματα στις στήλες μου στο result_df.
     bus_count = length(X)
     max_production = maximum(Y_LINEAR)
     min_production = minimum(Y_LINEAR)
     
     # # Data preparation
-    buses = production_LINEAR_df.bus
+    buses = production_LINEAR_df.Bus
     
     # # y_range 
     y_min = min_production
@@ -471,7 +474,7 @@ function create_voltage_angles_plot_Thesis_Linear(
 
 
     VD_LINEAR_df = result_df
-    Y_D_LINEAR = VD_LINEAR_df[!, "va_degree"]
+    Y_D_LINEAR = VD_LINEAR_df[!, "va_degrees"]
 
     max_angle = maximum(Y_D_LINEAR)
     min_angle = minimum(Y_D_LINEAR)
@@ -545,7 +548,7 @@ function create_nodal_prices_plot_Thesis_Linear(
 
 
     prices_LINEAR_df = result_df
-    Y_prices_LINEAR = prices_LINEAR_df[!, "price"]
+    Y_prices_LINEAR = prices_LINEAR_df[!, "nodal_price_euro/MWh"]
 
     max_price = maximum(Y_prices_LINEAR)
     min_price = minimum(Y_prices_LINEAR)
