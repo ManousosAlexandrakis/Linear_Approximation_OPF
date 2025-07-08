@@ -77,7 +77,7 @@ min_voltage = minimum([minimum(Y_V_ACOPF),  minimum(Y_V_BTheta), minimum(Y_V_Dec
 # max_voltage = maximum([maximum(Y_V_ACOPF),  maximum(Y_V_LINEAR_fixed), maximum(Y_V_ACOPF_fixed),maximum(Y_V_LINEAR)])
 # min_voltage = minimum([minimum(Y_V_ACOPF),  minimum(Y_V_LINEAR_fixed), minimum(Y_V_ACOPF_fixed),minimum(Y_V_LINEAR)])
 
-zoom_out = 0.03
+zoom_out = 0.025
 fz = 18 # fontsize <-- great for IEEE journal templates
 
 y_min = min_voltage
@@ -111,7 +111,7 @@ V = scatter(
       color = RGB(237/255,201/255,81/255),  # Color for the dataset
       #alpha = 0.8,
       markerstrokewidth = 0,
-      yticks = 0.9:0.01:1.1,
+      yticks = 0.9:0.02:1.2,
       xticks = (xticks_values_V,xticks_labels_V),  # Set xticks and labels
       xrotation = 0, # Rotate labels by 45 degrees
       markershape = :circle,
@@ -199,10 +199,10 @@ output_dir = joinpath(base_path, base_name)
 mkpath(output_dir)  # Creates all necessary parent directories
 
 # # Define versioned filename
-version = 3
+version = 100
 #filename = base_name * "_Voltage_Magnitude_fixed_V$version.pdf"
 filename = base_name * "_Voltage_Magnitude_V$version.pdf"
 save_path = joinpath(output_dir, filename)
 
 # # Save the plot
-#  savefig(V, save_path)
+savefig(V, save_path)
