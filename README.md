@@ -23,7 +23,7 @@
 
 
 # Repository's purpose
-This repository presents three linear approximation models for the Optimal Power Flow (OPF) problem, alongside the full AC-OPF formulation. The models were developed as part of the diploma thesis of Manousos Alexandrakis under the supervision of [Prof. Anthony Papavasiliou](https://ap-rg.eu/) and Zejun Ruan. It includes implementation code (both in julia and python), case files in XLSX format, and code for plotting results. The thesis introduces a novel linear OPF model inspired by the linearization approach of Saverio Bolognani and Sandro Zampieri in their work “On the existence and linear approximation of the power flow solution in power distribution networks.” This proposed model is benchmarked against two established linear models from the literature: the BTheta and the Decoupled formulations.
+This repository presents three linear approximation models for the Optimal Power Flow (OPF) problem, alongside the full AC-OPF formulation. The models were developed as part of the diploma thesis of Manousos Alexandrakis under the supervision of [Prof. Anthony Papavasiliou](https://ap-rg.eu/) and ZeJun Ruan. It includes implementation code (both in julia and python), case files in XLSX format, and code for plotting results. The thesis introduces a novel linear OPF model inspired by the linearization approach of Saverio Bolognani and Sandro Zampieri in their work “On the existence and linear approximation of the power flow solution in power distribution networks.” This proposed model is benchmarked against two established linear models from the literature: the BTheta and the Decoupled formulations.
 
 
 
@@ -34,7 +34,7 @@ This repository presents three linear approximation models for the Optimal Power
 
 
 # Authors
-This code was created by [Manousos Alexandrakis](https://github.com/ManousosAlexandrakis), [Lina Efthymiadou](https://github.com/lina-efthymiadou) and [Zejun Ruan](https://github.com/zejunr), listed in alphabetical order. The initial work was carried out by Zejun Ruan and Lina Efthymiadou, while Manousos Alexandrakis finalized the implementation.
+This code was created by [Manousos Alexandrakis](https://github.com/ManousosAlexandrakis), [Lina Efthymiadou](https://github.com/lina-efthymiadou) and [ZeJun Ruan](https://github.com/zejunr), listed in alphabetical order. The initial work was carried out by Zejun Ruan and Lina Efthymiadou, while Manousos Alexandrakis finalized the implementation.
 
 For any questions or contributions, feel free to open an issue or submit a pull request.
 
@@ -57,6 +57,7 @@ For any questions or contributions, feel free to open an issue or submit a pull 
     1. [`Thesis_Linear_OPF_main`](main_code/Thesis_Linear_OPF_main.jl) → Runs the proposed linear model.
     2. [`DC_Btheta_OPF_main`](main_code/DC_Btheta_OPF_main.jl) → Runs the BTheta model.
     3. [`Decoupled_OPF_main`](main_code/Decoupled_OPF_main.jl) → Runs the Decoupled model.
+    4. [`AC_OPF_main`](main_code/AC-OPF_main.jl) → Runs the AC model. (provided by ZeJun Ruan)
  - **main_code_python:** 
     1. [`Thesis_Linear_OPF_main_in_python`](main_code_python/Thesis_Linear_OPF_main_in_python.py) → Runs the proposed linear model with python code.
     2. [`DC_Btheta_OPF_main_in_python`](main_code_python/DC_BTheta_OPF_main_in_python.py) → Runs the BTheta model with python code.
