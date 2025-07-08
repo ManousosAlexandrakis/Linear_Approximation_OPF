@@ -65,7 +65,7 @@ For any questions or contributions, feel free to open an issue or submit a pull 
 
 The [`main_code`](main_code)/[`main_code_python`](main_code_python) folder contains standalone scripts that run the entire problem without using modularized functions. The codes are written in a fully expanded form for clarity and completeness.
 
-- **Plotting_Scripts →** Creates visualizations for all models (including the [`AC-OPF_model`](main_code_python/AC-OPF_main_in_python.py)).
+- **Plotting_Scripts →** Creates visualizations for all models.
 
 - **Resources →** Contains images used in readme file.
 
