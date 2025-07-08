@@ -57,7 +57,7 @@ For any questions or contributions, feel free to open an issue or submit a pull 
     1. [`Thesis_Linear_OPF_main`](main_code/Thesis_Linear_OPF_main.jl) → Runs the proposed linear model.
     2. [`DC_Btheta_OPF_main`](main_code/DC_Btheta_OPF_main.jl) → Runs the BTheta model.
     3. [`Decoupled_OPF_main`](main_code/Decoupled_OPF_main.jl) → Runs the Decoupled model.
-    4. [`AC_OPF_main`](main_code/AC-OPF_main.jl) → Runs the AC model. (provided by ZeJun Ruan)
+    4. [`AC_OPF_main`](main_code/AC-OPF_main.jl) → Runs the AC model. (code provided by ZeJun Ruan)
  - **main_code_python:** 
     1. [`Thesis_Linear_OPF_main_in_python`](main_code_python/Thesis_Linear_OPF_main_in_python.py) → Runs the proposed linear model with python code.
     2. [`DC_Btheta_OPF_main_in_python`](main_code_python/DC_BTheta_OPF_main_in_python.py) → Runs the BTheta model with python code.
