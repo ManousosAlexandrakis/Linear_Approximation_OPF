@@ -9,7 +9,7 @@ function create_admittance_matrix_decoupled_opf()
         From_Bus = bus_id_to_index[row.from_bus]
         To_Bus = bus_id_to_index[row.to_bus]
         x = row.X_pu
-        r = 0.0  # Forcing resistance to zero per your original code
+        r = row.R_pu
         z = r + x * im
         y[From_Bus, To_Bus] = 1/z
         y[To_Bus, From_Bus] = 1/z
