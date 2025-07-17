@@ -25,6 +25,21 @@
 # Repository's purpose
 This repository presents three linear approximation models for the Optimal Power Flow (OPF) problem, alongside the full AC-OPF formulation. The models were developed as part of the diploma thesis of Manousos Alexandrakis under the supervision of [Prof. Anthony Papavasiliou](https://ap-rg.eu/) and ZeJun Ruan. It includes implementation code (both in julia and python), case files in XLSX format, and code for plotting results. The thesis introduces a novel linear OPF model inspired by the linearization approach of Saverio Bolognani and Sandro Zampieri in their work “On the existence and linear approximation of the power flow solution in power distribution networks.” This proposed model is benchmarked against two established linear models from the literature: the BTheta and the Decoupled formulations.
 
+# Access the Web-Based OPF Interface
+In addition to the Julia and Python-based implementation presented in this repository, a web-based interface has been developed to offer a more accessible and user-friendly way of executing the linear Optimal Power Flow (OPF) models.
+
+## Web Application Repository
+You can explore the web interface and find setup and usage instructions by visiting the repository below:
+<p align="center">
+  <a href="https://github.com/ManousosAlexandrakis/OPF_app" target="_blank">
+    <img src="https://img.shields.io/badge/Launch_Web_App-Easy%20OPF%20Tool-green?style=for-the-badge&logo=flask&logoColor=white">
+  </a>
+</p>
+
+This interface is particularly useful for users who wish to explore the models without relying on a programming environment. It simplifies the execution and visualization process through an interactive platform. 
+
+
+
 
 
 # Thesis Presentation
