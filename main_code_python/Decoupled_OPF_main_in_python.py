@@ -38,7 +38,7 @@ edges_index = Edges.index.tolist()
 # Create a dictionary to store the index of each bus
 # slack_index = buses.index(slack_bus)
 
-bus_id_to_index = {buses[i]: i for i in range(len(buses)-1)}
+bus_id_to_index = {buses[i]: i for i in range(len(buses))}
 bus_id_to_index[slack_bus] = buses.index(slack_bus)
 
 
@@ -362,9 +362,10 @@ flows_df = DataFrame({
 print(flows_df)
 
 
-filepath1 = "//Users//malexandrakis//Documents//Results//Paper_nodes_PV//"
-
-writer = pd.ExcelWriter(filepath1 + "Decoupled_results_case_ieee123.xlsx", engine='xlsxwriter')
+base_name = filename.replace(".xlsx", "")  # Remove the extension
+output_name = f"Decoupled_results_{base_name}_python.xlsx"
+filepath1 = ".//Results//"
+writer = pd.ExcelWriter(filepath1 + output_name, engine='xlsxwriter')
 
 results_df.to_excel(writer, sheet_name="Results", index=False)
 production_df.to_excel(writer, sheet_name="Production", index=False)

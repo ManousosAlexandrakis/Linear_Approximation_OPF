@@ -41,9 +41,11 @@ edges_index = Edges.index.tolist()
 bus_id_to_index = {buses[i]: i for i in range(len(buses)-1)}
 bus_id_to_index[slack_bus] = buses.index(slack_bus)
 
-K_buses = sorted(set(
-    row['bus'] for _, row in sgen_data.iterrows() if row['bus'] != slack_bus
-))
+Upward_set = set(Upward_data["Bus"])
+
+K_buses = sorted([
+    bus for bus in Upward_set if bus != slack_bus
+])
 n_K_buses = len(K_buses)
 
 
@@ -98,7 +100,7 @@ for i in range(len(Edges)):
     
 Flowmax_edge_dict = dict()
 for i in range(len(Edges)):
-    index = Edges["idx"].iloc[i] - 1
+    index = int(Edges["idx"].iloc[i] - 1)
     Flowmax_edge_dict[i] = Edges["FlowMax"].iloc[index]
     
     
@@ -120,7 +122,6 @@ MaxQ = {Upward_data["Bus"].iloc[i] : Upward_data["MaxQ"].iloc[i]/Ssystem for i i
 Qmin = {sgen_data["bus"].iloc[i] : sgen_data["QRmin"].iloc[i]/Ssystem for i in range(len(sgen_data))}
 Qmax = {sgen_data["bus"].iloc[i] : sgen_data["QRmax"].iloc[i]/Ssystem for i in range(len(sgen_data))}
 
-Upward_set = set(Upward_data["Bus"])
 buses_except_upward = set(buses) - set(Upward_set)
 
 
@@ -496,15 +497,12 @@ print("")
 
 print("Termination Status:", results.solver.termination_condition)
 
-filepath1 = "//Users//malexandrakis//Documents//Results//Paper_nodes_PV//"
 
-writer = pd.ExcelWriter(filepath1 + "Bolognani_results_case_ieee123_python.xlsx", engine='xlsxwriter')
-
-# results_df.to_excel(writer, sheet_name="results", index=False)
-# prod_df.to_excel(writer, sheet_name="production", index=False)
-# Qreact_df.to_excel(writer,sheet_name="reactive")
-# price_df.to_excel(writer, sheet_name="price", index=False)
-# flows_df.to_excel(writer, sheet_name="flows", index=False)
+base_name = filename.replace(".xlsx", "")  # Remove the extension
+output_name = f"Bolognani_results_{base_name}_python.xlsx"
+filepath1 = ".//Results//"
+#writer = pd.ExcelWriter(filepath1 + "Bolognani_results_case_ieee123_python.xlsx", engine='xlsxwriter')
+writer = pd.ExcelWriter(filepath1 + output_name, engine='xlsxwriter')
 
 results_df.to_excel(writer, sheet_name="Results", index=False)
 prod_df.to_excel(writer, sheet_name="Production", index=False)

@@ -36,8 +36,7 @@ edges_index = Edges.index.tolist()
 
 # Create a dictionary to store the index of each bus
 # slack_index = buses.index(slack_bus)
-
-bus_id_to_index = {buses[i]: i for i in range(len(buses)-1)}
+bus_id_to_index = {buses[i]: i for i in range(len(buses))}
 bus_id_to_index[slack_bus] = buses.index(slack_bus)
 
 
@@ -98,7 +97,6 @@ buses_except_upward = set(buses) - set(Upward_set)
 
 # # Create Y matrix
 y = np.zeros((n,n), dtype=complex)
-
 
 for i in range(len(Edges)):
     From_bus = bus_id_to_index[Edges["from_bus"].iloc[i]]
@@ -224,7 +222,7 @@ model.dual = Suffix(direction=Suffix.IMPORT)
 solver = SolverFactory("gurobi")
 
 # Solve model
-solver.solve(model, tee=True)
+results = solver.solve(model, tee=True)
 
 
 # Set up dual variables
@@ -283,9 +281,31 @@ flows_df = pd.DataFrame({
     "Flowmax_pu": [Flowmax_edge_dict[i] for i in range(len(Edges))]
 })
 
+# # # Print the results
+print("")
+print("Voltage magnitudes [p.u.] and Voltage angles [°]:")
+print(results_df)
+print("")
+print("Active power production [p.u.]:")
+print(prod_df)
+print("")
+print("Nodal prices [€/MWh]:")
+print(price_df)
+print("")
+print("Active and Reactive power flows for lines [p.u.]:")
+print(flows_df)
+print("")
 
-filepath1 = "//Users//malexandrakis//Documents//Results//Paper_nodes_PV//"
-writer = pd.ExcelWriter(filepath1 + "BTheta_results_case_ieee123_python.xlsx", engine='xlsxwriter')
+
+print("Termination Status:", results.solver.termination_condition)
+
+base_name = filename.replace(".xlsx", "")  # Remove the extension
+output_name = f"BTheta_results_{base_name}_python.xlsx"
+filepath1 = ".//Results//"
+writer = pd.ExcelWriter(filepath1 + output_name, engine='xlsxwriter')
+
+# filepath1 = "//Users//malexandrakis//Documents//Results//Paper_nodes_PV//"
+# writer = pd.ExcelWriter(filepath1 + "BTheta_results_case_ieee123_python.xlsx", engine='xlsxwriter')
 
 results_df.to_excel(writer, sheet_name="Results", index=False)
 prod_df.to_excel(writer, sheet_name="Production", index=False)
