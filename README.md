@@ -37,7 +37,9 @@ You can explore the web interface and find setup and usage instructions by visit
 </p>
 
 This interface is particularly useful for users who wish to explore the models without relying on a programming environment. It simplifies the execution and visualization process through an interactive platform. 
-
+<p align="center">
+  <img src="Resources/Web-Interface.gif" alt="Demo Animation" width="1000"/>
+</p>
 
 
 
@@ -79,7 +81,7 @@ For any questions or contributions, feel free to open an issue or submit a pull 
     3. [`Decoupled_OPF_main_in_python`](main_code_python/Decoupled_OPF_main_in_python.py) → Runs the Decoupled model with python code.
     4. [`AC-OPF_main_in_python`](main_code_python/AC-OPF_main_in_python.py) → Runs the AC model with python code.
 
-The [`main_code`](main_code)/[`main_code_python`](main_code_python) folder contains standalone scripts that run the entire problem without using modularized functions. The codes are written in a fully expanded form for clarity and completeness.
+The [`main_code`](main_code)/[`main_code_python`](main_code_python) folder contains standalone scripts that run the entire problem without using modularized functions. The code scripts are written in a fully expanded form for clarity and completeness.
 
 - **Plotting_Scripts →** Creates visualizations for all models.
 
