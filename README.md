@@ -38,7 +38,7 @@ You can explore the web interface and find setup and usage instructions by visit
 
 This interface is particularly useful for users who wish to explore the models without relying on a programming environment. It simplifies the execution and visualization process through an interactive platform. 
 <p align="center">
-  <img src="Resources/Web-Interface.gif" alt="Demo Animation" width="1000"/>
+  <img src="Resources/Web-Interface.gif" alt="Animation" width="900"/>
 </p>
 
 
