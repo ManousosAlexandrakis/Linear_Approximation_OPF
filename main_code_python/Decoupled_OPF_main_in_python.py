@@ -367,8 +367,10 @@ output_name = f"Decoupled_results_{base_name}_python.xlsx"
 filepath1 = ".//Results//"
 writer = pd.ExcelWriter(filepath1 + output_name, engine='xlsxwriter')
 
+# TODO : check if excel is printed the right way
 results_df.to_excel(writer, sheet_name="Results", index=False)
 production_df.to_excel(writer, sheet_name="Production", index=False)
+Qreact_df.to_excel(writer,sheet_name="Reactive")
 price_df.to_excel(writer, sheet_name="LMP", index=False)
 flows_df.to_excel(writer, sheet_name="Flows", index=False)
 
