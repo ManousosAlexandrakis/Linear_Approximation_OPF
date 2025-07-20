@@ -468,9 +468,10 @@ print("Active and reactive power injections [p.u.]:")
 
 print("Termination Status:", results.solver.termination_condition)
 
-filepath1 = "//Users//malexandrakis//Documents//Results//Paper_nodes_PV//"
-
-writer = pd.ExcelWriter(filepath1 + "AC_results_case_ieee123_python.xlsx", engine='xlsxwriter')
+base_name = filename.replace(".xlsx", "")  # Remove the extension
+output_name = f"AC_results_{base_name}_python.xlsx"
+filepath1 = ".//Results//"
+writer = pd.ExcelWriter(filepath1 + output_name, engine='xlsxwriter')
 
 # results_df.to_excel(writer, sheet_name="results", index=False)
 # prod_df.to_excel(writer, sheet_name="production", index=False)
