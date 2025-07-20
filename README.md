@@ -87,6 +87,8 @@ The [`main_code`](main_code)/[`main_code_python`](main_code_python) folder conta
 
 - **Resources →** Contains images used in readme file.
 
+- **Results →** Includes result files (XLSX) from both the linear approximation models and the full AC-OPF solution for the case study: [`case_ieee123_modified`](Case_Files/case_ieee123_modified.xlsx) .
+
 - **Thesis_Linear_OPF_conv**, **DC_BTheta_OPF_conv**, **Decoupled_OPF_conv**:
   - These scripts provide an easier and more organized way to run the Thesis Linear, BTheta and Decoupled OPF models, respectively, based on the modular functions from their     corresponding folders.
   - You can specify the XLSX output filename and file path for saving results.
